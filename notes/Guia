@@ -1,0 +1,37 @@
+1 - Crud de estudiante-----> ok
+    -Exportar a PDF---> ok
+        -Manejar el Exception del pdf
+    -Exportar a Exel-----> ok
+    -Eliminacion multiple------> ok
+        - Detalles: Añadir seleccionar todos los estudiantes---> Pendiente
+
+2 - Graficos------> ok
+    -Estudiantes por sexo ---> ok
+    -Estudiantes por municipios ---> ok
+
+3 - Asignar las notas a los estudiantes -------> En desarrollo
+    -Crear las nuevas clases del modelo para las notas --> Pendiente
+    -Hacer la interfaz ---> ok
+        -Exportable---> ok
+    -Grafica en tiempo real de porcentaje de aprobados y desaprobados --->ok
+    -Resumen de evalucion---> ok
+        -Exportar a PDF---> ok
+        -Exportar a EXCEL---> ok
+
+4 - Usuarios
+    -Login---> ok
+    -Logouth---> ok
+    -Cambiar password---> ok
+    -Actualizar usuario actual---> ok
+    -Permisos en el sistema---> ok
+    -Mostrar nombre de usuario en la pantalla principal---> ok
+
+5 - Implementar plugins JS --->ok
+    -Select 2---> ok
+    -DaterangePicker---> ok
+    -TempusDominus---> ok
+    -TouchSpin---> ok
+    -Datatables---> ok
+    -HightCharts---> ok
+
+6 - Manejar grupos, carreras, profesores---> Pendiente

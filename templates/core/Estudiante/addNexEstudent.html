@@ -1,0 +1,71 @@
+{% extends 'interfaz/index.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'core/Select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'core/Select2/select2-bootstrap4.min.css' %}">
+{% endblock %}
+
+{% block contenido %}
+    <div class="col-lg-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-user"></i> Crear nuevo estudiante</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form method="post">
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            {% if messages %}
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                        <div class="alert alert-success alert-dismissible">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                                ×
+                                            </button>
+                                            <h5><i class="icon fas fa-check"></i> Listo!</h5>
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% for error in form.non_field_errors %}
+                                <div class="alert alert-danger alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                    </button>
+                                    <h5><i class="icon fas fa-ban"></i> Error!</h5>
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                            {% for field in form %}
+                                <div class="form-group ">
+                                    <label for="exampleInputEmail1">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <strong> {{ field.errors }} </strong>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer text-center">
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Guardar</button>
+                        <a class="btn btn-danger ml-5" style="color: white" href="{% url 'core:ListEstudiante' %}"><i
+                                class="fa fa-times-circle"></i> Cancelar</a>
+                    </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static  'core/Select2/select2.min.js' %}"></script>
+    <script src="{% static  'core/Select2/i18n/es.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,562 @@
+{% extends 'interfaz/index.html' %}
+{% load static %}
+
+{% block links %}
+    {#  Select 2  #}
+    <link rel="stylesheet" href="{% static 'core/Select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'core/Select2/select2-bootstrap4.min.css' %}">
+    {#  Tempus Diminus  #}
+    <link rel="stylesheet" href="{% static 'core/tempusDominus 5.1.2/tempusdominus-bootstrap-4.min.css' %}">
+    {#  TouchPin  #}
+    <link rel="stylesheet" href="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}">
+
+    <link rel="stylesheet" href="{% static 'core/daterangePicker v3.14.1/daterangepicker.css' %}">
+
+    <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+
+    <script src="{% static 'code/highcharts.js' %}"></script>
+    <script src="{% static 'code/modules/exporting.js' %}"></script>
+    <script src="{% static 'code/modules/offline-exporting.js' %}"></script>
+    <script src="{% static 'code/modules/export-data.js' %}"></script>
+    <script src="{% static 'code/modules/accessibility.js' %}"></script>
+    <script src="{% static 'code/themes/grid-light.js' %}"></script>
+{% endblock %}
+
+{% block contenido %}
+
+
+    <div class="col-lg-9">
+        <div class="card card-dark">
+            <div class="card-header border-transparent">
+                <h3 class="card-title text-center"><i class="fa fa-list"></i> Listado de estudiantes</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" title="Ayuda">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="text-center">
+                    <button class="btn btn-info" id="add-new-est"><i class="fa fa-plus"></i> Crear estudiante</button>
+                </div>
+                <table class="table" id="list">
+                    <thead>
+                        <th>Carnet de identidad</th>
+                        <th>Nombre completo</th>
+                        <th>Sexo</th>
+                        <th>Municipio</th>
+                        <th>Opciones</th>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                    <tfoot>
+                        <th>Carnet de identidad</th>
+                        <th>Nombre completo</th>
+                        <th>Sexo</th>
+                        <th>Municipio</th>
+                        <th>Opciones</th>
+                    </tfoot>
+                </table>
+                <!-- /.table-responsive -->
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <form method="post" id="form-add-note">
+            <div class="card card-dark">
+                <div class="card-header border-transparent">
+                    <h3 class="card-title text-center"><i class="fa  fa-thumbs-up"></i> {{ title }}</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    {% csrf_token %}
+                    {{ form }}
+                    <!-- /.table-responsive -->
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer text-center">
+                    <button type="submit" class="btn btn-success" disabled id="save"><i class="fa fa-save"></i>
+                        Guardar
+                    </button>
+                    <button class="btn btn-danger" disabled id="cancel"><i class="fa fa-times-circle"></i> Cancelar
+                    </button>
+                </div>
+                <!-- /.card-footer -->
+            </div>
+        </form>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card card-dark">
+            <div class="card-header border-transparent">
+                <h3 class="card-title text-center"><i class="fa fa-chart-area"></i></h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div id="g-donut"></div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer clearfix">
+                {#                        <a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Place New Order</a>#}
+                {#                        <a href="javascript:void(0)" class="btn btn-sm btn-secondary float-right">View All Orders</a>#}
+            </div>
+            <!-- /.card-footer -->
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="card card-dark">
+            <div class="card-header border-transparent">
+                <h3 class="card-title text-center"><i class="fa fa-list"></i> Resumen de resultados de la evaluación
+                </h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table class="table Tresumen">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Nota</th>
+                        <th>Resultado</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                <!-- /.table-responsive -->
+            </div>
+
+        </div>
+    </div>
+    <div class="modal fade" id="add-es">
+        <form action="" id="form-new-est">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"><i class="fa fa-user-circle"></i> Crear nuevo estudiante</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        {{ formNew }}
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i
+                                class="fa fa-times-circle"></i>
+                            Cancelar
+                        </button>
+                        <button type="submit" id="save-new-est" class="btn btn-primary"><i class="fa fa-save"></i>
+                            Guardar
+                        </button>
+
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </form>
+    </div>
+    <!-- /.modal -->
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static  'core/Select2/select2.min.js' %}"></script>
+    <script src="{% static  'core/Select2/i18n/es.js' %}"></script>
+
+    <script src="{% static 'core/tempusDominus 5.1.2/moment.min.js' %}"></script>
+    <script src="{% static 'core/tempusDominus 5.1.2/moment-with-locales.js' %}"></script>
+    <script src="{% static 'core/tempusDominus 5.1.2/tempusdominus-bootstrap-4.min.js' %}"></script>
+
+    <script src="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+
+    <script src="{% static 'core/daterangePicker v3.14.1/daterangepicker.min.js' %}"></script>
+
+    <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'core/Datatables/Buttons-1.6.5/js/dataTables.buttons.js' %}"></script>
+    <script src="{% static 'core/Datatables/JSZip-2.5.0/jszip.js' %}"></script>
+    <script src="{% static 'core/Datatables/pdfmake-0.1.36/pdfmake.js' %}"></script>
+    <script src="{% static 'core/Datatables/pdfmake-0.1.36/vfs_fonts.js' %}"></script>
+    <script src="{% static 'core/Datatables/Buttons-1.6.5/js/buttons.html5.js' %}"></script>
+
+    <script src="{% static 'core/ajaxAdd.js' %}"></script>
+    <script src="{% static 'errorMessage.js' %}"></script>
+
+
+    <script>
+        let dataE = {
+            id: '',
+            name: '',
+            tipoEval: '',
+            nota: '',
+            fecha: ''
+        }
+        let GraficoApro = [
+            {
+                name: 'Aprobados',
+                y: 0
+            },
+            {
+                name: 'Desaprobados',
+                sliced: true,
+                selected: true,
+                y: 0
+            }
+        ]
+        let Resumen = []
+
+        function Select2() {
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                language: 'es'
+            })
+        }
+
+        function Touchpin() {
+            $('#touchpin').TouchSpin({
+                min: 2,
+                max: 5,
+                step: 1,
+                decimals: 0,
+                boostat: 5,
+                maxboostedstep: 10,
+                {#postfix: '%',#}
+            })
+        }
+
+        function DateRange() {
+            $('#id_fechaEval').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                minYear: 1901,
+                maxYear: parseInt(moment().format('YYYY'), 10),
+                opens: 'center',
+                drops: 'auto',
+                startDate: moment().format('MM/DD/YYYY'),
+                endDate: moment().format('MM/DD/YYYY'),
+            }, function (start, end, label) {
+                dataE.fecha = start.format('MM/DD/YYYY')
+                console.log(dataE)
+            });
+        }
+
+        function Grafico() {
+            Highcharts.chart('g-donut', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Porcentaje de aprobados y desaprobados'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Porcentaje',
+                    colorByPoint: true,
+                    data: GraficoApro
+                }]
+            });
+        }
+
+        function Tresumen() {
+            var tableresumen = $(".Tresumen").DataTable({
+                scrollY: "250px",
+                paging: false,
+                responsive: true,
+                autoWidth: false,
+                destroy: true,
+                deferRender: true,
+                data: Resumen,
+                columns: [
+                    {'data': 'name'},
+                    {'data': 'nota'},
+                    {'data': 'nota'},
+                ],
+                columnDefs: [
+                    {
+                        targets: [-1],
+                        class: 'text-center',
+                        render: function (data, type, row) {
+                            if (data == 5) {
+                                return '<span class="badge badge-warning" style="color: white; padding: 5px">Sobresaliente</span>'
+                            } else if (data > 2) {
+                                return '<span class="badge badge-success" style="color: white;padding: 5px">Aprobado</span>'
+                            } else {
+                                return '<span class="badge badge-danger" style="color: white;padding: 5px">Desaprobado</span>'
+                            }
+                        }
+                    },
+                    {
+                        targets: [0, 1],
+                        class: 'text-center'
+                    }
+                ],
+                dom: "<'row'<'form-inline'<'offset-sm-10'>>>" +
+                    "<'row'<'col-lg-4'l><'col-lg-4 text-center mb-2'B><'col-lg-4'f>>" +
+                    "<'row'<'col-lg-12'tr>>" +
+                    "<'row'<'col-lg-5'i><'col-lg-7'p>>",
+                buttons: [
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<i class="fas fa-file-pdf"></i>',
+                        titleAttr: 'Exportar a Pdf',
+                        className: 'btn btn-danger',
+                        exportOptions: {
+                            columns: [0, 1]
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i>',
+                        titleAttr: 'Exportar a exel',
+                        className: 'btn btn-success',
+                        exportOptions: {
+                            columns: [0, 1]
+                        }
+                    },
+                ],
+                language: {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "<i class='fa fa-search'></i>",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                }
+            })
+        }
+
+        $(function () {
+            var table = $("#list").DataTable({
+                scrollY: "250px",
+                paging: false,
+                responsive: true,
+                autoWidth: false,
+                destroy: true,
+                deferRender: true,
+                ajax: {
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'list'
+                    },
+                    dataSrc: "",
+                },
+                columns: [
+                    {'data': 'ci'},
+                    {'data': 'nombre'},
+                    {'data': 'sexo'},
+                    {'data': 'municipio'},
+                    {'defaultContent': ''},
+                ],
+                columnDefs: [
+                    {
+                        targets: [-1],
+                        class: 'text-center',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            var buttons = '<a class="btn btn-success btn-xs ml-1" rel="eval" title="Evaluar" style="color:white;"><i class="fa fa-thumbs-up"></i> Evaluar</a>'
+                            return buttons
+                        }
+                    },
+                    {
+                        targets: [0, 1, 2, 4],
+                        class: 'text-center',
+                    },
+                    {
+                        targets: [2],
+                        class: 'text-center',
+                        render: function (data, type, row) {
+                            if (data == 'Masculino') {
+                                return '<span class="badge" style="background-color: #007bff; color: white">' + data + '</span>'
+                            } else {
+                                return '<span class="badge" style="background-color: #f012be; color: white">' + data + '</span>'
+                            }
+                        }
+                    },
+                ],
+                language: {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "<i class='fa fa-search'></i>",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                },
+                fnInitComplete: function () {
+
+                }
+
+            })
+            Select2()
+            Touchpin()
+            DateRange()
+            Grafico()
+            Tresumen()
+
+            $('#add-new-est').click(function (e) {
+                e.preventDefault
+                $('#add-es').modal('show')
+            })
+            $('#form-new-est').submit(function (e) {
+                e.preventDefault();
+                var parameters = $(this).serializeArray();
+                parameters.push({
+                    name: 'action',
+                    value: 'add'
+                })
+                console.log(parameters);
+                SendajaxE('¡Está seguro/a!', 'Los datos del estudiante serán guardados', window.location.pathname, parameters, function (e) {
+                    $('#add-es').modal('hide')
+                    $('#form-add-note').trigger('reset')
+                })
+            })
+
+            $('#add-es').on('hidden.bs.modal', function () {
+                $('#form-new-est').trigger('reset')
+                Select2()
+                table.ajax.reload()
+            })
+
+            $('#list tbody').on('click', 'a[rel="eval"]', function (e) {
+                e.preventDefault()
+                $('#id_typEval').removeAttr('disabled')
+                $('#touchpin').removeAttr('disabled')
+                $('#id_fechaEval').removeAttr('disabled')
+                $('#save').removeAttr('disabled')
+                $('#cancel').removeAttr('disabled')
+
+                let data = table.row($(this).parents('tr')).data()
+                dataE.id = data.id
+                dataE.name = data.nombre
+                dataE.nota = $('#touchpin').val()
+                dataE.fecha = $('#id_fechaEval').val()
+                dataE.tipoEval = $('.select2').val()
+
+                $('#id_estudiante').val(dataE.name)
+                console.log(dataE)
+            });
+            $('#touchpin').change(function (e) {
+                dataE.nota = this.value
+                // console.log(dataE)
+            })
+            $('.select2').change(function (e) {
+                dataE.tipoEval = this.value
+                //console.log(dataE)
+            })
+            $('#cancel').click(function (e) {
+                e.preventDefault()
+                for (let dataEKey in dataE) {
+                    dataE[dataEKey] = ''
+                }
+                $('#form-add-note').trigger('reset')
+                $('#id_estudiante').attr('disabled', '')
+                $('#id_typEval').attr('disabled', '')
+                $('#touchpin').attr('disabled', '')
+                $('#id_fechaEval').attr('disabled', '')
+                $('#save').attr('disabled', '')
+                $('#cancel').attr('disabled', '')
+            })
+            $('#save').click(function (e) {
+                e.preventDefault()
+                if (dataE.nota > 2) {
+                    GraficoApro[0].y += 1
+                } else {
+                    GraficoApro[1].y += 1
+                }
+                Grafico()
+                Resumen.push({
+                    ci: dataE.id,
+                    name: dataE.name,
+                    nota: dataE.nota
+                })
+                Tresumen()
+            })
+
+        })
+    </script>
+{% endblock %}

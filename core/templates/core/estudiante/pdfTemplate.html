@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link href="{% static 'core/Bootstrap4/css/bootstrap.css' %}">
+    <script src="{% static 'core/Bootstrap4/js/bootstrap.js' %}"></script>
+    <style>
+        html {
+            font-size: 12px;
+        }
+
+        thead tr {
+            border-bottom: 1px solid #000b16;
+            padding-bottom: 3px;
+            padding-top: 6px;
+            border-top: 1px solid #000b16 ;
+        }
+        tfoot tr {
+            border-top: 1px solid #000b16;
+            padding-top: 3px;
+        }
+
+        tbody tr {
+            padding-top: 3px;
+            margin-top: 3px;
+        }
+        tbody tr td{
+            text-align: center;
+        }
+        td {
+            border-bottom: 1px solid #8c8989;
+        }
+        div{
+            display: inline;
+            padding-bottom: 3px;
+            margin-bottom: 3px;
+        }
+    </style>
+</head>
+<body>
+{#<h1 style="text-align: center">Hades</h1>#}
+<h5 style="text-align: right">{{ fecha }}</h5>
+<h1 style="text-align: center">{{ title }}</h1>
+
+<h3 style="text-align: left">Total: {{ total }}</h3>
+
+{% for sexo in sexos %}
+    <div style="text-align: left">{{ sexo.sexo }}: {{ sexo.cant }}</div>
+{% endfor %}
+<br>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Carnet de identidad</th>
+        <th>Nombre completo</th>
+        <th>Edad</th>
+        <th>Sexo</th>
+        <th>Municipio</th>
+        <th>Provincia</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in data %}
+        <tr>
+            <td>{{ item.ci }}</td>
+            <td>{{ item.nombre }}</td>
+            <td>{{ item.age }}</td>
+            <td>{{ item.sexo }}</td>
+            <td>{{ item.municipio }}</td>
+            <td>{{ item.provincia }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>Carnet de identidad</th>
+            <th>Nombre completo</th>
+            <th>Edad</th>
+            <th>Sexo</th>
+            <th>Municipio</th>
+            <th>Provincia</th>
+        </tr>
+    </tfoot>
+</table>
+</body>
+</html>

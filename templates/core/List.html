@@ -1,0 +1,73 @@
+{% extends 'interfaz/index.html' %}
+{% load static %}
+
+
+{% block links %}
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+    {% block mylinks %}
+
+    {% endblock %}
+{% endblock %}
+
+{% block contenido %}
+    <div class="col-lg-12">
+        <div class="card card-gray">
+            <div class="card-header text-center">
+                <h3 class="card-title">
+                    {% block cardTitle %}
+
+                    {% endblock %}
+                </h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool">
+                        <i class="fas fa-info-circle"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="list" class="table table-bordered table-striped">
+                    <thead>
+                    <tr style="border-bottom: 1px solid black">
+                        {% block thead %}
+
+                        {% endblock %}
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        {% block tfoot %}
+
+                        {% endblock %}
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <!-- DataTables -->
+    <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'core/Datatables/Buttons-1.6.5/js/dataTables.buttons.js' %}"></script>
+    <script src="{% static 'core/Datatables/JSZip-2.5.0/jszip.js' %}"></script>
+    <script src="{% static 'core/Datatables/pdfmake-0.1.36/pdfmake.js' %}"></script>
+    <script src="{% static 'core/Datatables/pdfmake-0.1.36/vfs_fonts.js' %}"></script>
+    <script src="{% static 'core/Datatables/Buttons-1.6.5/js/buttons.html5.js' %}"></script>
+    <script src="{% static 'core/ajaxAdd.js' %}"></script>
+    <script src="{% static 'errorMessage.js' %}"></script>
+    {% block myscripts %}
+
+    {% endblock %}
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'interfaz/card.html' %}
+{% load static %}
+
+{% block fields %}
+    {% for field in form %}
+        <div class="form-group">
+            <label for="exampleInputEmail1">{{ field.label }}</label>
+            {{ field }}
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block buttons %}
+    <button type="submit" class="btn btn-primary"><i class="fa fa-key"></i> Guardar cambios
+    </button>
+    <a class="btn btn-danger" href="{% url 'interfaz:MenuPpal' %}" style="color: white">Cancelar</a>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'login/sendAjax.js' %}"></script>
+    <script src="{% static 'errorMessage.js' %}"></script>
+    <script>
+        $('form').submit(function (e) {
+            e.preventDefault();
+            var parameters = $(this).serializeArray();
+            var urlList = '{% url 'interfaz:MenuPpal' %}'
+            console.log(parameters);
+            Sendajax('¡Está seguro/a!', 'Los datos del usuario serán guardados', 'Su datos fueron actualizados correctamente', window.location.pathname, parameters,
+                urlList)
+        })
+    </script>
+{% endblock %}

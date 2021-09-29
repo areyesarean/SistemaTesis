@@ -1,0 +1,131 @@
+{% extends 'interfaz/index.html' %}
+{% load static %}
+
+{% block links %}
+    {#  Select 2  #}
+    <link rel="stylesheet" href="{% static 'core/Select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'core/Select2/select2-bootstrap4.min.css' %}">
+    {#  Tempus Diminus  #}
+    <link rel="stylesheet" href="{% static 'core/tempusDominus 5.1.2/tempusdominus-bootstrap-4.min.css' %}">
+    {#  TouchPin  #}
+    <link rel="stylesheet" href="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}">
+
+    <link rel="stylesheet" href="{% static 'core/daterangePicker v3.14.1/daterangepicker.css' %}">
+{% endblock %}
+
+{% block contenido %}
+    <div class="col-lg-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Plugins: Select2, Tempus Dominus, DateRangePicker</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form role="form">
+                <div class="card-body">
+                    <div class="form-group">
+                        <div class="col-lg-3">
+                            {{ form }}
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static  'core/Select2/select2.min.js' %}"></script>
+    <script src="{% static  'core/Select2/i18n/es.js' %}"></script>
+
+    <script src="{% static 'core/tempusDominus 5.1.2/moment.min.js' %}"></script>
+    <script src="{% static 'core/tempusDominus 5.1.2/moment-with-locales.js' %}"></script>
+    <script src="{% static 'core/tempusDominus 5.1.2/tempusdominus-bootstrap-4.min.js' %}"></script>
+
+    <script src="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+
+    <script src="{% static 'core/daterangePicker v3.14.1/daterangepicker.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                language: 'es'
+            })
+
+            $('select[name="sexo"]').change(function () {
+                let id = this.value
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'id': id
+                    },
+                    dataType: 'json'
+                }).done(function (data) {
+                    if (!data.hasOwnProperty('error')) {
+                        $('select[name="estudiantes"]').html('').select2({
+                            theme: 'bootstrap4',
+                            language: 'es',
+                            data: data
+                        })
+                    } else {
+                        $.alert({
+                            icon: 'fa fa-times-circle',
+                            theme: 'modern',
+                            animation: 'zoom',
+                            type: 'red',
+                            title: 'Ha ocurrido un error!',
+                            content: data.error
+                        });
+                    }
+                })
+            })
+
+            $('#fecha').datetimepicker({
+                format: 'YYYY-MM-DD',
+                date: moment().format('YYYY-MM-DD'),
+                locale: 'es',
+                minDate: moment().format('YYYY-MM-DD')
+            })
+
+            $('#touchpin').TouchSpin({
+                min: 0,
+                max: 100,
+                step: 0.1,
+                decimals: 2,
+                boostat: 5,
+                maxboostedstep: 10,
+                {#postfix: '%',#}
+
+            })
+
+            $('#range').daterangepicker({
+                "showDropdowns": true,
+                "showISOWeekNumbers": true,
+                "timePicker": true,
+                ranges: {
+                    'Hoy': [moment(), moment()],
+                    'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Últimos 7 Días': [moment().subtract(6, 'days'), moment()],
+                    'Últimos 30 Días': [moment().subtract(29, 'days'), moment()],
+                    'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+                    'Mes Pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                "alwaysShowCalendars": true,
+                "startDate": moment().format('MM/DD/YYYY'),
+                "endDate": moment().format('MM/DD/YYYY'),
+                "drops": "up",
+                "cancelClass": "btn-danger"
+            }, function (start, end, label) {
+                console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+            });
+
+        })
+    </script>
+{% endblock %}

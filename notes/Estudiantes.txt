@@ -1,0 +1,13 @@
+35,97101320027,Alejandro Reyes Areán,23,1,1,1
+36,95101342521,Dayai Ortiz Negrin,25,3,1,2
+37,97402322227,Delio Javier Perez Nuñez,23,6,1,1
+38,97021422427,Litsay Vazquez Vega,22,2,1,2
+39,97050945787,Adriana Fildalgo Méndez,24,2,1,2
+40,97103320027,Eliannis Veliz Oliva,22,2,1,2
+41,97121224927,Dayron Ríos Garcés,23,6,1,1
+42,97071327126,Erisdel Aguilar Garcés,23,9,1,1
+43,97031347127,Sandra Rosales Gómez,22,8,1,2
+44,96031323427,Víctor Nieves Vega,25,8,1,1
+45,96111353727,Rafael Rosales Dominguez,24,6,1,1
+46,97123120027,Orlendis Leisis Meriño Gomez,22,8,1,2
+47,98101320027,Lisabeth Pérez Hernandez,22,1,1,2

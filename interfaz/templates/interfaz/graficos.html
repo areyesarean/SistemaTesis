@@ -1,0 +1,102 @@
+{% extends 'interfaz/index.html' %}
+{% load static %}
+
+{% block links %}
+    <script src="{% static 'code/highcharts.js' %}"></script>
+    <script src="{% static 'code/modules/exporting.js' %}"></script>
+    <script src="{% static 'code/modules/offline-exporting.js' %}"></script>
+    <script src="{% static 'code/modules/export-data.js' %}"></script>
+    <script src="{% static 'code/modules/accessibility.js' %}"></script>
+    <script src="{% static 'code/themes/dark-unica.js' %}"></script>
+{% endblock %}
+
+{% block contenido %}
+    <div class="col-lg-6">
+        <div id="g-donut"></div>
+    </div>
+
+    <div class="col-lg-6">
+        <div id="g-bars"></div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        Highcharts.chart('g-bars', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Cantidad de estudiantes por municipio'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: {{ municipios|safe }},
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Cantidad de estudiantes'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y} </b></td></tr>',/*:.1f*/
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: 'Cantidad',
+                showInLegend: false,
+                colorByPoint: true,
+                data: {{ data_municipios }}
+
+            }]
+        });
+        Highcharts.chart('g-donut', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Porcentaje de estudiantes por sexo'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true
+                }
+            },
+            series: [{
+                name: 'Porcentaje',
+                data: {{ data|safe }}
+            }]
+        });
+    </script>
+{% endblock %}

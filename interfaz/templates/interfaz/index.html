@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Hades | {{ title }}</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'dist/css/adminlte.css' %}">
+    <!--jQuery Confirm-->
+    <link rel="stylesheet" href="{% static 'plugins/jqueryConfirm/css/jquery-confirm.css' %}">
+
+    <link rel="stylesheet" href="{% static 'core/sweetalert2/sweetalert2.css' %}">
+    <style>
+        *{
+            font-family: "Poppins Medium";
+        }
+    </style>
+    {% block links %}
+
+    {% endblock %}
+</head>
+<!--
+BODY TAG OPTIONS:
+=================
+Apply one or more of the following classes to to the body tag
+to get the desired effect
+|---------------------------------------------------------|
+|LAYOUT OPTIONS | sidebar-collapse                        |
+|               | sidebar-mini                            |
+|---------------------------------------------------------|
+-->
+<body class="hold-transition sidebar-mini sidebar-collapse text-sm ">
+<div class="wrapper">
+    <!-- Navbar -->
+    {% include 'interfaz/navbarTop.html' %}
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    {% include 'interfaz/navbarDerecha.html' %}
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+
+                    {% block contenido %}
+
+                    {% endblock %}
+                    <!-- /.col-md-6 -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <footer class="main-footer">
+        <strong>Copyright &copy; 2020-2021.</strong>
+        <div class="float-right d-none d-sm-inline-block">
+            <b>Version</b> 1.0
+        </div>
+    </footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE -->
+<script src="{% static 'dist/js/adminlte.js' %}"></script>
+<!-- jQuery Confirm -->
+<script src="{% static 'plugins/jqueryConfirm/js/jquery-confirm.js' %}"></script>
+
+<!-- HigthCharts 
+<script src="{% static 'code/highcharts.js' %}"></script>
+<script src="{% static 'code/modules/exporting.js' %}"></script>
+<script src="{% static 'code/modules/export-data.js' %}"></script>
+<script src="{% static 'code/modules/accessibility.js' %}"></script>-->
+
+<!-- OPTIONAL SCRIPTS -->
+<script src="{% static 'core/sweetalert2/sweetalert2.js' %}"></script>
+
+{% block scripts %}
+
+{% endblock %}
+</body>
+</html>

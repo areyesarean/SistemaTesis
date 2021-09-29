@@ -1,0 +1,19 @@
+{% extends 'interfaz/index.html' %}
+
+{% block contenido %}
+    <div class="error-page">
+        <h2 class="headline text-danger">403</h2>
+        <div class="error-content">
+            <h3><i class="fas fa-exclamation-triangle text-danger"></i> Oops! Acceso Denegado.</h3>
+
+            <p>
+                <strong>Usted no tiene los permisos necesarios para acceder a este módulo.</strong>Contacte con el administrador
+                del sistema para que le asigne los permisos correspondientes en dependencia de su rol. <strong>Pulse
+                atrás para regresar a la página
+                donde se encontraba o haga click en el siguiente enlace</strong>
+                <a href="{% url 'interfaz:MenuPpal' %}"> Página principal</a>.
+            </p>
+
+        </div>
+    </div>
+{% endblock %}
