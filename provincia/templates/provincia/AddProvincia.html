@@ -11,7 +11,7 @@
     <div class="col-lg-12">
         <div class="card card-primary">
             <div class="card-header">
-                <h3 class="card-title"><i class="fa fa-user"></i> Crear nuevo estudiante</h3>
+                <h3 class="card-title"><i class="fa fa-user"></i> {{ title }}</h3>
             </div>
             <!-- /.card-header -->
             <!-- form start -->
@@ -21,30 +21,8 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group ">
-                                <label for="exampleInputEmail1">{{ form.ci.label }}</label>
-                                {{ form.ci }}
-                            </div>
-                            <div class="form-group ">
-                                <label for="exampleInputPassword1">{{ form.nombre.label }}</label>
-                                {{ form.nombre }}
-                            </div>
-                            <div class="form-group ">
-                                <label for="exampleInputPassword1">{{ form.age.label }}</label>
-                                {{ form.age }}
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group ">
-                                <label for="exampleInputPassword1">{{ form.sexo.label }}</label>
-                                {{ form.sexo }}
-                            </div>
-                            <div class="form-group ">
                                 <label for="exampleInputPassword1">{{ form.provincia.label }}</label>
                                 {{ form.provincia }}
-                            </div>
-                            <div class="form-group ">
-                                <label for="exampleInputPassword1">{{ form.municipio.label }}</label>
-                                {{ form.municipio }}
                             </div>
                         </div>
                     </div>
@@ -53,7 +31,7 @@
                 <!-- /.card-body -->
                 <div class="card-footer text-center">
                     <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Guardar</button>
-                    <a class="btn btn-danger ml-5" style="color: white" href="{% url 'core:ListEstudiante' %}"><i
+                    <a class="btn btn-danger ml-5" style="color: white" href="{% url 'provincia:ListProvincia' %}"><i
                             class="fa fa-times-circle"></i> Cancelar</a>
                 </div>
             </form>
@@ -77,7 +55,7 @@
             $('form').submit(function (e) {
                 e.preventDefault();
                 let parameters = $(this).serializeArray();
-                let urlList = '{% url 'core:ListEstudiante' %}'
+                let urlList = '{% url 'provincia:ListProvincia' %}'
                 SendajaxL('¡Está seguro/a!', 'Los datos del estudiante serán guardados', window.location.pathname, parameters, urlList)
             })
         })

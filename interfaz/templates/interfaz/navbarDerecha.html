@@ -37,6 +37,15 @@
                 </li>
                 <li class="nav-header">Entidades</li>
                 <li class="nav-item">
+                    <a href="{% url 'provincia:ListProvincia' %}" class="nav-link">
+                        <i class="nav-icon fas fa-home"></i>
+                        <p>
+                            Provincias
+                            <span class="right badge badge-info">{{ cant_estudiantes }}</span>
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{% url 'core:ListEstudiante' %}" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>
                         <p>

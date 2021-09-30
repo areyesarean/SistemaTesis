@@ -1,4 +1,6 @@
 from django.db import models
+from django.forms import model_to_dict
+
 from provincia import mchoices
 
 
@@ -13,3 +15,7 @@ class Provincias(models.Model):
         verbose_name = 'Provincia'
         verbose_name_plural = 'Provincias'
         # ordering = ['provincia']
+
+    def toJson(self):
+        item = model_to_dict(self)
+        return item

@@ -60,26 +60,29 @@ class ListEstudiante(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
 class AddEstudiante(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     permission_required = 'core.add_estudiante'
-    template_name = 'core/estudiante/addNexEstudent.html'
+    template_name = 'core/Add.html'
     form_class = FormEstudiante
     success_url = reverse_lazy('core:AddEstudiante')
 
-    # def post(self, request, *args, **kwargs):
-    #     data = {}
-    #     try:
-    #         form = self.get_form()
-    #         data = form.save()
-    #     except Exception as e:
-    #         data['error'] = str(e)
-    #     return JsonResponse(data)
-
-    def form_valid(self, form):
+    def post(self, request, *args, **kwargs):
+        data = {}
         try:
-            estudent = form.save()
-            messages.success(self.request, 'Estudiante guardado correcamente')
-        except IntegrityError:
-            messages.error(self.request, 'Ya existe un estudiante con esos datos')
-        return super(AddEstudiante, self).form_valid(form)
+            form = self.get_form()
+            if form.is_valid():
+                form.save()
+            else:
+                data['error'] = form.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
+    # def form_valid(self, form):
+    #     try:
+    #         estudent = form.save()
+    #         messages.success(self.request, 'Estudiante guardado correcamente')
+    #     except IntegrityError:
+    #         messages.error(self.request, 'Ya existe un estudiante con esos datos')
+    #     return super(AddEstudiante, self).form_valid(form)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AddEstudiante, self).get_context_data(**kwargs)
@@ -102,7 +105,10 @@ class UpdateEstudiante(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         data = {}
         try:
             form = self.get_form()
-            data = form.save()
+            if form.is_valid():
+                form.save()
+            else:
+                data['error'] = form.errors
         except Exception as e:
             data['error'] = str(e)
         return JsonResponse(data)
