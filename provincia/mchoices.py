@@ -1,8 +1,3 @@
-sexo = (
-    ('Masculino', 'Masculino'),
-    ('Femenino', 'Femenino'),
-    ('Gary', 'Gary'),
-)
 Provincias = (
     ('ISL', 'Isla de la juventud'),
     ('PRI', 'Pinar del río'),

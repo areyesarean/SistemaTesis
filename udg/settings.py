@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'interfaz.apps.InterfazConfig',
     'login.apps.LoginConfig',
+    'provincia.apps.ProvinciaConfig'
     'widget_tweaks',
     'django_filters',
 ]
