@@ -76,7 +76,7 @@ class AddProvincia(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
 
 class UpdateProvincia(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
-    permission_required = 'provincia..add_provincia'
+    permission_required = 'provincia.add_provincia'
     template_name = 'provincia/AddProvincia.html'
     form_class = FormProvincia
     success_url = reverse_lazy('provincia:ListProvincia')

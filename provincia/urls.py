@@ -10,6 +10,4 @@ urlpatterns = [
     path('update/<int:pk>', UpdateProvincia.as_view(), name='UpdateProvincia'),
     # path('delete/<int:pk>', DeleteEstudiante.as_view(), name='DeleteEstudiante'),
     # path('pdf/', PdfEstudiantesView.as_view(), name='PdfEstudiantesView'),
-    # path('select2/', Plugins.as_view(), name='Plugins'),
-    # path('evaluacion/', EvaluacionView.as_view(), name='Evaluacion'),
 ]
