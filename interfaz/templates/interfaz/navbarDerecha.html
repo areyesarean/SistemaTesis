@@ -46,6 +46,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{% url 'municipio:ListMunicipio' %}" class="nav-link">
+                        <i class="nav-icon fas fa-archive"></i>
+                        <p>
+                            Municipios
+                            <span class="right badge badge-info">{{ cant_estudiantes }}</span>
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{% url 'core:ListEstudiante' %}" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>
                         <p>

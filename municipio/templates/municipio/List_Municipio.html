@@ -1,0 +1,244 @@
+{% extends 'core/List.html' %}
+{% load static %}
+
+
+{% block cardTitle %}
+    <i class="fa fa-list"></i> {{ title }}
+{% endblock %}
+
+{% block thead %}
+    <th>Selección</th>
+    <th>Municipio</th>
+    <th>Provincia</th>
+    <th>Opciones</th>
+{% endblock %}
+
+{% block tfoot %}
+    <th>Selección</th>
+    <th>Municipio</th>
+    <th>Provincia</th>
+    <th>Opciones</th>
+{% endblock %}
+
+{% block myscripts %}
+
+    <script>
+        let TableEst
+        function List() {
+            TableEst = $("#list").DataTable({
+                responsive: true,
+                autoWidth: false,
+                destroy: true,
+                deferRender: true,
+                ajax: {
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'list'
+                    },
+                    dataSrc: "",
+                },
+                dom: "<'row'<'form-inline'<'offset-sm-10'>>>" +
+                    "<'row'<'col-lg-4'l><'col-lg-4 text-center mb-2'B><'col-lg-4'f>>" +
+                    "<'row'<'col-lg-12'tr>>" +
+                    "<'row'<'col-lg-5'i><'col-lg-7'p>>",
+                buttons: [
+                    {
+                        text: '<i class="fa fa-spinner"></i>',
+                        titleAttr: 'Actualizar listado',
+                        className: 'btn btn-info',
+                        action: function () {
+                            this.ajax.reload()
+                        }
+                    },
+                    {
+                        text: '<i class="fa fa-plus"></i>',
+                        titleAttr: 'Añadir nuevo Municipio',
+                        className: 'btn btn-primary',
+                        action: function () {
+                            location.replace('{% url 'municipio:AddMunicipio' %}');
+                        }
+                    },
+                    {
+                        text: '<i class="fa fa-trash"></i>',
+                        titleAttr: 'Eliminación multiple',
+                        className: 'btn btn-danger',
+                        action: function () {
+                            let ids = []
+                            $(':checkbox:checked').each(function () {
+                                ids.push($(this).val())
+                            })
+                            console.log(ids)
+                            if (ids.length == 0) {
+                                $.alert({
+                                    icon: 'fa fa-times-circle',
+                                    theme: 'modern',
+                                    animation: 'zoom',
+                                    type: 'red',
+                                    title: 'Error!',
+                                    content: 'Debe seleccionar almenos un Municipio de la lista'
+                                });
+                            } else {
+                                $.confirm({
+                                    icon: 'fas fa-exclamation-triangle',
+                                    theme: 'modern',
+                                    title: 'Esta seguro!!!',
+                                    content: 'Los Municipios seleccionadas serán eliminados',
+                                    type: 'orange',
+                                    animation: 'zoom',
+                                    buttons: {
+                                        save: {
+                                            text: '<i class="fa fa-trash"></i> Eliminar',
+                                            action: function () {
+                                                $.ajax({
+                                                    url: window.location.pathname,
+                                                    type: 'POST',
+                                                    dataType: 'json',
+                                                    data: {
+                                                        'action': 'del-mult',
+                                                        ids
+                                                    },
+                                                }).done(function (data) {
+                                                    if (!data.hasOwnProperty('error')) {
+                                                        $.alert({
+                                                            icon: 'fas fa-check',
+                                                            theme: 'modern',
+                                                            type: 'green',
+                                                            title: 'Éxito!!!',
+                                                            animation: 'zoom',
+                                                            content: 'Municipios eliminados correctamente',
+                                                            buttons: {
+                                                                confirm: {
+                                                                    text: '<i class="fa fa-check-circle"></i> Aceptar',
+                                                                    btnClass: 'btn-default',
+                                                                    action: function () {
+                                                                        TableEst.ajax.reload()
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                                    } else {
+                                                        errorMessage(data.error);
+                                                    }
+                                                }).fail(function (jqXHR, textStatus, errorThrown) {
+                                                    alert('Metodo Fail de Ajax: ' + textStatus + ': ' + errorThrown);
+                                                })
+                                            }
+                                        },
+                                        cancel: {
+                                            text: '<i class="fa fa-times"></i> Cancelar',
+                                            btnClass: 'btn-danger',
+                                            close: function () {
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+
+
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i>',
+                        titleAttr: 'Exportar a exel',
+                        className: 'btn btn-success',
+                        exportOptions: {
+                            columns: [2]
+                        }
+                    },
+                    {
+                        //extend: 'pdfHtml5',
+                        text: '<i class="fas fa-file-pdf"></i>',
+                        titleAttr: 'Exportar a Pdf',
+                        className: 'btn btn-danger',
+                        //exportOptions: {
+                        //    columns: [0, 1, 2, 3, 4, 5]
+                        //}
+                        action: function () {
+                            location.replace('{% url 'core:PdfEstudiantesView' %}');
+                        }
+                    },
+                ],
+                columns: [
+                    {'defaultContent': ''},
+                    {'data': 'municipio'},
+                    {'data': 'provincia'},
+                    {'defaultContent': ''},
+                ],
+                columnDefs: [
+                    {
+                        targets: [0],
+                        class: 'text-center',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return '<input type="checkbox" name="check-est" value='+row.id+' style="cursor: pointer">'
+                        }
+                    },
+                    {
+                        targets: [1, 2, 3],
+                        class: 'text-center',
+                    },
+                    {
+                        targets: [-1],
+                        class: 'text-center',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            var buttons = '<a class="btn btn-warning btn-xs" title="Editar" href="/municipio/update/' + row.id + '"><i class="fa fa-edit"></i></a>'
+                            buttons += '<a class="btn btn-danger btn-xs ml-1" rel="del" title="Eliminar" href="/municipio/delete/' + row.id + '"><i class="fa fa-trash"></i></a>'
+                            return buttons
+                        }
+                    },
+                ],
+                language: {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "<i class='fa fa-search'></i>",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                },
+                fnInitComplete: function () {
+
+                }
+
+            })
+        }
+
+        $(function () {
+            List()
+
+            $('#list tbody').on('click', 'a[rel="del"]', function (e) {
+                e.preventDefault()
+                let data = TableEst.row($(this).parents('tr')).data()
+                let parameters = {
+                    action: 'del',
+                    id: data.id
+                }
+                console.log(parameters)
+                DelAjax('¡Está seguro/a!', 'Los datos de los Municipios seran eliminados', window.location.pathname, parameters, function () {
+                    TableEst.ajax.reload()
+                })
+            })
+
+
+        })
+    </script>
+
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'interfaz/index.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'core/Select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'core/Select2/select2-bootstrap4.min.css' %}">
+{% endblock %}
+
+{% block contenido %}
+    <div class="col-lg-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-user"></i> {{ title }}</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form method="post">
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group ">
+                                <label for="exampleInputPassword1">{{ form.municipio.label }}</label>
+                                {{ form.municipio }}
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group ">
+                                <label for="exampleInputPassword1">{{ form.provincia.label }}</label>
+                                {{ form.provincia }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer text-center">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Guardar</button>
+                    <a class="btn btn-danger ml-5" style="color: white" href="{% url 'municipio:ListMunicipio' %}"><i
+                            class="fa fa-times-circle"></i> Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'core/ajaxAdd.js' %}"></script>
+    <script src="{% static 'errorMessage.js' %}"></script>
+    <script src="{% static  'core/Select2/select2.min.js' %}"></script>
+    <script src="{% static  'core/Select2/i18n/es.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                language: 'es'
+            })
+
+            $('form').submit(function (e) {
+                e.preventDefault();
+                let parameters = $(this).serializeArray();
+                let urlList = '{% url 'municipio:ListMunicipio' %}'
+                SendajaxL('¡Está seguro/a!', 'Los datos del municipio serán guardados', window.location.pathname, parameters, urlList)
+            })
+        })
+    </script>
+{% endblock %}

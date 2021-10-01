@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'interfaz.apps.InterfazConfig',
     'login.apps.LoginConfig',
     'provincia.apps.ProvinciaConfig',
+    'municipio.apps.MunicipioConfig',
     'widget_tweaks',
     'django_filters',
 ]
