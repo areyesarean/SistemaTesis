@@ -6,7 +6,7 @@ from municipio.models import Municipios
 
 
 class BloodBank(models.Model):
-    nombre = models.CharField('Nombre', unique=True, max_length=60)
+    nombre = models.CharField('Nombre', unique=False, max_length=60)
     municipio = models.ForeignKey(Municipios, on_delete=models.PROTECT, verbose_name='Municipio')
 
     def __str__(self):
