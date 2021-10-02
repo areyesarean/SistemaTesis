@@ -64,6 +64,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{% url 'bloodbank:ListBloodBank' %}" class="nav-link">
+                        <i class="nav-icon fas fa-bank"></i>
+                        <p>
+                            Bancos de Sangre
+                            <span class="right badge badge-info">{{ cant_estudiantes }}</span>
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{% url 'core:ListEstudiante' %}" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
