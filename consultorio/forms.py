@@ -1,11 +1,14 @@
 from django.forms import *
 
-from bloodbank.models import BloodBank
 from consultorio.models import Consultorio
 
 
 class FormConsultorio(ModelForm):
     error_css_class = 'is-invalid'
+    action = CharField(widget=TextInput(attrs={
+        'class': 'form-control text-center',
+        'disabled': '',
+    }))
 
     class Meta:
         model = Consultorio
@@ -30,10 +33,14 @@ class FormConsultorio(ModelForm):
         cleaned_data = super(FormConsultorio, self).clean()
         numero = cleaned_data.get('numero')
         areasalud = cleaned_data.get('areasalud')
+        action = cleaned_data.get('action')
+        print(action)
         try:
             Consultorio.objects.get(numero=numero, areasalud=areasalud)
         except Consultorio.DoesNotExist:
             pass
         else:
-            raise forms.ValidationError(
-                'Ya existe un Consultorio en el Área de Salud: "{}" con el número: "{}". <b>Sugerencia: Cambie de número<b/> '.format(areasalud, numero))
+            if action != 'edit':
+                raise forms.ValidationError(
+                    'Ya existe un Consultorio en el Área de Salud: "{}" con el número: "{}". <b>Sugerencia: Cambie de número<b/> '.format(
+                        areasalud, numero))
