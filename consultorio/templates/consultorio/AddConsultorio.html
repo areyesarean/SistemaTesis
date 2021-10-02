@@ -31,7 +31,7 @@
                                 {{ form.areasalud }}
                             </div>
                         </div>
-
+                        <input type="hidden" name="action" value="{{ action }}" class="form-control" id="id_action">
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
@@ -70,6 +70,12 @@
             $('form').submit(function (e) {
                 e.preventDefault();
                 let parameters = $(this).serializeArray();
+                parameters.forEach((element) => {
+                    if(element['name'] === 'direccion'&& element['value'] ===''){
+                        element['value'] = "No se especificó una dirección"
+                    }
+                })
+                console.log(parameters)
                 let urlList = '{% url 'consultorio:ListConsultorio' %}'
                 SendajaxL('¡Está seguro/a!', 'Los datos del Consultorio serán guardados', window.location.pathname, parameters, urlList)
             })
