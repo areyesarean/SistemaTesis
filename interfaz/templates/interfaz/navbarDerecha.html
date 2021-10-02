@@ -55,6 +55,15 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{% url 'areasalud:ListAreaSalud' %}" class="nav-link">
+                        <i class="nav-icon fas fa-archive"></i>
+                        <p>
+                            Áreas de Salud
+                            <span class="right badge badge-info">{{ cant_estudiantes }}</span>
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{% url 'core:ListEstudiante' %}" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
