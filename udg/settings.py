@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'municipio.apps.MunicipioConfig',
     'areasalud.apps.AreasaludConfig',
     'bloodbank.apps.BloodbankConfig',
+    'consultorio.apps.ConsultorioConfig',
     'widget_tweaks',
     'django_filters',
 ]
