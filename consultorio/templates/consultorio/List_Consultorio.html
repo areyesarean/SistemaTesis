@@ -8,15 +8,17 @@
 
 {% block thead %}
     <th>Selección</th>
-    <th>Nombre</th>
-    <th>Municipio</th>
+    <th>Número</th>
+    <th>Dirección</th>
+    <th>Área de Salud</th>
     <th>Opciones</th>
 {% endblock %}
 
 {% block tfoot %}
     <th>Selección</th>
-    <th>Nombre</th>
-    <th>Municipio</th>
+    <th>Número</th>
+    <th>Dirección</th>
+    <th>Área de Salud</th>
     <th>Opciones</th>
 {% endblock %}
 
@@ -56,7 +58,7 @@
                         titleAttr: 'Añadir nuevo Banco de Sangre',
                         className: 'btn btn-primary',
                         action: function () {
-                            location.replace('{% url 'bloodbank:AddBloodBank' %}');
+                            location.replace('{% url 'consultorio:AddConsultorio' %}');
                         }
                     },
                     {
@@ -76,14 +78,14 @@
                                     animation: 'zoom',
                                     type: 'red',
                                     title: 'Error!',
-                                    content: 'Debe seleccionar almenos un Banco de Sangre de la lista'
+                                    content: 'Debe seleccionar almenos un Consultorio de la lista'
                                 });
                             } else {
                                 $.confirm({
                                     icon: 'fas fa-exclamation-triangle',
                                     theme: 'modern',
                                     title: 'Esta seguro!!!',
-                                    content: 'Los Banco de Sangre seleccionadas serán eliminados',
+                                    content: 'Los Consultorios seleccionados serán eliminados',
                                     type: 'orange',
                                     animation: 'zoom',
                                     buttons: {
@@ -106,7 +108,7 @@
                                                             type: 'green',
                                                             title: 'Éxito!!!',
                                                             animation: 'zoom',
-                                                            content: 'Bancos de Sangre eliminada correctamente',
+                                                            content: 'Consultorio eliminado correctamente',
                                                             buttons: {
                                                                 confirm: {
                                                                     text: '<i class="fa fa-check-circle"></i> Aceptar',
@@ -162,8 +164,9 @@
                 ],
                 columns: [
                     {'defaultContent': ''},
-                    {'data': 'nombre'},
-                    {'data': 'municipio'},
+                    {'data': 'numero'},
+                    {'data': 'direccion'},
+                    {'data': 'areasalud'},
                     {'defaultContent': ''},
                 ],
                 columnDefs: [
@@ -184,8 +187,8 @@
                         class: 'text-center',
                         orderable: false,
                         render: function (data, type, row) {
-                            var buttons = '<a class="btn btn-warning btn-xs" title="Editar" href="/bloodbank/update/' + row.id + '"><i class="fa fa-edit"></i></a>'
-                            buttons += '<a class="btn btn-danger btn-xs ml-1" rel="del" title="Eliminar" href="/bloodbank/delete/' + row.id + '"><i class="fa fa-trash"></i></a>'
+                            var buttons = '<a class="btn btn-warning btn-xs" title="Editar" href="/consultorio/update/' + row.id + '"><i class="fa fa-edit"></i></a>'
+                            buttons += '<a class="btn btn-danger btn-xs ml-1" rel="del" title="Eliminar" href="/consultorio/delete/' + row.id + '"><i class="fa fa-trash"></i></a>'
                             return buttons
                         }
                     },
@@ -232,7 +235,7 @@
                     id: data.id
                 }
                 console.log(parameters)
-                DelAjax('¡Está seguro/a!', 'Los datos de los Bancos de Sangre serán eliminados', window.location.pathname, parameters, function () {
+                DelAjax('¡Está seguro/a!', 'Los datos del Consultorio serán eliminados', window.location.pathname, parameters, function () {
                     TableEst.ajax.reload()
                 })
             })

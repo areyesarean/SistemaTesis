@@ -19,16 +19,25 @@
                 {% csrf_token %}
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-4">
                             <div class="form-group ">
-                                <label for="exampleInputPassword1">{{ form.nombre.label }}</label>
-                                {{ form.nombre }}
+                                <label for="exampleInputPassword1">{{ form.numero.label }}</label>
+                                {{ form.numero }}
                             </div>
                         </div>
+                        <div class="col-lg-8">
+                            <div class="form-group ">
+                                <label for="exampleInputPassword1">{{ form.areasalud.label }}</label>
+                                {{ form.areasalud }}
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group ">
-                                <label for="exampleInputPassword1">{{ form.municipio.label }}</label>
-                                {{ form.municipio }}
+                                <label for="exampleInputPassword1">{{ form.direccion.label }}</label>
+                                {{ form.direccion }}
                             </div>
                         </div>
                     </div>
@@ -37,7 +46,7 @@
                 <!-- /.card-body -->
                 <div class="card-footer text-center">
                     <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Guardar</button>
-                    <a class="btn btn-danger ml-5" style="color: white" href="{% url 'bloodbank:ListBloodBank' %}"><i
+                    <a class="btn btn-danger ml-5" style="color: white" href="{% url 'consultorio:ListConsultorio' %}"><i
                             class="fa fa-times-circle"></i> Cancelar</a>
                 </div>
             </form>
@@ -61,8 +70,8 @@
             $('form').submit(function (e) {
                 e.preventDefault();
                 let parameters = $(this).serializeArray();
-                let urlList = '{% url 'bloodbank:ListBloodBank' %}'
-                SendajaxL('¡Está seguro/a!', 'Los datos del Banco de Sangre serán guardados', window.location.pathname, parameters, urlList)
+                let urlList = '{% url 'consultorio:ListConsultorio' %}'
+                SendajaxL('¡Está seguro/a!', 'Los datos del Consultorio serán guardados', window.location.pathname, parameters, urlList)
             })
         })
     </script>
