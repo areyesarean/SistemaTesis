@@ -1,13 +1,13 @@
 from django.urls import path
 
-from areasalud.views import ListAreaSalud, AddAreaSalud, UpdateAreaSalud
+from bloodbank.views import ListBloodBank, AddBloodBank, UpdateBloodBank
 
 app_name = 'bloodbank'
 
 urlpatterns = [
-    path('list/', ListAreaSalud.as_view(), name='ListAreaSalud'),
-    path('add/', AddAreaSalud.as_view(), name='AddAreaSalud'),
-    path('update/<int:pk>', UpdateAreaSalud.as_view(), name='UpdateAreaSalud'),
+    path('list/', ListBloodBank.as_view(), name='ListBloodBank'),
+    path('add/', AddBloodBank.as_view(), name='AddBloodBank'),
+    path('update/<int:pk>', UpdateBloodBank.as_view(), name='UpdateBloodBank'),
     # path('delete/<int:pk>', DeleteEstudiante.as_view(), name='DeleteEstudiante'),
     # path('pdf/', PdfEstudiantesView.as_view(), name='PdfEstudiantesView'),
 ]
