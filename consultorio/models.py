@@ -7,7 +7,7 @@ from areasalud.models import AreaSalud
 
 class Consultorio(models.Model):
     numero = models.IntegerField('Número', unique=False)
-    direccion = models.TextField('Dirección', unique=False, max_length=200)
+    direccion = models.TextField('Dirección', unique=False,blank=True, max_length=200)
     areasalud = models.ForeignKey(AreaSalud, on_delete=models.PROTECT, verbose_name='Área de Salud')
 
     def __str__(self):
