@@ -10,7 +10,7 @@ class AreaSalud(models.Model):
     municipio = models.ForeignKey(Municipios, on_delete=models.PROTECT, verbose_name='Municipio')
 
     def __str__(self):
-        return self.nombre
+        return '{} - {}'.format(self.nombre, self.municipio)
 
     class Meta:
         verbose_name = 'AreaSalud'
