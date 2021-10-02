@@ -71,6 +71,7 @@ class AddConsultorio(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AddConsultorio, self).get_context_data(**kwargs)
         context['title'] = 'Crear nuevo Consultorio'
+        context['action'] = 'create'
         return context
 
 
@@ -100,4 +101,5 @@ class UpdateConsultorio(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(UpdateConsultorio, self).get_context_data(**kwargs)
         context['title'] = 'Editar Consultorio'
+        context['action'] = 'edit'
         return context
