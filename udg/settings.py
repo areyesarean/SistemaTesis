@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'bloodbank.apps.BloodbankConfig',
     'consultorio.apps.ConsultorioConfig',
     'bloodgroup.apps.BloodgroupConfig',
+    'sexo.apps.SexoConfig',
     'widget_tweaks',
     'django_filters',
 ]
