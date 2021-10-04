@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'consultorio.apps.ConsultorioConfig',
     'bloodgroup.apps.BloodgroupConfig',
     'sexo.apps.SexoConfig',
+    'skincolor.apps.SkincolorConfig',
     'widget_tweaks',
     'django_filters',
 ]
