@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'bloodgroup.apps.BloodgroupConfig',
     'sexo.apps.SexoConfig',
     'skincolor.apps.SkincolorConfig',
+    'donante.apps.DonanteConfig',
     'widget_tweaks',
     'django_filters',
 ]
