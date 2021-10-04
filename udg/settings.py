@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'areasalud.apps.AreasaludConfig',
     'bloodbank.apps.BloodbankConfig',
     'consultorio.apps.ConsultorioConfig',
+    'bloodgroup.apps.BloodgroupConfig',
     'widget_tweaks',
     'django_filters',
 ]
