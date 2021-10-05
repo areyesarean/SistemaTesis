@@ -1,0 +1,129 @@
+{% extends 'interfaz/index.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'core/Select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'core/Select2/select2-bootstrap4.min.css' %}">
+{% endblock %}
+
+{% block contenido %}
+    <div class="col-lg-12">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fa fa-user"></i> {{ title }}</h3>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            <form method="post">
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-5 col-md-12">
+                                    <div class="form-group ">
+                                        <label for="exampleInputPassword1">{{ form.consultorio.label }}</label>
+                                        {{ form.consultorio }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-7">
+                                    <div class="form-group ">
+                                        <label for="exampleInputPassword1">{{ form.ci.label }}</label>
+                                        {{ form.ci }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <div class="form-group ">
+                                        <label for="exampleInputPassword1">{{ form.nombre.label }}</label>
+                                        {{ form.nombre }}
+                                    </div>
+                                </div>
+                                <div class="col-lg-7">
+                                    <div class="form-group ">
+                                        <label for="exampleInputPassword1">{{ form.apellidos.label }}</label>
+                                        {{ form.apellidos }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group ">
+                                                <label for="exampleInputPassword1">{{ form.edad.label }}</label>
+                                                {{ form.edad }}
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group ">
+                                                <label for="exampleInputPassword1">{{ form.bloodgroup.label }}</label>
+                                                {{ form.bloodgroup }}
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group ">
+                                                <label for="exampleInputPassword1">{{ form.sexo.label }}</label>
+                                                {{ form.sexo }}
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group ">
+                                                <label for="exampleInputPassword1">{{ form.skincolor.label }}</label>
+                                                {{ form.skincolor }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-7">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group ">
+                                                <label for="exampleInputPassword1">{{ form.direccion.label }}</label>
+                                                {{ form.direccion }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer text-center">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Guardar</button>
+                    <a class="btn btn-danger ml-5" style="color: white" href="{% url 'bloodbank:ListBloodBank' %}"><i
+                            class="fa fa-times-circle"></i> Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'core/ajaxAdd.js' %}"></script>
+    <script src="{% static 'errorMessage.js' %}"></script>
+    <script src="{% static  'core/Select2/select2.min.js' %}"></script>
+    <script src="{% static  'core/Select2/i18n/es.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                language: 'es'
+            })
+
+            $('form').submit(function (e) {
+                e.preventDefault();
+                let parameters = $(this).serializeArray();
+                let urlList = '{% url 'bloodbank:ListBloodBank' %}'
+                SendajaxL('¡Está seguro/a!', 'Los datos del Banco de Sangre serán guardados', window.location.pathname, parameters, urlList)
+            })
+        })
+    </script>
+{% endblock %}
