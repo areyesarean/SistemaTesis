@@ -11,7 +11,7 @@ class Consultorio(models.Model):
     areasalud = models.ForeignKey(AreaSalud, on_delete=models.PROTECT, verbose_name='Área de Salud')
 
     def __str__(self):
-        return str(self.numero)
+        return '#{} - {}'.format(self.numero, self.areasalud)
 
     class Meta:
         verbose_name = 'Consultorio'
