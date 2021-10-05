@@ -8,6 +8,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import UpdateView, ListView, CreateView, DeleteView, TemplateView, FormView
 
+from core.filters import EstudianteFilter
 from core.forms import FormEstudiante, Select2, Evaluacion
 from core.models import Estudiante, Sexo
 
@@ -25,6 +26,7 @@ class ListEstudiante(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     permission_required = 'core.view_estudiante'
     template_name = 'core/Estudiante/List_Estudiante.html'
     model = Estudiante
+
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -55,6 +57,7 @@ class ListEstudiante(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context = super(ListEstudiante, self).get_context_data(**kwargs)
         context['title'] = 'Listado de estudiantes'
         context['btnadd'] = 'Crear nuevo estudiante'
+        context['filter'] = EstudianteFilter(self.request.POST, queryset=Estudiante.objects.all())
         return context
 
 

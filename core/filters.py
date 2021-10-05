@@ -7,5 +7,5 @@ class EstudianteFilter(filters.FilterSet):
         model = Estudiante
         fields = {
             'ci': ['exact', 'icontains'],
-            'name': ['exact', 'icontains']
+            'nombre': ['exact', 'icontains']
         }
