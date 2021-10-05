@@ -4,6 +4,10 @@
 
 {% block cardTitle %}
     <i class="fa fa-list"></i> {{ title }}
+    <form method="post">
+    {{ filter.form }}
+    <button type="submit">Buscar</button>
+    </form>
 {% endblock %}
 
 {% block thead %}
