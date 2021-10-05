@@ -34,7 +34,7 @@ class Donante(models.Model):
 
     def toJson(self):
         item = model_to_dict(self)
-        item['consultorio'] = self.consultorio.numero
+        item['consultorio'] = '#{} {}'.format(self.consultorio.numero, self.consultorio.areasalud)
         item['bloodgroup'] = self.bloodgroup.bloodgroup
         item['sexo'] = self.sexo.sexo
         item['skincolor'] = self.skincolor.nskincolor
