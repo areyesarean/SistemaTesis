@@ -7,18 +7,78 @@
     <script src="{% static 'code/modules/offline-exporting.js' %}"></script>
     <script src="{% static 'code/modules/export-data.js' %}"></script>
     <script src="{% static 'code/modules/accessibility.js' %}"></script>
-    <script src="{% static 'code/themes/dark-unica.js' %}"></script>
+    <script src="{% static 'code/themes/sand-signika.js' %}"></script>
 {% endblock %}
 
 {% block contenido %}
-    <div class="col-lg-6">
-        <div id="g-donut"></div>
-    </div>
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-home"></i></span>
 
-    <div class="col-lg-6">
+                    <div class="info-box-content">
+                        <span class="info-box-text">Áreas de Salud</span>
+                        <span class="info-box-number">
+                  {{ cant_areasalud }}
+                </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-building"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Consultorios</span>
+                        <span class="info-box-number">{{ cant_consultorios }}</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+
+            <!-- fix for small devices only -->
+            <div class="clearfix hidden-md-up"></div>
+
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-tint "></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Donaciones</span>
+                        <span class="info-box-number">5</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box mb-3">
+                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Donantes</span>
+                        <span class="info-box-number">{{ cant_donantes }}</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+        </div>
+    </div>
+    <div class="col-lg-12">
         <div id="g-bars"></div>
     </div>
-
+    <div class="col-lg-6 mt-3">
+        <div id="g-donut"></div>
+    </div>
 {% endblock %}
 
 {% block scripts %}
@@ -28,19 +88,19 @@
                 type: 'column'
             },
             title: {
-                text: 'Cantidad de estudiantes por municipio'
+                text: 'Cantidad de donantes por área de salud'
             },
             subtitle: {
                 text: ''
             },
             xAxis: {
-                categories: {{ municipios|safe }},
+                categories: {{ areasalud|safe }},
                 crosshair: true
             },
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Cantidad de estudiantes'
+                    text: 'Cantidad de donantes'
                 }
             },
             tooltip: {
@@ -73,7 +133,7 @@
                 type: 'pie'
             },
             title: {
-                text: 'Porcentaje de estudiantes por sexo'
+                text: 'Porcentage de donantes por sexo'
             },
             tooltip: {
                 pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -94,7 +154,7 @@
                 }
             },
             series: [{
-                name: 'Porcentaje',
+                name: 'Porcentage',
                 data: {{ data|safe }}
             }]
         });
