@@ -4,7 +4,6 @@
 
 {% block cardTitle %}
     <i class="fa fa-list"></i> {{ title }}
-    {{ form }}
 {% endblock %}
 
 {% block thead %}
@@ -15,6 +14,8 @@
     <th>Edad</th>
     <th>Dirección</th>
     <th>Consultorio</th>
+    <th>Área de Salud</th>
+    <th>Municipio</th>
     <th>Grupo Sanguíneo</th>
     <th>Sexo</th>
     <th>Color de piel</th>
@@ -29,6 +30,8 @@
     <th>Edad</th>
     <th>Dirección</th>
     <th>Consultorio</th>
+    <th>Área de Salud</th>
+    <th>Municipio</th>
     <th>Grupo Sanguíneo</th>
     <th>Sexo</th>
     <th>Color de piel</th>
@@ -69,10 +72,10 @@
                     },
                     {
                         text: '<i class="fa fa-plus"></i>',
-                        titleAttr: 'Añadir nuevo Banco de Sangre',
+                        titleAttr: 'Añadir nuevo Donante',
                         className: 'btn btn-primary',
                         action: function () {
-                            location.replace('{% url 'bloodbank:AddBloodBank' %}');
+                            location.replace('{% url 'donante:AddDonante' %}');
                         }
                     },
                     {
@@ -92,14 +95,14 @@
                                     animation: 'zoom',
                                     type: 'red',
                                     title: 'Error!',
-                                    content: 'Debe seleccionar almenos un Banco de Sangre de la lista'
+                                    content: 'Debe seleccionar almenos un Donante de la lista'
                                 });
                             } else {
                                 $.confirm({
                                     icon: 'fas fa-exclamation-triangle',
                                     theme: 'modern',
                                     title: 'Esta seguro!!!',
-                                    content: 'Los Banco de Sangre seleccionadas serán eliminados',
+                                    content: 'Los Donantes seleccionadas serán eliminados',
                                     type: 'orange',
                                     animation: 'zoom',
                                     buttons: {
@@ -122,7 +125,7 @@
                                                             type: 'green',
                                                             title: 'Éxito!!!',
                                                             animation: 'zoom',
-                                                            content: 'Bancos de Sangre eliminada correctamente',
+                                                            content: 'Donantes eliminados correctamente',
                                                             buttons: {
                                                                 confirm: {
                                                                     text: '<i class="fa fa-check-circle"></i> Aceptar',
@@ -184,6 +187,8 @@
                     {'data': 'edad'},
                     {'data': 'direccion'},
                     {'data': 'consultorio'},
+                    {'data': 'areasalud'},
+                    {'data': 'municipio'},
                     {'data': 'bloodgroup'},
                     {'data': 'sexo'},
                     {'data': 'skincolor'},

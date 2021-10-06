@@ -9,7 +9,7 @@
 
 {% block contenido %}
     <div class="col-lg-12">
-        <div class="card card-primary">
+        <div class="card card-gray">
             <div class="card-header">
                 <h3 class="card-title"><i class="fa fa-user"></i> {{ title }}</h3>
             </div>
@@ -97,7 +97,7 @@
                 <!-- /.card-body -->
                 <div class="card-footer text-center">
                     <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Guardar</button>
-                    <a class="btn btn-danger ml-5" style="color: white" href="{% url 'bloodbank:ListBloodBank' %}"><i
+                    <a class="btn btn-danger ml-5" style="color: white" href="{% url 'donante:ListDonante' %}"><i
                             class="fa fa-times-circle"></i> Cancelar</a>
                 </div>
             </form>
@@ -121,8 +121,8 @@
             $('form').submit(function (e) {
                 e.preventDefault();
                 let parameters = $(this).serializeArray();
-                let urlList = '{% url 'bloodbank:ListBloodBank' %}'
-                SendajaxL('¡Está seguro/a!', 'Los datos del Banco de Sangre serán guardados', window.location.pathname, parameters, urlList)
+                let urlList = '{% url 'donante:ListDonante' %}'
+                SendajaxL('¡Está seguro/a!', 'Los datos del Donante serán guardados', window.location.pathname, parameters, urlList)
             })
         })
     </script>
