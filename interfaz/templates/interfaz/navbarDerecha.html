@@ -1,11 +1,16 @@
 {% load static %}
 <aside class="main-sidebar sidebar-dark-danger elevation-4">
     <!-- Brand Logo -->
-    <a href="{% url 'interfaz:MenuPpal' %}" class="brand-link">
-        <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo"
-             class="brand-image img-circle elevation-3"
-             style="opacity: .8">
-        <span class="brand-text font-weight-light">Banco de Sangre</span>
+    <a href="{% url 'interfaz:MenuPpal' %}" class="brand-link text-center">
+        {#        <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo"#}
+        {#             class="brand-image img-circle elevation-3"#}
+        {#             style="opacity: .8">#}
+        <span style="font-size: 20px; color: #dc3545;">
+            <i class="fas fa-tint"></i>
+            Banco de Sangre
+        </span>
+
+
     </a>
 
     <!-- Sidebar -->
@@ -17,7 +22,8 @@
                      alt="User Image">
             </div>
             <div class="info">
-                <a href="{% url 'login:UdateUSerView' %}" class="d-block">{{ request.user.first_name }} {{ request.user.last_name }}</a>
+                <a href="{% url 'login:UdateUSerView' %}"
+                   class="d-block">{{ request.user.first_name }} {{ request.user.last_name }}</a>
             </div>
         </div>
 
@@ -38,28 +44,28 @@
                 <li class="nav-header">Entidades</li>
                 <li class="nav-item">
                     <a href="{% url 'provincia:ListProvincia' %}" class="nav-link">
-                        <i class="nav-icon fas fa-home"></i>
+                        <i class="nav-icon fas fa-cube"></i>
                         <p>
-                            Provincias
-                            <span class="right badge badge-info">{{ cant_estudiantes }}</span>
+                            Provincia
+                            <span class="right badge badge-info"></span>
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'municipio:ListMunicipio' %}" class="nav-link">
-                        <i class="nav-icon fas fa-archive"></i>
+                        <i class="nav-icon fas fa-cubes"></i>
                         <p>
-                            Municipios
-                            <span class="right badge badge-info">{{ cant_estudiantes }}</span>
+                            Municipio
+                            <span class="right badge badge-info"></span>
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'areasalud:ListAreaSalud' %}" class="nav-link">
-                        <i class="nav-icon fas fa-archive"></i>
+                        <i class="nav-icon fas fa-heart"></i>
                         <p>
                             Áreas de Salud
-                            <span class="right badge badge-info">{{ cant_estudiantes }}</span>
+                            <span class="right badge badge-info"></span>
                         </p>
                     </a>
                 </li>
@@ -68,94 +74,103 @@
                         <i class="nav-icon fas fa-university"></i>
                         <p>
                             Bancos de Sangre
-                            <span class="right badge badge-info">{{ cant_estudiantes }}</span>
+                            <span class="right badge badge-info"></span>
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'consultorio:ListConsultorio' %}" class="nav-link">
-                        <i class="nav-icon fas fa-archive"></i>
+                        <i class="nav-icon fas fa-building"></i>
                         <p>
                             Consultorio
-                            <span class="right badge badge-info">{{ cant_estudiantes }}</span>
+                            <span class="right badge badge-info"></span>
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'bloodgroup:ListBloodGroup' %}" class="nav-link">
-                        <i class="nav-icon fas fa-archive"></i>
+                        <i class="nav-icon fas fa-tint"></i>
                         <p>
                             Grupos Sanguíneos
-                            <span class="right badge badge-info">{{ cant_estudiantes }}</span>
+                            <span class="right badge badge-info"></span>
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'sexo:ListSexo' %}" class="nav-link">
-                        <i class="nav-icon fas fa-archive"></i>
+                        <i class="nav-icon fas fa-venus-mars"></i>
                         <p>
                             Sexo
-                            <span class="right badge badge-info">{{ cant_estudiantes }}</span>
+                            <span class="right badge badge-info"></span>
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url 'core:ListEstudiante' %}" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
+                    <a href="{% url 'donante:ListDonante' %}" class="nav-link">
+                        <i class="nav-icon fas fa-user-plus"></i>
                         <p>
-                            Estudiantes
-                            <span class="right badge badge-info">{{ cant_estudiantes }}</span>
+                            Donante
+                            <span class="right badge badge-info"></span>
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{% url 'core:Plugins' %}" class="nav-link">
-                        <i class="nav-icon fas fa-calendar"></i>
-                        <p>
-                            Plugins
-                            {#                                <span class="right badge badge-danger">New</span>#}
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'core:Evaluacion' %}" class="nav-link">
-                        <i class="nav-icon fas fa-thumbs-up"></i>
-                        <p>
-                            Notas
-                            {# <span class="right badge badge-danger">New</span>#}
-                        </p>
-                    </a>
-                </li>
-{#                <li class="nav-item has-treeview">#}
-{#                    <a href="#" class="nav-link">#}
-{#                        <i class="nav-icon fas fa-copy"></i>#}
-{#                        <p>#}
-{#                            Layout Options#}
-{#                            <i class="fas fa-angle-left right"></i>#}
-{#                            <span class="badge badge-info right">6</span>#}
-{#                        </p>#}
-{#                    </a>#}
-{#                    <ul class="nav nav-treeview">#}
-{#                        <li class="nav-item">#}
-{#                            <a href="pages/layout/top-nav.html" class="nav-link">#}
-{#                                <i class="far fa-circle nav-icon"></i>#}
-{#                                <p>Top Navigation</p>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                        <li class="nav-item">#}
-{#                            <a href="pages/layout/top-nav-sidebar.html" class="nav-link">#}
-{#                                <i class="far fa-circle nav-icon"></i>#}
-{#                                <p>Top Navigation + Sidebar</p>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                        <li class="nav-item">#}
-{#                            <a href="pages/layout/boxed.html" class="nav-link">#}
-{#                                <i class="far fa-circle nav-icon"></i>#}
-{#                                <p>Boxed</p>#}
-{#                            </a>#}
-{#                        </li>#}
-{#                    </ul>#}
-{#                </li>#}
+                {#                <li class="nav-item">#}
+                {#                    <a href="{% url 'core:ListEstudiante' %}" class="nav-link">#}
+                {#                        <i class="nav-icon fas fa-users"></i>#}
+                {#                        <p>#}
+                {#                            Estudiantes#}
+                {#                            <span class="right badge badge-info">{{ cant_estudiantes }}</span>#}
+                {#                        </p>#}
+                {#                    </a>#}
+                {#                </li>#}
+                {#                <li class="nav-item">#}
+                {#                    <a href="{% url 'core:Plugins' %}" class="nav-link">#}
+                {#                        <i class="nav-icon fas fa-calendar"></i>#}
+                {#                        <p>#}
+                {#                            Plugins#}
+                {#                                <span class="right badge badge-danger">New</span>#}
+                {#                        </p>#}
+                {#                    </a>#}
+                {#                </li>#}
+                {#                <li class="nav-item">#}
+                {#                    <a href="{% url 'core:Evaluacion' %}" class="nav-link">#}
+                {#                        <i class="nav-icon fas fa-thumbs-up"></i>#}
+                {#                        <p>#}
+                {#                            Notas#}
+                {# <span class="right badge badge-danger">New</span>#}
+                {#                        </p>#}
+                {#                    </a>#}
+                {#                </li>#}
+                {#                <li class="nav-item has-treeview">#}
+                {#                    <a href="#" class="nav-link">#}
+                {#                        <i class="nav-icon fas fa-copy"></i>#}
+                {#                        <p>#}
+                {#                            Layout Options#}
+                {#                            <i class="fas fa-angle-left right"></i>#}
+                {#                            <span class="badge badge-info right">6</span>#}
+                {#                        </p>#}
+                {#                    </a>#}
+                {#                    <ul class="nav nav-treeview">#}
+                {#                        <li class="nav-item">#}
+                {#                            <a href="pages/layout/top-nav.html" class="nav-link">#}
+                {#                                <i class="far fa-circle nav-icon"></i>#}
+                {#                                <p>Top Navigation</p>#}
+                {#                            </a>#}
+                {#                        </li>#}
+                {#                        <li class="nav-item">#}
+                {#                            <a href="pages/layout/top-nav-sidebar.html" class="nav-link">#}
+                {#                                <i class="far fa-circle nav-icon"></i>#}
+                {#                                <p>Top Navigation + Sidebar</p>#}
+                {#                            </a>#}
+                {#                        </li>#}
+                {#                        <li class="nav-item">#}
+                {#                            <a href="pages/layout/boxed.html" class="nav-link">#}
+                {#                                <i class="far fa-circle nav-icon"></i>#}
+                {#                                <p>Boxed</p>#}
+                {#                            </a>#}
+                {#                        </li>#}
+                {#                    </ul>#}
+                {#                </li>#}
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
