@@ -82,11 +82,11 @@ class AddDonante(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
 
 class UpdateDonante(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
-    permission_required = 'bloodbank.change_bloodbank'
-    template_name = 'bloodbank/AddBloodBank.html'
-    form_class = FormBloodBank
-    success_url = reverse_lazy('bloodbank:ListBloodBank')
-    model = BloodBank
+    permission_required = 'donante.change_donante'
+    template_name = 'donante/Add_Donanate.html'
+    form_class = FormDonante
+    success_url = reverse_lazy('donante:ListDonante')
+    model = Donante
 
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
