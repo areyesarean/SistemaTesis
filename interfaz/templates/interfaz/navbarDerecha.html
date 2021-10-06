@@ -22,8 +22,16 @@
                      alt="User Image">
             </div>
             <div class="info">
-                <a href="{% url 'login:UdateUSerView' %}"
-                   class="d-block">{{ request.user.first_name }} {{ request.user.last_name }}</a>
+                <a href="{% url 'login:UdateUSerView' %}" class="d-block">
+                    {% if request.user.first_name == '' or request.user.last_name == '' %}
+                        No ha especificado
+                        <br>
+                        ningún nombre aún.
+                    {% endif %}
+                    {% if not request.user.first_name == '' or not request.user.last_name == '' %}
+                        {{ request.user.first_name }} {{ request.user.last_name }}
+                    {% endif %}
+                </a>
             </div>
         </div>
 
@@ -61,6 +69,24 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{% url 'sexo:ListSexo' %}" class="nav-link">
+                        <i class="nav-icon fas fa-venus-mars"></i>
+                        <p>
+                            Sexo
+                            <span class="right badge badge-info"></span>
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'bloodgroup:ListBloodGroup' %}" class="nav-link">
+                        <i class="nav-icon fas fa-tint"></i>
+                        <p>
+                            Grupos Sanguíneos
+                            <span class="right badge badge-info"></span>
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{% url 'areasalud:ListAreaSalud' %}" class="nav-link">
                         <i class="nav-icon fas fa-heart"></i>
                         <p>
@@ -87,24 +113,8 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{% url 'bloodgroup:ListBloodGroup' %}" class="nav-link">
-                        <i class="nav-icon fas fa-tint"></i>
-                        <p>
-                            Grupos Sanguíneos
-                            <span class="right badge badge-info"></span>
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'sexo:ListSexo' %}" class="nav-link">
-                        <i class="nav-icon fas fa-venus-mars"></i>
-                        <p>
-                            Sexo
-                            <span class="right badge badge-info"></span>
-                        </p>
-                    </a>
-                </li>
+
+
                 <li class="nav-item">
                     <a href="{% url 'donante:ListDonante' %}" class="nav-link">
                         <i class="nav-icon fas fa-user-plus"></i>
