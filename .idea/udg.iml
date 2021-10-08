@@ -13,7 +13,10 @@
     </facet>
   </component>
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/donacion" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/udg" isTestSource="false" />
+    </content>
     <orderEntry type="jdk" jdkName="Tesis" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
