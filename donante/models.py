@@ -6,6 +6,7 @@ from django.forms import model_to_dict
 from bloodgroup.models import BloodGroup
 from consultorio.models import Consultorio
 from core.models import Sexo
+from sexo.models import Sexos
 from skincolor.models import SkinColor
 from .validators import *
 
@@ -20,7 +21,7 @@ class Donante(models.Model):
                                     related_name='Consultorio')
     bloodgroup = models.ForeignKey(BloodGroup, on_delete=models.PROTECT, verbose_name='Grupo sanguineo',
                                    related_name='BloodGroup')
-    sexo = models.ForeignKey(Sexo, on_delete=models.PROTECT, verbose_name='Sexo', related_name='Sexo')
+    sexo = models.ForeignKey(Sexos, on_delete=models.PROTECT, verbose_name='Sexo', related_name='Sexo')
     skincolor = models.ForeignKey(SkinColor, on_delete=models.PROTECT, verbose_name='Color de la piel',
                                   related_name='SkinColor')
 
