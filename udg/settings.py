@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'sexo.apps.SexoConfig',
     'skincolor.apps.SkincolorConfig',
     'donante.apps.DonanteConfig',
+    'donacion.apps.DonacionConfig',
     'widget_tweaks',
     'django_filters',
 ]
