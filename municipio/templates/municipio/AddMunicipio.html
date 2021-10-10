@@ -61,6 +61,7 @@
             $('form').submit(function (e) {
                 e.preventDefault();
                 let parameters = $(this).serializeArray();
+                console.log(parameters)
                 let urlList = '{% url 'municipio:ListMunicipio' %}'
                 SendajaxL('¡Está seguro/a!', 'Los datos del municipio serán guardados', window.location.pathname, parameters, urlList)
             })
