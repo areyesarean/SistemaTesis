@@ -10,7 +10,7 @@ from donante.models import Donante
 
 # Create your models here.
 class Donacion(models.Model):
-    bloodbank = models.ForeignKey(BloodBank, on_delete=models.PROTECT, verbose_name='BloodBank',
+    bloodbank = models.ForeignKey(BloodBank, on_delete=models.PROTECT, verbose_name='Banco de Sangre',
                                   related_name='BloodBank')
     donante = models.ForeignKey(Donante, on_delete=models.PROTECT, verbose_name='Donante', related_name='Donante')
 
@@ -31,7 +31,7 @@ class Donacion(models.Model):
 
     def toJson(self):
         item = model_to_dict(self)
-        item['consultorio'] = self.bloodbank.nombre
+        item['bloodbank'] = self.bloodbank.nombre
         item['donante'] = self.donante.ci
         item['consultorio'] = self.consultorio.numero
         return item
