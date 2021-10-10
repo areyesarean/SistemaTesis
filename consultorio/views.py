@@ -60,6 +60,7 @@ class AddConsultorio(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         data = {}
         try:
             form = self.get_form()
+            print(request.POST)
             if form.is_valid():
                 form.save()
             else:
