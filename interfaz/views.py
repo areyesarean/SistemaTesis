@@ -1,12 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 # Create your views here.
 from django.views.generic import TemplateView
 
 from areasalud.models import AreaSalud
 from bloodbank.models import BloodBank
 from consultorio.models import Consultorio
-from core.models import Estudiante, Sexo, Municipio
+from core.models import Estudiante, Municipio
+from donacion.models import Donacion
 from donante.models import Donante
 from sexo.models import Sexos
 
@@ -44,6 +44,9 @@ class MenuPpal(LoginRequiredMixin, TemplateView):
     def cant_estudiantes(self):
         return Estudiante.objects.count()
 
+    def cant_donaciones(self):
+        return Donacion.objects.count()
+
     def get_context_data(self, **kwargs):
         context = super(MenuPpal, self).get_context_data(**kwargs)
         context['title'] = 'Página Principal'
@@ -56,4 +59,5 @@ class MenuPpal(LoginRequiredMixin, TemplateView):
         context['cant_consultorios'] = Consultorio.objects.count()
         context['data_municipios'] = self.graphic_catMunicipio()
         context['cant_estudiantes'] = self.cant_estudiantes()
+        context['cant_donaciones'] = self.cant_donaciones()
         return context
