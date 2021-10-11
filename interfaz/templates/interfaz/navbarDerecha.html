@@ -37,7 +37,7 @@
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+            <ul class="nav nav-pills nav-sidebar flex-column nav-flat" data-widget="treeview" role="menu"
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
@@ -49,16 +49,65 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-header">Entidades</li>
+
+                <li class="nav-header mt-1">Administrador</li>
                 <li class="nav-item">
-                    <a href="{% url 'donacion:AddDonacion' %}" class="nav-link">
-                        <i class="nav-icon fas fa-cube"></i>
+                    <a href="{% url 'sexo:ListSexo' %}" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
                         <p>
-                            Donar Sangre
+                            Usuarios
                             <span class="right badge badge-info"></span>
                         </p>
                     </a>
                 </li>
+
+                <li class="nav-header mt-1">Operaciones y reportes</li>
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-flask "></i>
+                        <p>
+                            Donaciones
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview" style="display: none;">
+                        <li class="nav-item">
+                            <a href="{% url 'donacion:AddDonacion' %}" class="nav-link">
+                                <i class="fa fa-tint nav-icon"></i>
+                                <p>Registrar Donación</p>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="nav nav-treeview" style="display: none;">
+                        <li class="nav-item">
+                            <a href="{% url 'donacion:ListDonacion' %}" class="nav-link">
+                                <i class="fa fa-list nav-icon"></i>
+                                <p>Listado de donaciones</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-newspaper"></i>
+                        <p>
+                            Reportes
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview" style="display: none;">
+                        <li class="nav-item">
+                            <a href="{% url 'donacion:AddDonacion' %}" class="nav-link">
+                                <i class="fa fa-tint nav-icon"></i>
+                                <p>Registrar Donación</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-header mt-1">Entidades</li>
                 <li class="nav-item">
                     <a href="{% url 'provincia:ListProvincia' %}" class="nav-link">
                         <i class="nav-icon fas fa-cube"></i>
@@ -142,63 +191,9 @@
                         </p>
                     </a>
                 </li>
-                {#                <li class="nav-item">#}
-                {#                    <a href="{% url 'core:ListEstudiante' %}" class="nav-link">#}
-                {#                        <i class="nav-icon fas fa-users"></i>#}
-                {#                        <p>#}
-                {#                            Estudiantes#}
-                {#                            <span class="right badge badge-info">{{ cant_estudiantes }}</span>#}
-                {#                        </p>#}
-                {#                    </a>#}
-                {#                </li>#}
-                {#                <li class="nav-item">#}
-                {#                    <a href="{% url 'core:Plugins' %}" class="nav-link">#}
-                {#                        <i class="nav-icon fas fa-calendar"></i>#}
-                {#                        <p>#}
-                {#                            Plugins#}
-                {#                                <span class="right badge badge-danger">New</span>#}
-                {#                        </p>#}
-                {#                    </a>#}
-                {#                </li>#}
-                {#                <li class="nav-item">#}
-                {#                    <a href="{% url 'core:Evaluacion' %}" class="nav-link">#}
-                {#                        <i class="nav-icon fas fa-thumbs-up"></i>#}
-                {#                        <p>#}
-                {#                            Notas#}
-                {# <span class="right badge badge-danger">New</span>#}
-                {#                        </p>#}
-                {#                    </a>#}
-                {#                </li>#}
-                {#                <li class="nav-item has-treeview">#}
-                {#                    <a href="#" class="nav-link">#}
-                {#                        <i class="nav-icon fas fa-copy"></i>#}
-                {#                        <p>#}
-                {#                            Layout Options#}
-                {#                            <i class="fas fa-angle-left right"></i>#}
-                {#                            <span class="badge badge-info right">6</span>#}
-                {#                        </p>#}
-                {#                    </a>#}
-                {#                    <ul class="nav nav-treeview">#}
-                {#                        <li class="nav-item">#}
-                {#                            <a href="pages/layout/top-nav.html" class="nav-link">#}
-                {#                                <i class="far fa-circle nav-icon"></i>#}
-                {#                                <p>Top Navigation</p>#}
-                {#                            </a>#}
-                {#                        </li>#}
-                {#                        <li class="nav-item">#}
-                {#                            <a href="pages/layout/top-nav-sidebar.html" class="nav-link">#}
-                {#                                <i class="far fa-circle nav-icon"></i>#}
-                {#                                <p>Top Navigation + Sidebar</p>#}
-                {#                            </a>#}
-                {#                        </li>#}
-                {#                        <li class="nav-item">#}
-                {#                            <a href="pages/layout/boxed.html" class="nav-link">#}
-                {#                                <i class="far fa-circle nav-icon"></i>#}
-                {#                                <p>Boxed</p>#}
-                {#                            </a>#}
-                {#                        </li>#}
-                {#                    </ul>#}
-                {#                </li>#}
+
+
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

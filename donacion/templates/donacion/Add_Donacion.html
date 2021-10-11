@@ -42,7 +42,9 @@
                     <div class="row">
                         <div class="col-lg-12">{{ formSearch }}</div>
                         <div class="col-lg-12">
-                            <button type="submit" class="btn btn-danger col-lg-12 mt-2" id="search"><i class="fa fa-search"></i> Buscar</button>
+                            <button type="submit" class="btn btn-danger col-lg-12 mt-2" id="search"><i
+                                    class="fa fa-search"></i> Buscar
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -83,11 +85,12 @@
                     </div>
 
 
-
-{#                    <div class="col-lg-12">#}
-{#                        {{ form }}#}
-{#                    </div>#}
-                   <button type="submit" class="btn btn-danger col-lg-12 mt-2" id="search"> <i class="fa fa-save"></i> Registrar Donación</button>
+                    {#                    <div class="col-lg-12">#}
+                    {#                        {{ form }}#}
+                    {#                    </div>#}
+                    <button type="submit" class="btn btn-danger col-lg-12 mt-2" id="save"><i class="fa fa-save"></i>
+                        Registrar Donación
+                    </button>
                 </form>
 
             </div>
@@ -96,7 +99,7 @@
 
     </div>
     <div class="col-md-6">
-        <div class="card card-primary card-outline">
+        <div class="card card-danger card-outline">
             <div class="card-header">
                 <h5 class="m-0 text-center">Datos del Donante</h5>
             </div>
@@ -107,7 +110,7 @@
                          alt="User profile picture">
                 </div>
 
-                <h3 id="donante_name" class="profile-username text-center">...</h3>
+                <h3 id="donante_name" class="profile-username text-center">Para que aparezcan datos aquí debe realizar la búsqueda de un donante</h3>
 
                 <ul class="list-group list-group-unbordered mb-3">
                     <li class="list-group-item">
@@ -135,7 +138,7 @@
                         <b>Municipio:</b> <a id="municipio" class="float-right">...</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Dirección Particular:</b> <a id="addres" class="float-right">...</a>
+                        <b>Dirección Particular:</b> <a id="addres" class="float-right text-center">...</a>
                     </li>
 
                 </ul>
@@ -197,7 +200,22 @@
             const municipio = document.getElementById('municipio');
             const addres = document.getElementById('addres');
             let id;
+
+            const bloodbank = document.getElementById('id_bloodbank');
+            const consultorio = document.getElementById('id_consultorio');
+            const fecha = document.getElementById('id_fecha');
+            const observaciones = document.getElementById('id_observaciones');
+            const btn_save = document.getElementById('save');
             clear_detail()
+            disableForm()
+
+            function disableForm() {
+                btn_save.setAttribute('disabled', 'true')
+            }
+            function enableForm(){
+                btn_save.removeAttribute('disabled')
+            }
+
             $('#search_form').submit(function (e) {
                 e.preventDefault();
                 const ci = $('#id_ci').val()
@@ -214,11 +232,13 @@
 
                         if (data.error === 'Donante matching query does not exist.') {
                             clear_detail()
+                            disableForm()
                             errorMessage('No existe un donante con ese carnet de identidad');
                         }
                         console.log(data.error)
                     }
                     detail_donante(data);
+                    enableForm()
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     alert("Error")
                 });
@@ -242,7 +262,7 @@
             }
 
             function clear_detail() {
-                nombre.innerText = '...';
+                nombre.innerText = 'Para que aparezcan datos aquí debe realizar la búsqueda de un donante';
                 ci.innerText = '...'
                 gender.innerText = '...'
                 age.innerText = '...'
@@ -254,9 +274,7 @@
                 addres.innerText = '...'
             }
 
-            function disableForm(){
 
-            }
 
             $('#id_fecha').datetimepicker({
                 format: 'YYYY-MM-DD',
@@ -265,13 +283,14 @@
                 minDate: moment().format('YYYY-MM-DD')
             })
 
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                language: 'es'
+            })
+
             $('#donacion_form').submit(function (e) {
                 e.preventDefault();
-                const bloodbank = document.getElementById('id_bloodbank');
-                {#const donante = document.getElementById('donante_name');#}
-                const consultorio = document.getElementById('id_consultorio');
-                const fecha = document.getElementById('id_fecha');
-                const observaciones = document.getElementById('id_observaciones');
+
 
                 donanteO.bloodbank = bloodbank.value
                 donanteO.donante = id
@@ -282,9 +301,8 @@
                 let parameters = donanteO;
 
 
-
                 console.log(donanteO)
-                let urlList = '{% url 'donacion:AddDonacion' %}'
+                let urlList = '{% url 'donacion:ListDonacion' %}'
                 SendajaxD('¡Está seguro/a!', 'Los datos de la Donación serán guardados', window.location.pathname, parameters, urlList)
             })
         })
