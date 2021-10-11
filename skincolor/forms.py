@@ -12,7 +12,8 @@ class FormSkincolor(ModelForm):
         exclude = ['created_by', 'modified_by']
         widgets = {
             'nskincolor': TextInput(attrs={
-                'class': 'form-control'
+                'class': 'form-control',
+                'placeholder': 'Color de la piel'
             }),
 
         }
