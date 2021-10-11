@@ -33,5 +33,7 @@ class Donacion(models.Model):
         item = model_to_dict(self)
         item['bloodbank'] = self.bloodbank.nombre
         item['donante'] = self.donante.ci
+        item['nombre'] = '{} {}'.format(self.donante.nombre, self.donante.apellidos)
         item['consultorio'] = self.consultorio.numero
+        item['area_salud'] = self.consultorio.areasalud.nombre
         return item
