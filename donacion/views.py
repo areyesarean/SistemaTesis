@@ -4,9 +4,10 @@ from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import FormView, CreateView
+from django.views.generic import FormView, TemplateView, UpdateView
 
-from donacion.forms import FormDonacion, FormSearchDonante
+from donacion.forms import FormDonacion, FormSearchDonante, FormFilterDonacion
+from donacion.models import Donacion
 from donante.models import Donante
 
 
@@ -42,11 +43,8 @@ class AddDonacion(FormView):
         return context
 
 
-class AddDonacionP(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
-    permission_required = 'municipios.add_municipios'
-    template_name = 'donacion/Add_Donacionssss.html'
-    form_class = FormDonacion
-    success_url = reverse_lazy('municipio:AddMunicipio')
+class ListDonacion(LoginRequiredMixin, TemplateView):
+    template_name = 'donacion/List_Donacion.html'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -55,13 +53,50 @@ class AddDonacionP(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     def post(self, request, *args, **kwargs):
         data = {}
         try:
-            if request.POST['action']:
-                action = request.POST['action']
-                if action == 'search':
-                    data = []
-                    donante = Donante.objects.get(ci__exact=request.POST['ci'])
-                    data.append(donante.toJson())
+            action = request.POST['action']
+            if action == 'search_report':
+                data = []
+                start_date = request.POST.get('start_date', '')
+                end_date = request.POST.get('end_date', '')
 
+                print(start_date)
+                print(end_date)
+                donaciones = Donacion.objects.all()
+                if len(start_date) and len(end_date):
+                    donaciones = donaciones.filter(fecha__range=[start_date, end_date])
+                for i in donaciones:
+                    data.append(i.toJson())
+            elif action == 'del-mult':
+                for i in request.POST.getlist('ids[]'):
+                    est = Donacion.objects.get(pk=i)
+                    est.delete()
+            else:
+                data['error'] = 'No hay action'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ListDonacion, self).get_context_data(**kwargs)
+        context['title'] = 'Listado de Donaciones'
+        context['formFilter'] = FormFilterDonacion
+        return context
+
+
+class UpdateDonacion(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    permission_required = 'donacion.donacion_consultorio'
+    template_name = 'donacion/Update_Donacion.html'
+    form_class = FormDonacion
+    success_url = reverse_lazy('consultorio:ListConsultorio')
+    model = Donacion
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super(UpdateDonacion, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
             form = self.get_form()
             if form.is_valid():
                 form.save()
@@ -72,7 +107,8 @@ class AddDonacionP(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return JsonResponse(data)
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(AddDonacionP, self).get_context_data(**kwargs)
-        context['title'] = 'Crear nuevo Municipio'
+        context = super(UpdateDonacion, self).get_context_data(**kwargs)
+        context['title'] = 'Editar Donación'
+        context['action'] = 'edit'
         context['formSearch'] = FormSearchDonante
         return context
