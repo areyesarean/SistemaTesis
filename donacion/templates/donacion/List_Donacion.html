@@ -1,0 +1,368 @@
+{% extends 'core/List.html' %}
+{% load static %}
+
+{% block card %}
+    <div class="col-lg-12">
+        <div class="card card-outline card-danger">
+            <div class="card-header">
+                <h3 class="card-title "><i class="fa fa-calendar"></i> Seleccione la fecha o el rango de fechas para filtrar los datos</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                    </button>
+                </div>
+                <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="col-lg-4">
+                    {{ formFilter.filter }}
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+{% endblock %}
+
+{% block cardTitle %}
+    <i class="fa fa-list"></i> {{ title }}
+{% endblock %}
+
+{% block thead %}
+    <th>Selección</th>
+    <th>Banco de Sangre</th>
+    <th>Carnet de identidad</th>
+    <th>Nombre del Donante</th>
+    <th>Consultorio</th>
+    <th>Fecha</th>
+    <th>Área de Salud</th>
+    <th>Observaciones</th>
+    <th>Opciones</th>
+{% endblock %}
+
+{% block tfoot %}
+    <th>Selección</th>
+    <th>Banco de Sangre</th>
+    <th>Carnet de identidad</th>
+    <th>Nombre del Donante</th>
+    <th>Consultorio</th>
+    <th>Fecha</th>
+    <th>Área de Salud</th>
+    <th>Observaciones</th>
+    <th>Opciones</th>
+{% endblock %}
+
+{% block myscripts %}
+
+    <script src="{% static 'core/tempusDominus 5.1.2/moment.min.js' %}"></script>
+    <script src="{% static 'core/tempusDominus 5.1.2/moment-with-locales.js' %}"></script>
+    <script src="{% static 'core/tempusDominus 5.1.2/tempusdominus-bootstrap-4.min.js' %}"></script>
+
+    <script src="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+
+    <script src="{% static 'core/daterangePicker v3.14.1/daterangepicker.min.js' %}"></script>
+
+    <script>
+        let TableEst;
+        let date_range = null;
+        let date_now = new moment().format('YYYY-MM-DD')
+
+        function List(parameters) {
+            TableEst = $("#list").DataTable({
+                responsive: true,
+                autoWidth: false,
+                destroy: true,
+                deferRender: true,
+                ajax: {
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: parameters,
+                    dataSrc: "",
+                },
+                dom: "<'row'<'form-inline'<'offset-sm-10'>>>" +
+                    "<'row'<'col-lg-4'l><'col-lg-4 text-center mb-2'B><'col-lg-4'f>>" +
+                    "<'row'<'col-lg-12'tr>>" +
+                    "<'row'<'col-lg-5'i><'col-lg-7'p>>",
+                buttons: [
+                    {
+                        text: '<i class="fa fa-spinner"></i>',
+                        titleAttr: 'Actualizar listado',
+                        className: 'btn btn-info',
+                        action: function () {
+                            this.ajax.reload()
+                        }
+                    },
+                    {
+                        text: '<i class="fa fa-plus"></i>',
+                        titleAttr: 'Añadir nuevo Donante',
+                        className: 'btn btn-primary',
+                        action: function () {
+                            location.replace('{% url 'donante:AddDonante' %}');
+                        }
+                    },
+                    {
+                        text: '<i class="fa fa-trash"></i>',
+                        titleAttr: 'Eliminación multiple',
+                        className: 'btn btn-danger',
+                        action: function () {
+                            let ids = []
+                            $(':checkbox:checked').each(function () {
+                                ids.push($(this).val())
+                            })
+                            console.log(ids)
+                            if (ids.length == 0) {
+                                $.alert({
+                                    icon: 'fa fa-times-circle',
+                                    theme: 'modern',
+                                    animation: 'zoom',
+                                    type: 'red',
+                                    title: 'Error!',
+                                    content: 'Debe seleccionar almenos un Donante de la lista'
+                                });
+                            } else {
+                                $.confirm({
+                                    icon: 'fas fa-exclamation-triangle',
+                                    theme: 'modern',
+                                    title: 'Esta seguro!!!',
+                                    content: 'Los Donantes seleccionadas serán eliminados',
+                                    type: 'orange',
+                                    animation: 'zoom',
+                                    buttons: {
+                                        save: {
+                                            text: '<i class="fa fa-trash"></i> Eliminar',
+                                            action: function () {
+                                                $.ajax({
+                                                    url: window.location.pathname,
+                                                    type: 'POST',
+                                                    dataType: 'json',
+                                                    data: {
+                                                        'action': 'del-mult',
+                                                        ids
+                                                    },
+                                                }).done(function (data) {
+                                                    if (!data.hasOwnProperty('error')) {
+                                                        $.alert({
+                                                            icon: 'fas fa-check',
+                                                            theme: 'modern',
+                                                            type: 'green',
+                                                            title: 'Éxito!!!',
+                                                            animation: 'zoom',
+                                                            content: 'Donantes eliminados correctamente',
+                                                            buttons: {
+                                                                confirm: {
+                                                                    text: '<i class="fa fa-check-circle"></i> Aceptar',
+                                                                    btnClass: 'btn-default',
+                                                                    action: function () {
+                                                                        TableEst.ajax.reload()
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                                    } else {
+                                                        errorMessage(data.error);
+                                                    }
+                                                }).fail(function (jqXHR, textStatus, errorThrown) {
+                                                    alert('Metodo Fail de Ajax: ' + textStatus + ': ' + errorThrown);
+                                                })
+                                            }
+                                        },
+                                        cancel: {
+                                            text: '<i class="fa fa-times"></i> Cancelar',
+                                            btnClass: 'btn-danger',
+                                            close: function () {
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+
+
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa fa-file-excel"></i>',
+                        titleAttr: 'Exportar a exel',
+                        className: 'btn btn-success',
+                        exportOptions: {
+                            columns: [2]
+                        }
+                    },
+                    {
+                        //extend: 'pdfHtml5',
+                        text: '<i class="fas fa-file-pdf"></i>',
+                        titleAttr: 'Exportar a Pdf',
+                        className: 'btn btn-danger',
+                        //exportOptions: {
+                        //    columns: [0, 1, 2, 3, 4, 5]
+                        //}
+                        action: function () {
+                            location.replace('{% url 'core:PdfEstudiantesView' %}');
+                        }
+                    },
+                ],
+                columns: [
+                    {'defaultContent': ''},
+                    {'data': 'bloodbank'},
+                    {'data': 'donante'},
+                    {'data': 'nombre'},
+                    {'data': 'consultorio'},
+                    {'data': 'fecha'},
+                    {'data': 'area_salud'},
+                    {'data': 'observaciones'},
+                    {'defaultContent': ''},
+                ],
+                columnDefs: [
+                    {
+                        targets: [0],
+                        class: 'text-center',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            return '<input type="checkbox" name="check-est" value=' + row.id + ' style="cursor: pointer">'
+                        }
+                    },
+                    {
+                        targets: [1, 2, 3, 4, 5, 6, 7, 8],
+                        class: 'text-center',
+                    },
+                    {
+                        targets: [-1],
+                        class: 'text-center',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            var buttons = '<a class="btn btn-warning btn-xs" title="Editar" href="/donacion/update/' + row.id + '"><i class="fa fa-edit"></i></a>'
+                            buttons += '<a class="btn btn-danger btn-xs ml-1" rel="del" title="Eliminar" href="/donacion/delete/' + row.id + '"><i class="fa fa-trash"></i></a>'
+                            return buttons
+                        }
+                    },
+                ],
+                language: {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "<i class='fa fa-search'></i>",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    }
+                },
+                fnInitComplete: function () {
+
+                }
+
+            })
+        }
+
+        function generate_report() {
+            parameters = {
+                'action': 'search_report',
+                'start_date': date_now,
+                'end_date': date_now
+            };
+            if (date_range !== null) {
+                parameters['start_date'] = date_range.startDate.format('YYYY-MM-DD')
+                parameters['end_date'] = date_range.endDate.format('YYYY-MM-DD')
+            }
+            List(parameters)
+        }
+
+        $(function () {
+
+            $('#list tbody').on('click', 'a[rel="del"]', function (e) {
+                e.preventDefault()
+                let data = TableEst.row($(this).parents('tr')).data()
+                let parameters = {
+                    action: 'del',
+                    id: data.id
+                }
+                console.log(parameters)
+                DelAjax('¡Está seguro/a!', 'Los datos del Donante serán eliminados', window.location.pathname, parameters, function () {
+                    TableEst.ajax.reload()
+                })
+            })
+
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                language: 'es'
+            })
+
+
+            $('select[name="consultorio"]').change(function () {
+                let id = this.value
+                console.log(id)
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'filter_consu',
+                        'id_consu': id
+                    },
+                    dataType: 'json'
+                }).done(function (data) {
+                    if (!data.hasOwnProperty('error')) {
+                        console.log(data)
+                        TableEst.data = data;
+                        TableEst.ajax.reload()
+                    } else {
+                        $.alert({
+                            icon: 'fa fa-times-circle',
+                            theme: 'modern',
+                            animation: 'zoom',
+                            type: 'red',
+                            title: 'Ha ocurrido un error!',
+                            content: data.error
+                        });
+                    }
+                })
+            })
+
+            generate_report()
+
+            $('#range').daterangepicker({
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+                "showDropdowns": true,
+                "showISOWeekNumbers": true,
+                "timePicker": false,
+                ranges: {
+                    'Hoy': [moment(), moment()],
+                    'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Últimos 7 Días': [moment().subtract(6, 'days'), moment()],
+                    'Últimos 30 Días': [moment().subtract(29, 'days'), moment()],
+                    'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+                    'Mes Pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                "alwaysShowCalendars": true,
+                "drops": "down",
+                "cancelClass": "btn-danger"
+            }, function (start, end, label) {
+
+            }).on('apply.daterangepicker', function (ev, picker) {
+                date_range = picker;
+                generate_report()
+            }).on('cancel.daterangepicker', function (ev, picker) {
+                $(this).val('');
+                $(this).data('daterangepicker').setStartDate(date_now);
+                $(this).data('daterangepicker').setEndDate(date_now);
+            });
+        })
+
+
+    </script>
+
+{% endblock %}
