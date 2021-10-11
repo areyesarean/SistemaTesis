@@ -8,7 +8,15 @@ class FormSearchDonante(Form):
         'maxlength': '11',
         'minlength': '11',
         'placeholder': 'Carnet de identidad',
-        'pattern': '[0-9!?-]{8,12}'
+        'pattern': '[0-9!?-]{8,12}',
+        'autocomplete': 'off'
+    }))
+
+class FormFilterDonacion(Form):
+    filter = CharField(label='Seleccione el filtro', widget=TextInput(attrs={
+        'class': 'form-control',
+        'autocomplete': 'off',
+        'id': 'range',
     }))
 
 class FormDonacion(ModelForm):
@@ -40,6 +48,6 @@ class FormDonacion(ModelForm):
             'observaciones': Textarea(attrs={
                 'class': 'form-control',
                 'placeholder': 'Observaciones',
-                'row': '12'
+                'rows': '1'
             }),
         }
