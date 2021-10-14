@@ -21,4 +21,5 @@ class Consultorio(models.Model):
     def toJson(self):
         item = model_to_dict(self)
         item['areasalud'] = self.areasalud.nombre
+        item['municipio'] = self.areasalud.municipio.municipio
         return item
