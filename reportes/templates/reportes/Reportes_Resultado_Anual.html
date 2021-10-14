@@ -1,0 +1,308 @@
+{% extends 'interfaz/index.html' %}
+{% load static %}
+
+{% block links %}
+    {#  TouchPin  #}
+    <link rel="stylesheet" href="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}">
+
+    <link rel="stylesheet" href="{% static 'core/Select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'core/Select2/select2-bootstrap4.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+
+    <script src="{% static 'code/highcharts.js' %}"></script>
+    <script src="{% static 'code/modules/exporting.js' %}"></script>
+    <script src="{% static 'code/modules/offline-exporting.js' %}"></script>
+    <script src="{% static 'code/modules/export-data.js' %}"></script>
+    <script src="{% static 'code/modules/accessibility.js' %}"></script>
+    <script src="{% static 'code/themes/grid-light.js' %}"></script>
+
+    <style>
+        #touchpin {
+            text-decoration: none;
+        }
+    </style>
+{% endblock %}
+
+{% block contenido %}
+
+    <div class="col-lg-3">
+        <div class="card card-danger card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fa fa-calendar"></i> Seleccione
+                </h3>
+            </div>
+            <div class="card-body">
+                <form method="post" id="form_year">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group ">
+                                <label for="exampleInputPassword1">{{ FormYears.years.label }}</label>
+                                {{ FormYears.years }}
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group ">
+                                <label for="exampleInputPassword1">{{ FormYears.municipios.label }}</label>
+                                {{ FormYears.municipios }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 mt-2">
+                            <button id="send-year" type="submit" class="btn btn-danger col-lg-12">Mostrar resultados</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card card-danger card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Total de donaciones este año
+                </h3>
+            </div>
+            <div class="card-body" style="padding:77px 0px">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <span id="total_donaciones" style="font-size: 60px">0</span>
+                        <span id="total_donaciones" style="font-size: 60px">/</span>
+                        <span id="total_donaciones_prev" style="font-size: 60px">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5 ">
+        <div class="card card-danger card-outline ">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Porciento de cumplimiento del plan anual
+                </h3>
+            </div>
+            <div class="card-body" style="padding:58px 0px">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <h1 style="font-size: 100px"><span id="porctge_cumplimiento">0</span>%</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-lg-4 col-6">
+        <!-- small card -->
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>
+                    <span id="prctge_cons_cump">0.00</span>
+                    <sup style="font-size: 20px">%</sup>
+                </h3>
+
+                <p>Total: <span id="cant_cons_cump">0</span> consultorios</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <a href="#" class="small-box-footer">
+                Cumplieron el plan <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-4 col-6">
+        <!-- small card -->
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>
+                    <span id="prctge_cons_sobre">0.00</span>
+                    <sup style="font-size: 20px">%</sup>
+                </h3>
+                <p>Total: <span id="cant_cons_sobre">0</span> consultorios</p>
+
+            </div>
+            <div class="icon">
+                <i class="fa fa-certificate"></i>
+            </div>
+            <a href="#" class="small-box-footer">
+                Sobrecumplieron el plan <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-4 col-12">
+        <!-- small card -->
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>
+                    <span id="prctge_cons_incum">0.00</span>
+                    <sup style="font-size: 20px">%</sup>
+                </h3>
+
+                <p>Total: <span id="cant_cons_incum">0</span> consultorios</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-times-circle"></i>
+            </div>
+            <a href="#" class="small-box-footer">
+                Incumplieron el plan <i class="fas fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <!-- ./col -->
+
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+
+    <script src="{% static  'core/Select2/select2.min.js' %}"></script>
+    <script src="{% static  'core/Select2/i18n/es.js' %}"></script>
+
+    <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'core/Datatables/Buttons-1.6.5/js/dataTables.buttons.js' %}"></script>
+    <script src="{% static 'core/Datatables/JSZip-2.5.0/jszip.js' %}"></script>
+    <script src="{% static 'core/Datatables/pdfmake-0.1.36/pdfmake.js' %}"></script>
+    <script src="{% static 'core/Datatables/pdfmake-0.1.36/vfs_fonts.js' %}"></script>
+    <script src="{% static 'core/Datatables/Buttons-1.6.5/js/buttons.html5.js' %}"></script>
+
+
+    <script src="{% static 'donacion/add_ajax_donacion.js' %}"></script>
+    <script src="{% static 'errorMessage.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            //Declaracion de objetos
+            let data_number = {
+                total_donaciones: 0,
+                total_donaciones_prev: 0,
+                porctge_cumplimiento: 0.00,
+                prctge_cons_cump: 0.00,
+                cant_cons_cump: 0,
+                prctge_cons_incum: 0.00,
+                cant_cons_incum: 0,
+                prctge_cons_sobre: 0.00,
+                cant_cons_sobre: 0
+            }
+            //VALORES GLOBALES
+            const total_donaciones = document.getElementById('total_donaciones');
+            const total_donaciones_prev = document.getElementById('total_donaciones_prev');
+            const porctge_cumplimiento = document.getElementById('porctge_cumplimiento');
+            //CONSULTORIOS QUE CUMPLIERON
+            const prctge_cons_cump = document.getElementById('prctge_cons_cump');
+            const cant_cons_cump = document.getElementById('cant_cons_cump');
+            //CONSULTORIOS QUE INCUMPLIERON
+            const prctge_cons_incum = document.getElementById('prctge_cons_incum');
+            const cant_cons_incum = document.getElementById('cant_cons_incum');
+            //CONSULTORIOS QUE SOBRECUMPLIERON
+            const prctge_cons_sobre = document.getElementById('prctge_cons_sobre');
+            const cant_cons_sobre = document.getElementById('cant_cons_sobre');
+
+
+            //Llamda de funciones
+            clearValores()
+
+            //Declaracion de funciones
+            function cargaValores() {
+                total_donaciones.innerText = data_number.total_donaciones;
+                total_donaciones_prev.innerText = data_number.total_donaciones_prev;
+                porctge_cumplimiento.innerText = data_number.porctge_cumplimiento;
+                //CONSULTORIOS QUE CUMPLIERON
+                prctge_cons_cump.innerText = data_number.prctge_cons_cump;
+                cant_cons_cump.innerText = data_number.cant_cons_cump;
+                //CONSULTORIOS QUE INCUMPLIERON
+                prctge_cons_incum.innerText = data_number.prctge_cons_incum;
+                cant_cons_incum.innerText = data_number.cant_cons_incum;
+                //CONSULTORIOS QUE SOBRECUMPLIERON
+                prctge_cons_sobre.innerText = data_number.prctge_cons_sobre;
+                cant_cons_sobre.innerText = data_number.cant_cons_sobre;
+            }
+
+            function clearValores() {
+                total_donaciones.innerText = '0';
+                total_donaciones_prev.innerText = '0';
+                porctge_cumplimiento.innerText = '0.00';
+                //CONSULTORIOS QUE CUMPLIERON
+                prctge_cons_cump.innerText = '0.00';
+                cant_cons_cump.innerText = '0';
+                //CONSULTORIOS QUE INCUMPLIERON
+                prctge_cons_incum.innerText = '0.00';
+                cant_cons_incum.innerText = '0';
+                //CONSULTORIOS QUE SOBRECUMPLIERON
+                prctge_cons_sobre.innerText = '0.00';
+                cant_cons_sobre.innerText = '0';
+            }
+
+            function cargaObjeto(data) {
+                console.log(data)
+                console.log(data.total_donaciones)
+                data_number['total_donaciones'] = data.total_donaciones;
+                data_number['total_donaciones_prev'] = data.total_donaciones_previstas;
+                data_number['porctge_cumplimiento'] = data.porctge_cumplimiento.toFixed(2);
+                data_number['prctge_cons_cump'] = data.prctge_cons_cump.toFixed(2);
+                data_number['cant_cons_cump'] = data.cant_cons_cump;
+                data_number['prctge_cons_incum'] = data.prctge_cons_incum.toFixed(2);
+                data_number['cant_cons_incum'] = data.cant_cons_incum;
+                data_number['prctge_cons_sobre'] = data.prctge_cons_sobre.toFixed(2);
+                data_number['cant_cons_sobre'] = data.cant_cons_sobre;
+                console.log(data_number)
+                clearValores()
+                cargaValores()
+            }
+
+            //Eventos
+            $('#touchpin').TouchSpin({
+                min: 2000,
+                max: 2300,
+                step: 1,
+                decimals: 0,
+                boostat: 5,
+                maxboostedstep: 10,
+                {#postfix: '%',#}
+            })
+
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                language: 'es'
+            })
+
+            $('#form_year').submit(function (e) {
+                e.preventDefault();
+                const year = $('#touchpin').val()
+                const municipios = $('#id_municipios').val()
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        action: 'data_number',
+                        year,
+                        municipios
+                    },
+                    dataType: 'json',
+                }).done(function (data) {
+                    if (data.hasOwnProperty('error')) {
+                        clearValores()
+                        errorMessage(data.error)
+                    }
+                    console.log(data[0]);
+                    cargaObjeto(data[0]);
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert("Error")
+                });
+            })
+
+
+        });
+    </script>
+{% endblock %}

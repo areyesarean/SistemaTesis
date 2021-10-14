@@ -1,0 +1,27 @@
+{% extends 'interfaz/card_empty.html' %}
+
+{% block card-title %}
+    <i class="fa fa-newspaper"></i> Reportes
+{% endblock %}
+
+{% block card-body %}
+    <h5 class="mb-4">Seleccione un reporte de la lista!</h5>
+
+    <ul>
+        <li class="mb-3">
+            <a href="">Porcentage de cumplimiento del plan de donaciones por mes y año de todos los consultorios</a>
+        </li>
+        <li class="mb-3">
+            <a href="{% url 'reportes:ReportesResultadoAnual' %}">Resultados por año</a>
+        </li>
+        <li class="mb-3">
+            <a href="">Porcentage de cumplimiento por Municipio</a>
+        </li>
+        <li class="mb-3">
+            <a href="">Porcentage de cumplimiento por Área de Salud</a>
+        </li>
+        <li class="mb-3">
+            <a href=""></a>
+        </li>
+    </ul>
+{% endblock %}
