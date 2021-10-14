@@ -35,5 +35,6 @@ class Donacion(models.Model):
         item['donante'] = self.donante.ci
         item['nombre'] = '{} {}'.format(self.donante.nombre, self.donante.apellidos)
         item['consultorio'] = self.consultorio.numero
+        item['municipio'] = self.bloodbank.municipio.municipio
         item['area_salud'] = self.consultorio.areasalud.nombre
         return item
