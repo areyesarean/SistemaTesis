@@ -11,8 +11,8 @@ class FormBloodGroup(ModelForm):
         fields = '__all__'
         exclude = ['created_by', 'modified_by']
         widgets = {
-            'bloodgroup': TextInput(attrs={
-                'class': 'form-control',
+            'bloodgroup': Select(attrs={
+                'class': 'form-control select2',
                 'placeholder': 'Nombre del Grupo Sanguíneo',
             }),
 
