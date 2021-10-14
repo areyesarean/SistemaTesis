@@ -11,7 +11,8 @@ from donacion.models import Donacion
 from donante.models import Donante
 
 
-class AddDonacion(FormView):
+class AddDonacion(LoginRequiredMixin, PermissionRequiredMixin, FormView):
+    permission_required = 'donacion.add_donacion'
     form_class = FormDonacion
     template_name = 'donacion/Add_Donacion.html'
 
@@ -43,7 +44,8 @@ class AddDonacion(FormView):
         return context
 
 
-class ListDonacion(LoginRequiredMixin, TemplateView):
+class ListDonacion(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+    permission_required = ['donacion.delete_donacion', 'donacion.view_donacion']
     template_name = 'donacion/List_Donacion.html'
 
     @method_decorator(csrf_exempt)
@@ -84,7 +86,7 @@ class ListDonacion(LoginRequiredMixin, TemplateView):
 
 
 class UpdateDonacion(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
-    permission_required = 'donacion.donacion_consultorio'
+    permission_required = 'donacion.change_donacion'
     template_name = 'donacion/Update_Donacion.html'
     form_class = FormDonacion
     success_url = reverse_lazy('consultorio:ListConsultorio')
