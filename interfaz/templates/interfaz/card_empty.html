@@ -1,0 +1,25 @@
+{% extends 'interfaz/index.html' %}
+
+{% block contenido %}
+    <div class="col-lg-12">
+        <div class="card card-danger card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    {% block card-title %}
+
+                    {% endblock %}
+                </h3>
+            </div>
+            <div class="card-body">
+                {% block card-body %}
+
+                {% endblock %}
+            </div>
+            <div class="card-footer">
+                {% block card-footer %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
