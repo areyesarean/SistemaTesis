@@ -34,8 +34,9 @@
     <th>Carnet de identidad</th>
     <th>Nombre del Donante</th>
     <th>Consultorio</th>
-    <th>Fecha</th>
     <th>Área de Salud</th>
+    <th>Municipio</th>
+    <th>Fecha</th>
     <th>Observaciones</th>
     <th>Opciones</th>
 {% endblock %}
@@ -46,8 +47,9 @@
     <th>Carnet de identidad</th>
     <th>Nombre del Donante</th>
     <th>Consultorio</th>
-    <th>Fecha</th>
     <th>Área de Salud</th>
+    <th>Municipio</th>
+    <th>Fecha</th>
     <th>Observaciones</th>
     <th>Opciones</th>
 {% endblock %}
@@ -97,7 +99,7 @@
                         titleAttr: 'Añadir nuevo Donante',
                         className: 'btn btn-primary',
                         action: function () {
-                            location.replace('{% url 'donante:AddDonante' %}');
+                            location.replace('{% url 'donacion:AddDonacion' %}');
                         }
                     },
                     {
@@ -117,14 +119,14 @@
                                     animation: 'zoom',
                                     type: 'red',
                                     title: 'Error!',
-                                    content: 'Debe seleccionar almenos un Donante de la lista'
+                                    content: 'Debe seleccionar almenos una Donación de la lista'
                                 });
                             } else {
                                 $.confirm({
                                     icon: 'fas fa-exclamation-triangle',
                                     theme: 'modern',
                                     title: 'Esta seguro!!!',
-                                    content: 'Los Donantes seleccionadas serán eliminados',
+                                    content: 'Los registros de las Donaciónes seleccionadas serán eliminados',
                                     type: 'orange',
                                     animation: 'zoom',
                                     buttons: {
@@ -147,7 +149,7 @@
                                                             type: 'green',
                                                             title: 'Éxito!!!',
                                                             animation: 'zoom',
-                                                            content: 'Donantes eliminados correctamente',
+                                                            content: 'Donaciónes eliminadas correctamente',
                                                             buttons: {
                                                                 confirm: {
                                                                     text: '<i class="fa fa-check-circle"></i> Aceptar',
@@ -185,20 +187,20 @@
                         titleAttr: 'Exportar a exel',
                         className: 'btn btn-success',
                         exportOptions: {
-                            columns: [2]
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8]
                         }
                     },
                     {
-                        //extend: 'pdfHtml5',
+                        extend: 'pdfHtml5',
                         text: '<i class="fas fa-file-pdf"></i>',
                         titleAttr: 'Exportar a Pdf',
                         className: 'btn btn-danger',
-                        //exportOptions: {
-                        //    columns: [0, 1, 2, 3, 4, 5]
-                        //}
-                        action: function () {
-                            location.replace('{% url 'core:PdfEstudiantesView' %}');
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8]
                         }
+                       // action: function () {
+                        //    location.replace('{% url 'core:PdfEstudiantesView' %}');
+                       // }
                     },
                 ],
                 columns: [
@@ -207,8 +209,9 @@
                     {'data': 'donante'},
                     {'data': 'nombre'},
                     {'data': 'consultorio'},
-                    {'data': 'fecha'},
                     {'data': 'area_salud'},
+                    {'data': 'municipio'},
+                    {'data': 'fecha'},
                     {'data': 'observaciones'},
                     {'defaultContent': ''},
                 ],
@@ -290,7 +293,7 @@
                     id: data.id
                 }
                 console.log(parameters)
-                DelAjax('¡Está seguro/a!', 'Los datos del Donante serán eliminados', window.location.pathname, parameters, function () {
+                DelAjax('¡Está seguro/a!', 'Los datos de la Donación serán eliminados', window.location.pathname, parameters, function () {
                     TableEst.ajax.reload()
                 })
             })
