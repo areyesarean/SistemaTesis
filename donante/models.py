@@ -41,4 +41,5 @@ class Donante(models.Model):
         item['municipio'] = self.consultorio.areasalud.municipio.municipio
         item['sexo'] = self.sexo.sexo
         item['skincolor'] = self.skincolor.nskincolor
+        item['provincia'] = self.consultorio.areasalud.municipio.provincia.provincia
         return item
