@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 
 from consultorio.models import Consultorio
 from donacion.models import Donacion
+from municipio.models import Municipios
 from reportes.forms import FormYears
 
 
@@ -25,6 +26,25 @@ class ReportesResultadoAnualView(TemplateView):
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
+    def graphic_comp_men_mun(self, mun, year):
+        try:
+            mont = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            muni = Municipios.objects.get(pk=mun)
+            data = []
+            serie = []
+            for i in mont:
+                serie.append(Donacion.objects.filter(fecha__year=year, fecha__month=i, bloodbank__municipio_id=muni.pk).count())
+
+            print(serie)
+
+            data.append({
+                'name': muni.municipio,
+                'data': serie
+            })
+            return data
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+
     def post(self, request, *args, **kwargs):
         data = {}
         try:
@@ -36,10 +56,13 @@ class ReportesResultadoAnualView(TemplateView):
                 year = request.POST.get('year', '')
                 municipio = request.POST.get('municipios', '')
 
+
+
                 if len(year) and len(municipio):
                     consultorios = Consultorio.objects.filter(areasalud__municipio_id=municipio)
                     if not len(consultorios):
-                        raise ValueError('Uyy, No existen consultorios asociados al municipio seleccionado en el año seleccionado')
+                        raise ValueError(
+                            'Uyy, No existen consultorios asociados al municipio seleccionado en el año seleccionado')
 
                     cant_consul = consultorios.count()
                     donaciones_previstas = (cant_consul * 3) * 12
@@ -69,8 +92,10 @@ class ReportesResultadoAnualView(TemplateView):
                             'cant_cons_sobre': cons_sobre,
                             'prctge_cons_sobre': (cons_sobre * 100) / cant_consul,
                         })
+                        data.append(self.graphic_comp_men_mun(municipio, year))
                     else:
-                        raise ValueError("Uyy, No hay donaciones asociadas al municipio seleccionado en el año seleccionado")
+                        raise ValueError(
+                            "Uyy, No hay donaciones asociadas al municipio seleccionado en el año seleccionado")
             else:
                 data['error'] = 'No hay action'
         except Exception as e:
