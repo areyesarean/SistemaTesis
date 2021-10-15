@@ -136,7 +136,7 @@
 
                         }
                     },
-                    {
+                   /* {
                         extend: 'excelHtml5',
                         text: '<i class="fa fa-file-excel"></i>',
                         titleAttr: 'Exportar a exel',
@@ -146,17 +146,14 @@
                         }
                     },
                     {
-                        //extend: 'pdfHtml5',
+                        extend: 'pdfHtml5',
                         text: '<i class="fas fa-file-pdf"></i>',
                         titleAttr: 'Exportar a Pdf',
                         className: 'btn btn-danger',
-                        //exportOptions: {
-                        //    columns: [0, 1, 2, 3, 4, 5]
-                        //}
-                        action: function () {
-                            location.replace('{% url 'core:PdfEstudiantesView' %}');
+                        exportOptions: {
+                            columns: [1]
                         }
-                    },
+                    },*/
                 ],
                 columns: [
                     {'defaultContent': ''},
