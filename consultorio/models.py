@@ -22,4 +22,5 @@ class Consultorio(models.Model):
         item = model_to_dict(self)
         item['areasalud'] = self.areasalud.nombre
         item['municipio'] = self.areasalud.municipio.municipio
+        item['provincia'] = self.areasalud.municipio.provincia.provincia
         return item
