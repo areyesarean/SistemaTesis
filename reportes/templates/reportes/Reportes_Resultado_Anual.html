@@ -222,7 +222,7 @@
 
             //Llamda de funciones
             clearValores()
-            graph(serieempty)
+            graph(serieempty, '----')
             //Declaracion de funciones
             function cargaValores() {
                 total_donaciones.innerText = data_number.total_donaciones;
@@ -303,27 +303,28 @@
                 }).done(function (data) {
                     if (data.hasOwnProperty('error')) {
                         clearValores()
+                        graph(serieempty, '----')
                         errorMessage(data.error)
                     }
                     console.log(data[0]);
                     cargaObjeto(data[0]);
                     console.log(data[1][0])
-                    graph(data[1][0])
+                    graph(data[1][0],year)
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     alert("Error")
                 });
             })
 
-            function graph(serie) {
+            function graph(serie, year) {
                 Highcharts.chart('g-bars', {
                 chart: {
                     type: 'column'
                 },
                 title: {
-                    text: `Comportamiento mensual de las donaciones en el municipio ${serie.name} `
+                    text: `Comportamiento mensual de las donaciones en el año ${year} `
                 },
                 subtitle: {
-                    text: 'Source: WorldClimate.com'
+                    text:`Municipio: ${serie.name}`
                 },
                 xAxis: {
                     categories: [
