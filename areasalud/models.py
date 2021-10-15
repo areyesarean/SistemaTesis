@@ -20,4 +20,5 @@ class AreaSalud(models.Model):
     def toJson(self):
         item = model_to_dict(self)
         item['municipio'] = self.municipio.municipio
+        item['provincia'] = self.municipio.provincia.provincia
         return item
