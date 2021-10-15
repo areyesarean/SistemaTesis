@@ -52,7 +52,8 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 mt-2">
-                            <button id="send-year" type="submit" class="btn btn-danger col-lg-12">Mostrar resultados</button>
+                            <button id="send-year" type="submit" class="btn btn-danger col-lg-12">Mostrar resultados
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -158,7 +159,9 @@
     </div>
     <!-- ./col -->
 
-
+    <div class="col-lg-12">
+        <div id="g-bars"></div>
+    </div>
 
 {% endblock %}
 
@@ -177,6 +180,13 @@
     <script src="{% static 'core/Datatables/pdfmake-0.1.36/pdfmake.js' %}"></script>
     <script src="{% static 'core/Datatables/pdfmake-0.1.36/vfs_fonts.js' %}"></script>
     <script src="{% static 'core/Datatables/Buttons-1.6.5/js/buttons.html5.js' %}"></script>
+
+    <script src="{% static 'code/highcharts.js' %}"></script>
+    <script src="{% static 'code/modules/exporting.js' %}"></script>
+    <script src="{% static 'code/modules/offline-exporting.js' %}"></script>
+    <script src="{% static 'code/modules/export-data.js' %}"></script>
+    <script src="{% static 'code/modules/accessibility.js' %}"></script>
+    <script src="{% static 'code/themes/sand-signika.js' %}"></script>
 
 
     <script src="{% static 'donacion/add_ajax_donacion.js' %}"></script>
@@ -208,11 +218,11 @@
             //CONSULTORIOS QUE SOBRECUMPLIERON
             const prctge_cons_sobre = document.getElementById('prctge_cons_sobre');
             const cant_cons_sobre = document.getElementById('cant_cons_sobre');
-
+            const serieempty = {name: ': No hay un municipio seleccionado aún',data: [0,0,0,0,0,0,0,0,0,0,0,0]}
 
             //Llamda de funciones
             clearValores()
-
+            graph(serieempty)
             //Declaracion de funciones
             function cargaValores() {
                 total_donaciones.innerText = data_number.total_donaciones;
@@ -297,11 +307,64 @@
                     }
                     console.log(data[0]);
                     cargaObjeto(data[0]);
+                    console.log(data[1][0])
+                    graph(data[1][0])
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     alert("Error")
                 });
             })
 
+            function graph(serie) {
+                Highcharts.chart('g-bars', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: `Comportamiento mensual de las donaciones en el municipio ${serie.name} `
+                },
+                subtitle: {
+                    text: 'Source: WorldClimate.com'
+                },
+                xAxis: {
+                    categories: [
+                        'Enero',
+                        'Febrero',
+                        'Marzo',
+                        'Abril',
+                        'Mayo',
+                        'Junio',
+                        'Julio',
+                        'Agosto',
+                        'Septiembre',
+                        'Octubre',
+                        'Noviembre',
+                        'Diciembre'
+                    ],
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Cantidad de donaciones'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [serie]
+            });
+            }
 
         });
     </script>
