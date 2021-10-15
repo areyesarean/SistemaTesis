@@ -12,13 +12,14 @@
     <th>Nombre</th>
     <th>Apellidos</th>
     <th>Edad</th>
-    <th>Dirección</th>
+    <th>Sexo</th>
+    <th>Color de piel</th>
+    <th>Grupo Sanguíneo</th>
     <th>Consultorio</th>
     <th>Área de Salud</th>
     <th>Municipio</th>
-    <th>Grupo Sanguíneo</th>
-    <th>Sexo</th>
-    <th>Color de piel</th>
+    <th>Provincia</th>
+    <th>Dirección</th>
     <th>Opciones</th>
 {% endblock %}
 
@@ -28,13 +29,14 @@
     <th>Nombre</th>
     <th>Apellidos</th>
     <th>Edad</th>
-    <th>Dirección</th>
+    <th>Sexo</th>
+    <th>Color de piel</th>
+    <th>Grupo Sanguíneo</th>
     <th>Consultorio</th>
     <th>Área de Salud</th>
     <th>Municipio</th>
-    <th>Grupo Sanguíneo</th>
-    <th>Sexo</th>
-    <th>Color de piel</th>
+    <th>Provincia</th>
+    <th>Dirección</th>
     <th>Opciones</th>
 {% endblock %}
 
@@ -163,20 +165,17 @@
                         titleAttr: 'Exportar a exel',
                         className: 'btn btn-success',
                         exportOptions: {
-                            columns: [2]
+                            columns: [1,2,3,4,5,6,7,8,9,10,11,12]
                         }
                     },
                     {
-                        //extend: 'pdfHtml5',
+                        extend: 'pdfHtml5',
                         text: '<i class="fas fa-file-pdf"></i>',
                         titleAttr: 'Exportar a Pdf',
                         className: 'btn btn-danger',
-                        //exportOptions: {
-                        //    columns: [0, 1, 2, 3, 4, 5]
-                        //}
-                        action: function () {
-                            location.replace('{% url 'core:PdfEstudiantesView' %}');
-                        }
+                        exportOptions: {
+                            columns: [1,2,3,4,5,6,7,8,9,10,11,12]
+                        },
                     },
                 ],
                 columns: [
@@ -185,13 +184,14 @@
                     {'data': 'nombre'},
                     {'data': 'apellidos'},
                     {'data': 'edad'},
-                    {'data': 'direccion'},
+                    {'data': 'sexo'},
+                    {'data': 'skincolor'},
+                    {'data': 'bloodgroup'},
                     {'data': 'consultorio'},
                     {'data': 'areasalud'},
                     {'data': 'municipio'},
-                    {'data': 'bloodgroup'},
-                    {'data': 'sexo'},
-                    {'data': 'skincolor'},
+                    {'data': 'provincia'},
+                    {'data': 'direccion'},
                     {'defaultContent': ''},
                 ],
                 columnDefs: [
