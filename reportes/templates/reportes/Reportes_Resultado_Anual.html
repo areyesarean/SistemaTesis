@@ -163,6 +163,125 @@
         <div id="g-bars"></div>
     </div>
 
+    <div class="col-lg-12">
+        <div class="card card-danger">
+            <div class="card-header text-center">
+                <h3 class="card-title" id="card-title-incum">
+                    Listado de consultorios que incumplieron el plan del año ---- en el municipio ----
+                </h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="list-incum-table" class="table table-bordered table-striped">
+                    <thead>
+                    <tr style="border-bottom: 1px solid black">
+                        <th>Número</th>
+                        <th>Dirección</th>
+                        <th>Área de Salud</th>
+                        <th>Municipio</th>
+                        <th>Provincia</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Número</th>
+                        <th>Dirección</th>
+                        <th>Área de Salud</th>
+                        <th>Municipio</th>
+                        <th>Provincia</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="card card-success">
+            <div class="card-header text-center">
+                <h3 class="card-title" id="card-title-sobre">
+                    Listado de consultorios que sobrecumplieron el plan del año ---- en el municipio ----
+                </h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="list-sobre-table" class="table table-bordered table-striped">
+                    <thead>
+                    <tr style="border-bottom: 1px solid black">
+                        <th>Número</th>
+                        <th>Dirección</th>
+                        <th>Área de Salud</th>
+                        <th>Municipio</th>
+                        <th>Provincia</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Número</th>
+                        <th>Dirección</th>
+                        <th>Área de Salud</th>
+                        <th>Municipio</th>
+                        <th>Provincia</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="card card-primary">
+            <div class="card-header text-center">
+                <h3 class="card-title" id="card-title-cump">
+                    Listado de consultorios que cumplieron el plan del año ---- en el municipio ----
+                </h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <table id="list-cump-table" class="table table-bordered table-striped">
+                    <thead>
+                    <tr style="border-bottom: 1px solid black">
+                        <th>Número</th>
+                        <th>Dirección</th>
+                        <th>Área de Salud</th>
+                        <th>Municipio</th>
+                        <th>Provincia</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Número</th>
+                        <th>Dirección</th>
+                        <th>Área de Salud</th>
+                        <th>Municipio</th>
+                        <th>Provincia</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -218,11 +337,19 @@
             //CONSULTORIOS QUE SOBRECUMPLIERON
             const prctge_cons_sobre = document.getElementById('prctge_cons_sobre');
             const cant_cons_sobre = document.getElementById('cant_cons_sobre');
-            const serieempty = {name: ': No hay un municipio seleccionado aún',data: [0,0,0,0,0,0,0,0,0,0,0,0]}
+            const serieempty = {
+                name: ': No hay un municipio seleccionado aún',
+                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            }
+            const card_title_sobre = document.getElementById('card-title-sobre');
+            const card_title_cump = document.getElementById('card-title-cump');
+            const card_title_incum = document.getElementById('card-title-incum');
 
             //Llamda de funciones
             clearValores()
             graph(serieempty, '----')
+            //List_Incum()
+
             //Declaracion de funciones
             function cargaValores() {
                 total_donaciones.innerText = data_number.total_donaciones;
@@ -271,6 +398,18 @@
                 cargaValores()
             }
 
+            function carga_name_tablas(year, mun) {
+                card_title_sobre.innerText = `Listado de consultorios que Sobrecumplieron el plan en el año ${year} en el municipio ${mun}`
+                card_title_cump.innerText = `Listado de consultorios que Cumplieron el plan en el año ${year} en el municipio ${mun}`
+                card_title_incum.innerText = `Listado de consultorios que Incumplieron el plan en el año ${year} en el municipio ${mun}`
+            }
+
+            function clear_name_tablas() {
+                card_title_sobre.innerText = `Listado de consultorios que Sobrecumplieron el plan en el año ---- en el municipio ----`
+                card_title_cump.innerText = `Listado de consultorios que Cumplieron el plan en el año ---- en el municipio ----`
+                card_title_incum.innerText = `Listado de consultorios que Incumplieron el plan en el año ---- en el municipio ----`
+            }
+
             //Eventos
             $('#touchpin').TouchSpin({
                 min: 2000,
@@ -304,12 +443,24 @@
                     if (data.hasOwnProperty('error')) {
                         clearValores()
                         graph(serieempty, '----')
+                        clear_name_tablas()
+                        $("#list-incum-table").dataTable().fnDestroy();
+                        $("#list-sobre-table").dataTable().fnDestroy();
+                        $("#list-cump-table").dataTable().fnDestroy();
+                        List_Incum([])
+                        List_Sobre([])
+                        List_Cump([])
                         errorMessage(data.error)
                     }
-                    console.log(data[0]);
+                    $("#list-incum-table").dataTable().fnDestroy();
+                    $("#list-sobre-table").dataTable().fnDestroy();
+                    $("#list-cump-table").dataTable().fnDestroy();
                     cargaObjeto(data[0]);
-                    console.log(data[1][0])
-                    graph(data[1][0],year)
+                    List_Incum(data[2])
+                    List_Sobre(data[3])
+                    List_Cump(data[4])
+                    carga_name_tablas(year, data[1][0].name)
+                    graph(data[1][0], year)
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     alert("Error")
                 });
@@ -317,54 +468,276 @@
 
             function graph(serie, year) {
                 Highcharts.chart('g-bars', {
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: `Comportamiento mensual de las donaciones en el año ${year} `
-                },
-                subtitle: {
-                    text:`Municipio: ${serie.name}`
-                },
-                xAxis: {
-                    categories: [
-                        'Enero',
-                        'Febrero',
-                        'Marzo',
-                        'Abril',
-                        'Mayo',
-                        'Junio',
-                        'Julio',
-                        'Agosto',
-                        'Septiembre',
-                        'Octubre',
-                        'Noviembre',
-                        'Diciembre'
-                    ],
-                    crosshair: true
-                },
-                yAxis: {
-                    min: 0,
+                    chart: {
+                        type: 'column'
+                    },
                     title: {
-                        text: 'Cantidad de donaciones'
-                    }
-                },
-                tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                        '<td style="padding:0"><b>{point.y}</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0
-                    }
-                },
-                series: [serie]
-            });
+                        text: `Comportamiento mensual de las donaciones en el año ${year} `
+                    },
+                    subtitle: {
+                        text: `Municipio: ${serie.name}`
+                    },
+                    xAxis: {
+                        categories: [
+                            'Enero',
+                            'Febrero',
+                            'Marzo',
+                            'Abril',
+                            'Mayo',
+                            'Junio',
+                            'Julio',
+                            'Agosto',
+                            'Septiembre',
+                            'Octubre',
+                            'Noviembre',
+                            'Diciembre'
+                        ],
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Cantidad de donaciones'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                            '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [serie]
+                });
+            }
+
+            function List_Incum(data) {
+                let table_incum = $('#list-incum-table').DataTable({
+                    "paging": true,
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false,
+                    "responsive": true,
+                    data: data,
+                    columns: [
+                        {data: 'numero'},
+                        {data: 'direccion'},
+                        {data: 'areasalud'},
+                        {data: 'municipio'},
+                        {data: 'provincia'},
+                    ],
+                    dom: "<'row'<'form-inline'<'offset-sm-10'>>>" +
+                        "<'row'<'col-lg-4'l><'col-lg-4 text-center mb-2'B><'col-lg-4'f>>" +
+                        "<'row'<'col-lg-12'tr>>" +
+                        "<'row'<'col-lg-5'i><'col-lg-7'p>>",
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            text: '<i class="fa fa-file-excel"></i>',
+                            titleAttr: 'Exportar a exel',
+                            className: 'btn btn-success',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: '<i class="fas fa-file-pdf"></i>',
+                            titleAttr: 'Exportar a Pdf',
+                            className: 'btn btn-danger',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            },
+                        }
+                    ],
+                    columnDefs: [
+                        {
+                            targets: [0, 1, 2, 3, 4],
+                            class: 'text-center',
+                        }
+                    ],
+                    language: {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Parece que nadie sobrecumplió el plan anual, quizás la próxima",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "<i class='fa fa-search'></i>",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    },
+                });
+            }
+
+            function List_Sobre(data) {
+                $('#list-sobre-table').DataTable({
+                    "paging": true,
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false,
+                    "responsive": true,
+                    data: data,
+                    columns: [
+                        {data: 'numero'},
+                        {data: 'direccion'},
+                        {data: 'areasalud'},
+                        {data: 'municipio'},
+                        {data: 'provincia'},
+                    ],
+                    dom: "<'row'<'form-inline'<'offset-sm-10'>>>" +
+                        "<'row'<'col-lg-4'l><'col-lg-4 text-center mb-2'B><'col-lg-4'f>>" +
+                        "<'row'<'col-lg-12'tr>>" +
+                        "<'row'<'col-lg-5'i><'col-lg-7'p>>",
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            text: '<i class="fa fa-file-excel"></i>',
+                            titleAttr: 'Exportar a exel',
+                            className: 'btn btn-success',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: '<i class="fas fa-file-pdf"></i>',
+                            titleAttr: 'Exportar a Pdf',
+                            className: 'btn btn-danger',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            },
+                        }
+                    ],
+                    columnDefs: [
+                        {
+                            targets: [0, 1, 2, 3, 4],
+                            class: 'text-center',
+                        }
+                    ],
+                    language: {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Excelente, nadie ha incumplido el plan",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "<i class='fa fa-search'></i>",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    },
+                });
+            }
+
+            function List_Cump(data) {
+                $('#list-cump-table').DataTable({
+                    "paging": true,
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false,
+                    "responsive": true,
+                    data: data,
+                    columns: [
+                        {data: 'numero'},
+                        {data: 'direccion'},
+                        {data: 'areasalud'},
+                        {data: 'municipio'},
+                        {data: 'provincia'},
+                    ],
+                    dom: "<'row'<'form-inline'<'offset-sm-10'>>>" +
+                        "<'row'<'col-lg-4'l><'col-lg-4 text-center mb-2'B><'col-lg-4'f>>" +
+                        "<'row'<'col-lg-12'tr>>" +
+                        "<'row'<'col-lg-5'i><'col-lg-7'p>>",
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            text: '<i class="fa fa-file-excel"></i>',
+                            titleAttr: 'Exportar a exel',
+                            className: 'btn btn-success',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: '<i class="fas fa-file-pdf"></i>',
+                            titleAttr: 'Exportar a Pdf',
+                            className: 'btn btn-danger',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4]
+                            },
+                        }
+                    ],
+                    columnDefs: [
+                        {
+                            targets: [0, 1, 2, 3, 4],
+                            class: 'text-center',
+                        }
+                    ],
+                    language: {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Upss parece que nadie cumplió el plan",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "<i class='fa fa-search'></i>",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    },
+                });
             }
 
         });

@@ -70,14 +70,23 @@ class ReportesResultadoAnualView(TemplateView):
                     cons_cump = 0
                     cons_incum = 0
 
+                    cons_incum_data = []
+                    cons_cump_data = []
+                    cons_sobre_data = []
+
                     for i in consultorios:
                         cant = Donacion.objects.filter(consultorio__numero=i.numero, fecha__year=year).count()
                         if cant > 5:
+                            cons_sobre_data.append(i.toJson())
+                            cons_cump_data.append(i.toJson())
                             cons_sobre += 1
                         elif cant < 5:
+                            cons_incum_data.append(i.toJson())
                             cons_incum += 1
                         else:
+                            cons_cump_data.append(i.toJson())
                             cons_cump += 1
+                    print(cons_sobre_data)
 
                     donaciones = Donacion.objects.filter(fecha__year=year, bloodbank__municipio_id=municipio)
                     if len(donaciones):
@@ -93,6 +102,9 @@ class ReportesResultadoAnualView(TemplateView):
                             'prctge_cons_sobre': (cons_sobre * 100) / cant_consul,
                         })
                         data.append(self.graphic_comp_men_mun(municipio, year))
+                        data.append(cons_incum_data)
+                        data.append(cons_sobre_data)
+                        data.append(cons_cump_data)
                     else:
                         raise ValueError(
                             "Uyy, No hay donaciones asociadas al municipio seleccionado en el año seleccionado")
