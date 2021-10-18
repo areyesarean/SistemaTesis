@@ -32,12 +32,12 @@ function Sendajax(title, content, confirm, url, parameters,urlList) {
                                             location.href = window.location.pathname;
                                         }
                                     },
-                                    list: {
+                                    /*list: {
                                         text: '<i class="fa fa-home"></i> Página principal',
                                         action: function () {
                                             location.href = urlList
                                         }
-                                    }
+                                    }*/
                                 }
                             });
                             return false;
