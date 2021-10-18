@@ -80,6 +80,7 @@ class ReportesResultadoAnualView(TemplateView):
                             cons_sobre_data.append(i.toJson())
                             cons_cump_data.append(i.toJson())
                             cons_sobre += 1
+                            cons_cump += 1
                         elif cant < 5:
                             cons_incum_data.append(i.toJson())
                             cons_incum += 1
