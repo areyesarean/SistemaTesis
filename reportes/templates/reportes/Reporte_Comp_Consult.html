@@ -1,0 +1,217 @@
+{% extends 'interfaz/index.html' %}
+{% load static %}
+
+{% block links %}
+    {#  TouchPin  #}
+    <link rel="stylesheet" href="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}">
+
+    <link rel="stylesheet" href="{% static 'core/Select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'core/Select2/select2-bootstrap4.min.css' %}">
+
+    <script src="{% static 'code/highcharts.js' %}"></script>
+    <script src="{% static 'code/modules/exporting.js' %}"></script>
+    <script src="{% static 'code/modules/offline-exporting.js' %}"></script>
+    <script src="{% static 'code/modules/export-data.js' %}"></script>
+    <script src="{% static 'code/modules/accessibility.js' %}"></script>
+    <script src="{% static 'code/themes/grid-light.js' %}"></script>
+{% endblock %}
+
+{% block contenido %}
+    <div class="col-lg-4">
+        <div class="card card-danger card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Seleccione
+                </h3>
+            </div>
+            <form method="post" id="form">
+                <div class="card-body">
+                    <div class="form-group ">
+                        <label>{{ FormRPC.years.label }}</label>
+                        {{ FormRPC.years }}
+                    </div>
+                    <div class="form-group ">
+                        <label>{{ FormRPC.provincia.label }}</label>
+                        {{ FormRPC.provincia }}
+                    </div>
+                    <div class="form-group ">
+                        <label>{{ FormRPC.municipios.label }}</label>
+                        {{ FormRPC.municipios }}
+                    </div>
+                    <div class="form-group ">
+                        <label>{{ FormRPC.areasalud.label }}</label>
+                        {{ FormRPC.areasalud }}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <input type="submit" value="Mostrar" class="col-lg-12 btn btn-danger">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card card-danger card-outline">
+
+            <div class="card-body">
+                <div id="graphic" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+            </div>
+            <div class="card-footer">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+
+    <script src="{% static  'core/Select2/select2.min.js' %}"></script>
+    <script src="{% static  'core/Select2/i18n/es.js' %}"></script>
+
+
+    <script src="{% static 'donacion/add_ajax_donacion.js' %}"></script>
+    <script src="{% static 'errorMessage.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            graphic([], '-----')
+            $('#touchpin').TouchSpin({
+                min: 2000,
+                max: 2300,
+                step: 1,
+                decimals: 0,
+                boostat: 5,
+                maxboostedstep: 10,
+                buttondown_class: "btn btn-danger",
+                buttonup_class: "btn btn-danger"
+                {#postfix: '%',#}
+            })
+
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                language: 'es'
+            })
+
+            $('select[name="provincia"]').change(function () {
+                let id = this.value
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'mun_in_prov',
+                        'id': id
+                    },
+                    dataType: 'json'
+                }).done(function (data) {
+                    console.log(data)
+                    if (!data.hasOwnProperty('error')) {
+                        $('select[name="municipios"]').html('').select2({
+                            theme: 'bootstrap4',
+                            language: 'es',
+                            data: data
+                        })
+                    } else {
+                        $.alert({
+                            icon: 'fa fa-times-circle',
+                            theme: 'modern',
+                            animation: 'zoom',
+                            type: 'red',
+                            title: 'Ha ocurrido un error!',
+                            content: data.error
+                        });
+                    }
+                })
+            })
+
+            $('select[name="municipios"]').change(function () {
+                let id = this.value
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'areasalud_in_mun',
+                        'id': id
+                    },
+                    dataType: 'json'
+                }).done(function (data) {
+                    if (!data.hasOwnProperty('error')) {
+                        $('select[name="areasalud"]').html('').select2({
+                            theme: 'bootstrap4',
+                            language: 'es',
+                            data: data
+                        })
+                    } else {
+                        $.alert({
+                            icon: 'fa fa-times-circle',
+                            theme: 'modern',
+                            animation: 'zoom',
+                            type: 'red',
+                            title: 'Ha ocurrido un error!',
+                            content: data.error
+                        });
+                    }
+                })
+            })
+
+            $('#form').submit(function (e) {
+                e.preventDefault();
+                const year = $('#touchpin').val()
+                const area_salud = $('#id_areasalud').val()
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        action: 'show_graphic',
+                        year,
+                        id_area: area_salud
+                    },
+                    dataType: 'json',
+                }).done(function (data) {
+                    if (data.hasOwnProperty('error')) {
+                        //clearValores()
+                        graphic([{'y': 0, 'name': '-----'}], year)
+                        errorMessage(data.error)
+                    }
+                    console.log(data)
+                    graphic(data, year)
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert("Error")
+                });
+            })
+
+            function graphic(serie, year) {
+                Highcharts.chart('graphic', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: `Distribucion de donaciones por consultorios médicos, ${year}`
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>Consultorio #{point.name}</b>: {point.percentage:.1f} %',
+                                style: {
+                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Porcentage',
+                        colorByPoint: true,
+                        data: serie
+                    }]
+                });
+            }
+        });
+    </script>
+{% endblock %}
