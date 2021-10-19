@@ -1,13 +1,15 @@
 # Create your views here.
+
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
+from areasalud.models import AreaSalud
 from consultorio.models import Consultorio
 from donacion.models import Donacion
 from municipio.models import Municipios
-from reportes.forms import FormYears
+from reportes.forms import FormYears, FormRPC
 
 
 class ReportesMenuView(TemplateView):
@@ -33,7 +35,8 @@ class ReportesResultadoAnualView(TemplateView):
             data = []
             serie = []
             for i in mont:
-                serie.append(Donacion.objects.filter(fecha__year=year, fecha__month=i, bloodbank__municipio_id=muni.pk).count())
+                serie.append(
+                    Donacion.objects.filter(fecha__year=year, fecha__month=i, bloodbank__municipio_id=muni.pk).count())
 
             print(serie)
 
@@ -55,8 +58,6 @@ class ReportesResultadoAnualView(TemplateView):
                 data = []
                 year = request.POST.get('year', '')
                 municipio = request.POST.get('municipios', '')
-
-
 
                 if len(year) and len(municipio):
                     consultorios = Consultorio.objects.filter(areasalud__municipio_id=municipio)
@@ -119,4 +120,48 @@ class ReportesResultadoAnualView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Resultado Anual'
         context['FormYears'] = FormYears
+        return context
+
+
+class Reporte_Donaciones_de_Consultorios_Por_Area_Salud(TemplateView):
+    template_name = 'reportes/Reporte_Comp_Consult.html'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(Reporte_Donaciones_de_Consultorios_Por_Area_Salud, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        action = request.POST['action']
+        try:
+            if action == 'mun_in_prov':
+                id_prov = request.POST['id']
+                data = [{'id': '', 'text': '---------------'}]
+                for i in Municipios.objects.filter(provincia__municipios=id_prov):
+                    data.append({'id': i.pk, 'text': i.municipio})
+            elif action == 'areasalud_in_mun':
+                id_mun = request.POST['id']
+                data = [{'id': '', 'text': '---------------'}]
+                for i in AreaSalud.objects.filter(municipio_id=id_mun):
+                    data.append({'id': i.pk, 'text': i.nombre})
+            elif action == 'show_graphic':
+                data = []
+                id_area = request.POST.get('id_area', '')
+                year = request.POST.get('year', '')
+                if len(id_area) and len(year):
+                    for i in Consultorio.objects.filter(areasalud_id=id_area):
+                        data.append({
+                            'name': i.numero,
+                            'y': Donacion.objects.filter(consultorio_id=i.pk, fecha__year=year).count()
+                        })
+            else:
+                data['error'] = 'No se especificó un action'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Resultado Anual por consultorios'
+        context['FormRPC'] = FormRPC
         return context
