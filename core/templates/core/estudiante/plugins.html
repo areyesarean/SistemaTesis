@@ -68,6 +68,7 @@
                     },
                     dataType: 'json'
                 }).done(function (data) {
+                    console.log(data)
                     if (!data.hasOwnProperty('error')) {
                         $('select[name="estudiantes"]').html('').select2({
                             theme: 'bootstrap4',
