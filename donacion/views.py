@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 # Create your views here.
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -69,9 +70,18 @@ class ListDonacion(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
                 for i in donaciones:
                     data.append(i.toJson())
             elif action == 'del-mult':
-                for i in request.POST.getlist('ids[]'):
-                    est = Donacion.objects.get(pk=i)
+                if request.user.is_superuser:
+                    for i in request.POST.getlist('ids[]'):
+                        est = Donacion.objects.get(pk=i)
+                        est.delete()
+                else:
+                    data['error'] = 'No tiene permisos para realizar esta acción'
+            elif action == 'del':
+                if request.user.is_superuser:
+                    est = Donacion.objects.get(pk=request.POST['id'])
                     est.delete()
+                else:
+                    data['error'] = 'No tiene permisos para realizar esta acción'
             else:
                 data['error'] = 'No hay action'
         except Exception as e:
@@ -99,11 +109,11 @@ class UpdateDonacion(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         data = {}
         try:
-            form = self.get_form()
-            if form.is_valid():
-                form.save()
-            else:
-                data['error'] = form.errors
+                form = self.get_form()
+                if form.is_valid():
+                    form.save()
+                else:
+                    data['error'] = form.errors
         except Exception as e:
             data['error'] = str(e)
         return JsonResponse(data)
