@@ -51,8 +51,8 @@ class ListDonante(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ListDonante, self).get_context_data(**kwargs)
-        context['title'] = 'Listado de Donanates'
-        context['btnadd'] = 'Crear nuevo Donanate'
+        context['title'] = 'Listado de Donantes'
+        context['btnadd'] = 'Crear nuevo Donantes'
         context['form'] = Consultorio2()
         return context
 
