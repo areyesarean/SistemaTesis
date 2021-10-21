@@ -71,31 +71,23 @@
                 </li>
 
                 <li class="nav-header mt-1">Operaciones y reportes</li>
-                <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-flask "></i>
+                <li class="nav-item">
+                    <a href="{% url 'donacion:AddDonacion' %}" class="nav-link">
+                        <i class="nav-icon fa fa-tint"></i>
                         <p>
-                            Donaciones
-                            <i class="right fas fa-angle-left"></i>
+                            Registrar Donación
+                            <span class="right badge badge-info"></span>
                         </p>
                     </a>
-
-                    <ul class="nav nav-treeview" style="display: none;">
-                        <li class="nav-item">
-                            <a href="{% url 'donacion:AddDonacion' %}" class="nav-link">
-                                <i class="fa fa-tint nav-icon"></i>
-                                <p>Registrar Donación</p>
-                            </a>
-                        </li>
-                    </ul>
-                    <ul class="nav nav-treeview" style="display: none;">
-                        <li class="nav-item">
-                            <a href="{% url 'donacion:ListDonacion' %}" class="nav-link">
-                                <i class="fa fa-list nav-icon"></i>
-                                <p>Listado de donaciones</p>
-                            </a>
-                        </li>
-                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'donacion:ListDonacion' %}" class="nav-link">
+                        <i class="nav-icon fa fa-list"></i>
+                        <p>
+                            Listado de donaciones
+                            <span class="right badge badge-info"></span>
+                        </p>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'reportes:ReportesMenu' %}" class="nav-link">
