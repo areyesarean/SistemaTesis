@@ -293,7 +293,7 @@
     <script src="{% static 'code/modules/offline-exporting.js' %}"></script>
     <script src="{% static 'code/modules/export-data.js' %}"></script>
     <script src="{% static 'code/modules/accessibility.js' %}"></script>
-    <script src="{% static 'code/themes/sand-signika.js' %}"></script>
+    <script src="{% static 'code/themes/high-contrast-light.js' %}"></script>
 
 
     <script src="{% static 'donacion/add_ajax_donacion.js' %}"></script>
@@ -454,7 +454,7 @@
             function graph(serie, year) {
                 Highcharts.chart('g-bars', {
                     chart: {
-                        type: 'column'
+                        type: 'column',
                     },
                     title: {
                         text: `Comportamiento mensual de las donaciones en el año ${year} `
@@ -483,6 +483,7 @@
                         min: 0,
                         title: {
                             text: 'Cantidad de donaciones'
+
                         }
                     },
                     tooltip: {
