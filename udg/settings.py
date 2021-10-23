@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'donante.apps.DonanteConfig',
     'donacion.apps.DonacionConfig',
     'reportes.apps.ReportesConfig',
+    'configuration.apps.ConfigurationConfig',
     'widget_tweaks',
     'django_filters',
 ]
