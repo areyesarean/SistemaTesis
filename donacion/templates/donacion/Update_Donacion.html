@@ -7,26 +7,7 @@
     <link rel="stylesheet" href="{% static 'core/Select2/select2-bootstrap4.min.css' %}">
     {#  Tempus Diminus  #}
     <link rel="stylesheet" href="{% static 'core/tempusDominus 5.1.2/tempusdominus-bootstrap-4.min.css' %}">
-    {#  TouchPin  #}
-    <link rel="stylesheet" href="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}">
 
-    <link rel="stylesheet" href="{% static 'core/daterangePicker v3.14.1/daterangepicker.css' %}">
-
-    <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
-    <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
-    <link rel="stylesheet" href="{% static 'donacion/bs-stepper.min.css' %}">
-
-    <link rel="stylesheet" href="{% static 'core/Select2/select2.min.css' %}">
-    <link rel="stylesheet" href="{% static 'core/Select2/select2-bootstrap4.min.css' %}">
-
-
-    <script src="{% static 'code/highcharts.js' %}"></script>
-    <script src="{% static 'code/modules/exporting.js' %}"></script>
-    <script src="{% static 'code/modules/offline-exporting.js' %}"></script>
-    <script src="{% static 'code/modules/export-data.js' %}"></script>
-    <script src="{% static 'code/modules/accessibility.js' %}"></script>
-    <script src="{% static 'code/themes/grid-light.js' %}"></script>
-    <script src="{% static 'donacion/bs-stepper.min.js' %}"></script>
 {% endblock %}
 
 {% block contenido %}
@@ -34,30 +15,16 @@
     <div class="col-lg-6">
         <div class="card card-danger card-outline">
             <div class="card-header">
-                <h5 class="m-0 text-center">Buscar Donante</h5>
-            </div>
-
-            <div class="card-body">
-                <form method="post" id="search_form">
-                    <div class="row">
-                        <div class="col-lg-12">{{ formSearch }}</div>
-                        <div class="col-lg-12">
-                            <button type="submit" class="btn btn-danger col-lg-12 mt-2" id="search"><i
-                                    class="fa fa-search"></i> Buscar
-                            </button>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
-        </div>
-        <div class="card card-danger card-outline">
-            <div class="card-header">
                 <h5 class="m-0 text-center">Datos de la donación</h5>
             </div>
             <div class="card-body">
                 <form id="donacion_form" method="post">
                     <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group ">
+                                {{ form.donante }}
+                            </div>
+                        </div>
                         <div class="col-lg-12">
                             <div class="form-group ">
                                 <label for="exampleInputPassword1">{{ form.bloodbank.label }}</label>
@@ -83,11 +50,6 @@
                             </div>
                         </div>
                     </div>
-
-
-                    {#                    <div class="col-lg-12">#}
-                    {#                        {{ form }}#}
-                    {#                    </div>#}
                     <button type="submit" class="btn btn-danger col-lg-12 mt-2" id="save"><i class="fa fa-save"></i>
                         Registrar Donación
                     </button>
@@ -110,35 +72,36 @@
                          alt="User profile picture">
                 </div>
 
-                <h3 id="donante_name" class="profile-username text-center">...</h3>
+                <h3 id="donante_name" class="profile-username text-center">{{ data.nombre }} {{ data.apellidos }}</h3>
 
                 <ul class="list-group list-group-unbordered mb-3">
                     <li class="list-group-item">
-                        <b>Carnet de identidad:</b> <a id="ci" class="float-right">...</a>
+                        <b>Carnet de identidad:</b> <a id="ci" class="float-right">{{ data.ci }}</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Sexo:</b> <a id="gender" class="float-right">...</a>
+                        <b>Sexo:</b> <a id="gender" class="float-right">{{ data.sexo }}</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Edad:</b> <a id="age" class="float-right">...</a>
+                        <b>Edad:</b> <a id="age" class="float-right">{{ data.edad }}</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Grupo Sanguíneo:</b> <a id="blood_group" class="float-right">...</a>
+                        <b>Grupo Sanguíneo:</b> <a id="blood_group" class="float-right">{{ data.bloodgroup }}</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Color de la piel:</b> <a id="skin_color" class="float-right">...</a>
+                        <b>Color de la piel:</b> <a id="skin_color" class="float-right">{{ data.skincolor }}</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Consultorio Médico:</b> <a id="consul_med" class="float-right">...</a>
+                        <b>Consultorio Médico:</b> <a id="consul_med" class="float-right">{{ data.consultorio }}</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Área de Salud:</b> <a id="area_salud" class="float-right">...</a>
+                        <b>Área de Salud:</b> <a id="area_salud" class="float-right">{{ data.areasalud }}</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Municipio:</b> <a id="municipio" class="float-right">...</a>
+                        <b>Municipio:</b> <a id="municipio" class="float-right">{{ data.municipio }}</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Dirección Particular:</b> <a id="addres" class="float-right text-center">...</a>
+                        <b>Dirección Particular:</b> <a id="addres"
+                                                        class="float-right text-center">{{ data.direccion }}</a>
                     </li>
 
                 </ul>
@@ -152,41 +115,21 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static  'core/Select2/select2.min.js' %}"></script>
-    <script src="{% static  'core/Select2/i18n/es.js' %}"></script>
 
     <script src="{% static 'core/tempusDominus 5.1.2/moment.min.js' %}"></script>
     <script src="{% static 'core/tempusDominus 5.1.2/moment-with-locales.js' %}"></script>
     <script src="{% static 'core/tempusDominus 5.1.2/tempusdominus-bootstrap-4.min.js' %}"></script>
 
-    <script src="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+    <script src="{% static  'core/Select2/select2.min.js' %}"></script>
+    <script src="{% static  'core/Select2/i18n/es.js' %}"></script>
 
-    <script src="{% static 'core/daterangePicker v3.14.1/daterangepicker.min.js' %}"></script>
-
-    <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
-    <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
-    <script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
-    <script src="{% static 'core/Datatables/Buttons-1.6.5/js/dataTables.buttons.js' %}"></script>
-    <script src="{% static 'core/Datatables/JSZip-2.5.0/jszip.js' %}"></script>
-    <script src="{% static 'core/Datatables/pdfmake-0.1.36/pdfmake.js' %}"></script>
-    <script src="{% static 'core/Datatables/pdfmake-0.1.36/vfs_fonts.js' %}"></script>
-    <script src="{% static 'core/Datatables/Buttons-1.6.5/js/buttons.html5.js' %}"></script>
 
 
     <script src="{% static 'donacion/add_ajax_donacion.js' %}"></script>
     <script src="{% static 'errorMessage.js' %}"></script>
-
+<script src="{% static 'core/daterangePicker v3.14.1/daterangepicker.min.js' %}"></script>
 
     <script>
-        let donanteO = {
-            bloodbank: '',
-            donante: '',
-            consultorio: '',
-            fecha: '',
-            observaciones: '',
-            action: ''
-        }
 
         $(document).ready(function () {
             const nombre = document.getElementById('donante_name');
@@ -201,107 +144,29 @@
             const addres = document.getElementById('addres');
             let id;
 
-            const bloodbank = document.getElementById('id_bloodbank');
-            const consultorio = document.getElementById('id_consultorio');
             const fecha = document.getElementById('id_fecha');
-            const observaciones = document.getElementById('id_observaciones');
-            const btn_save = document.getElementById('save');
-            clear_detail()
-            disableForm()
+            console.log(fecha.value)
 
-            function disableForm() {
-                btn_save.setAttribute('disabled', 'true')
-            }
-            function enableForm(){
-                btn_save.removeAttribute('disabled')
-            }
-
-            $('#search_form').submit(function (e) {
-                e.preventDefault();
-                const ci = $('#id_ci').val()
-                $.ajax({
-                    url: window.location.pathname,
-                    type: 'POST',
-                    data: {
-                        action: 'search',
-                        ci
-                    },
-                    dataType: 'json',
-                }).done(function (data) {
-                    if (data.hasOwnProperty('error')) {
-
-                        if (data.error === 'Donante matching query does not exist.') {
-                            clear_detail()
-                            disableForm()
-                            errorMessage('No existe un donante con ese carnet de identidad');
-                        }
-                        console.log(data.error)
-                    }
-                    detail_donante(data);
-                    enableForm()
-                }).fail(function (jqXHR, textStatus, errorThrown) {
-                    alert("Error")
-                });
-            });
-
-            function detail_donante(data) {
-                data.forEach(element => {
-                    id = element.id
-                    nombre.innerText = `${element.nombre}  ${element.apellidos}`;
-                    ci.innerText = element.ci
-                    gender.innerText = element.sexo
-                    age.innerText = element.edad
-                    blood_group.innerText = element.bloodgroup
-                    skin_color.innerText = element.skincolor
-                    consul_med.innerText = element.consultorio
-                    area_salud.innerText = element.areasalud
-                    municipio.innerText = element.municipio
-                    addres.innerText = element.direccion
-                })
-                console.log(data)
-            }
-
-            function clear_detail() {
-                nombre.innerText = '...';
-                ci.innerText = '...'
-                gender.innerText = '...'
-                age.innerText = '...'
-                blood_group.innerText = '...'
-                skin_color.innerText = '...'
-                consul_med.innerText = '...'
-                area_salud.innerText = '...'
-                municipio.innerText = '...'
-                addres.innerText = '...'
-            }
-
-
-
-            $('#id_fecha').datetimepicker({
-                format: 'YYYY-MM-DD',
-                date: moment().format('YYYY-MM-DD'),
-                locale: 'es',
-                minDate: moment().format('YYYY-MM-DD')
-            })
 
             $('.select2').select2({
                 theme: 'bootstrap4',
                 language: 'es'
             })
 
+            $('#id_fecha').daterangepicker({
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+                singleDatePicker: true,
+                showDropdowns: false,
+                minYear: 2000,
+                maxYear: parseInt(moment().format('YYYY'), 10)
+            });
+
             $('#donacion_form').submit(function (e) {
                 e.preventDefault();
-
-
-                donanteO.bloodbank = bloodbank.value
-                donanteO.donante = id
-                donanteO.consultorio = consultorio.value
-                donanteO.fecha = fecha.value
-                donanteO.observaciones = observaciones.value
-                donanteO.action = 'add'
-                let parameters = donanteO;
-
-
-                console.log(donanteO)
+                let parameters = $(this).serializeArray();
+                console.log(parameters)
                 let urlList = '{% url 'donacion:ListDonacion' %}'
                 SendajaxD('¡Está seguro/a!', 'Los datos de la Donación serán guardados', window.location.pathname, parameters, urlList)
             })

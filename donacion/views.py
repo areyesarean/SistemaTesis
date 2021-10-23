@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView, TemplateView, UpdateView
 
-from donacion.forms import FormDonacion, FormSearchDonante, FormFilterDonacion
+from donacion.forms import FormDonacion, FormSearchDonante, FormFilterDonacion, FormDonacionUpdate
 from donacion.models import Donacion
 from donante.models import Donante
 
@@ -98,10 +98,11 @@ class ListDonacion(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
 class UpdateDonacion(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     permission_required = 'donacion.change_donacion'
     template_name = 'donacion/Update_Donacion.html'
-    form_class = FormDonacion
+    form_class = FormDonacionUpdate
     success_url = reverse_lazy('consultorio:ListConsultorio')
     model = Donacion
 
+    @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
         return super(UpdateDonacion, self).dispatch(request, *args, **kwargs)
@@ -109,11 +110,14 @@ class UpdateDonacion(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         data = {}
         try:
-                form = self.get_form()
-                if form.is_valid():
-                    form.save()
+                if request.user.is_superuser:
+                    form = self.get_form()
+                    if form.is_valid():
+                        form.save()
+                    else:
+                        data['error'] = form.errors
                 else:
-                    data['error'] = form.errors
+                    data['error'] = 'Usted no tiene permisos para realizar esta acción'
         except Exception as e:
             data['error'] = str(e)
         return JsonResponse(data)
@@ -123,4 +127,5 @@ class UpdateDonacion(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
         context['title'] = 'Editar Donación'
         context['action'] = 'edit'
         context['formSearch'] = FormSearchDonante
+        context['data'] = Donante.objects.get(ci__exact=self.object.toJson()['donante']).toJson()
         return context
