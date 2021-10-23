@@ -1,0 +1,73 @@
+{% extends 'interfaz/index.html' %}
+{% load static %}
+
+{% block links %}
+    <link rel="stylesheet" href="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}">
+{% endblock %}
+
+
+
+{% block contenido %}
+    <div class="card col-12">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-cogs"></i>
+                Configuración
+            </h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <form class="form-horizontal">
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-5 col-form-label">Cantidad de donaciones mensuales por consultorio médico</label>
+                        <div class="col-sm-2">
+                            {{ form.don_mensu }}
+                        </div>
+                    </div>
+                    <div class="form-text text-muted">
+                        <ul style="list-style-type: none" class="p-0">
+                            <li>Este valor es la cantidad de donaciones que un consultorio debe hacer en el mes.</li>
+                            <li>Este valor afecta el comportamiento de los reportes.</li>
+                        </ul>
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+                <button type="submit" class="btn btn-secondary btn-block">Guardar Configuración</button>
+                <!-- /.card-footer -->
+            </form>
+        </div>
+        <!-- /.card-body -->
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+    <script src="{% static 'configuration/ajaxAddConfig.js' %}"></script>
+    <script src="{% static 'errorMessage.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.touchpin').TouchSpin({
+                min: 1,
+                max: 3000,
+                step: 1,
+                decimals: 0,
+                boostat: 5,
+                maxboostedstep: 10,
+                buttondown_class: "btn btn-secondary",
+                buttonup_class: "btn btn-secondary"
+                {#postfix: '%',#}
+            })
+
+            $('form').submit(function (e) {
+                e.preventDefault();
+                var parameters = $(this).serializeArray();
+                console.log(parameters)
+                var urlList = '{% url 'interfaz:MenuPpal' %}'
+                SendajaxL('¡Está seguro/a!', 'La configuración será cambiada', window.location.pathname, parameters, urlList)
+            })
+        })
+    </script>
+{% endblock %}
