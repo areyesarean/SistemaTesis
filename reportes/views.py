@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from areasalud.models import AreaSalud
+from configuration.models import Configuration
 from consultorio.models import Consultorio
 from donacion.models import Donacion
 from municipio.models import Municipios
@@ -58,6 +59,8 @@ class ReportesResultadoAnualView(TemplateView):
                 data = []
                 year = request.POST.get('year', '')
                 municipio = request.POST.get('municipios', '')
+                cant_don_con_mes = Configuration.objects.get(pk=1)
+                print(cant_don_con_mes)
 
                 if len(year) and len(municipio):
                     consultorios = Consultorio.objects.filter(areasalud__municipio_id=municipio)
@@ -66,7 +69,7 @@ class ReportesResultadoAnualView(TemplateView):
                             'Uyy, No existen consultorios asociados al municipio seleccionado en el año seleccionado')
 
                     cant_consul = consultorios.count()
-                    donaciones_previstas = (cant_consul * 3) * 12
+                    donaciones_previstas = (cant_consul * cant_don_con_mes.don_mensu) * 12
                     cons_sobre = 0
                     cons_cump = 0
                     cons_incum = 0
@@ -77,12 +80,12 @@ class ReportesResultadoAnualView(TemplateView):
 
                     for i in consultorios:
                         cant = Donacion.objects.filter(consultorio__numero=i.numero, fecha__year=year).count()
-                        if cant > 5:
+                        if cant > cant_don_con_mes.don_mensu:
                             cons_sobre_data.append(i.toJson())
                             cons_cump_data.append(i.toJson())
                             cons_sobre += 1
                             cons_cump += 1
-                        elif cant < 5:
+                        elif cant < cant_don_con_mes.don_mensu:
                             cons_incum_data.append(i.toJson())
                             cons_incum += 1
                         else:
