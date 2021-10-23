@@ -22,7 +22,7 @@ from redirect import redirectLogin
 from udg import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('', redirectLogin, name='Redirect'),
     path('login/', include('login.urls')),
     path('dashboard/', include('interfaz.urls')),
@@ -38,5 +38,6 @@ urlpatterns = [
     path('donante/', include('donante.urls')),
     path('donacion/', include('donacion.urls')),
     path('reportes/', include('reportes.urls')),
+    path('config/', include('configuration.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
