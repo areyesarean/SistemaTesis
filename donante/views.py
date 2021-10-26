@@ -39,10 +39,8 @@ class ListDonante(LoginRequiredMixin, PermissionRequiredMixin, ListView):
                     est.delete()
             elif action == 'filter_consu':
                 data = []
-                print("Filter consu")
                 for i in Donante.objects.filter(consultorio_id=request.POST['id_consu']):
                     data.append(i.toJson())
-                print(data)
             else:
                 data['error'] = 'No se especificó una action'
         except Exception as e:

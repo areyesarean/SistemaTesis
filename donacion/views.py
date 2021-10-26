@@ -1,7 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
 # Create your views here.
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -61,9 +60,6 @@ class ListDonacion(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
                 data = []
                 start_date = request.POST.get('start_date', '')
                 end_date = request.POST.get('end_date', '')
-
-                print(start_date)
-                print(end_date)
                 donaciones = Donacion.objects.all()
                 if len(start_date) and len(end_date):
                     donaciones = donaciones.filter(fecha__range=[start_date, end_date])
@@ -110,14 +106,14 @@ class UpdateDonacion(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         data = {}
         try:
-                if request.user.is_superuser:
-                    form = self.get_form()
-                    if form.is_valid():
-                        form.save()
-                    else:
-                        data['error'] = form.errors
+            if request.user.is_superuser:
+                form = self.get_form()
+                if form.is_valid():
+                    form.save()
                 else:
-                    data['error'] = 'Usted no tiene permisos para realizar esta acción'
+                    data['error'] = form.errors
+            else:
+                data['error'] = 'Usted no tiene permisos para realizar esta acción'
         except Exception as e:
             data['error'] = str(e)
         return JsonResponse(data)

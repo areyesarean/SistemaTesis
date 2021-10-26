@@ -22,10 +22,8 @@ class ListProvincia(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return super(ListProvincia, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        print("Entro a POST")
         data = {}
         action = request.POST['action']
-        print(action)
         try:
             if action == 'list':
                 data = []

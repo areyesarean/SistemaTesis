@@ -60,7 +60,6 @@ class ReportesResultadoAnualView(TemplateView):
                 year = request.POST.get('year', '')
                 municipio = request.POST.get('municipios', '')
                 cant_don_con_mes = Configuration.objects.get(pk=1)
-                print(cant_don_con_mes)
 
                 if len(year) and len(municipio):
                     consultorios = Consultorio.objects.filter(areasalud__municipio_id=municipio)

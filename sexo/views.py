@@ -1,15 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import JsonResponse
-from django.shortcuts import render
-
 # Create your views here.
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, CreateView, UpdateView
 
-from provincia.forms import FormProvincia
-from provincia.models import Provincias
 from sexo.forms import FormSexo
 from sexo.models import Sexos
 
@@ -24,10 +20,8 @@ class ListSexo(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return super(ListSexo, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        print("Entro a POST")
         data = {}
         action = request.POST['action']
-        print(action)
         try:
             if action == 'list':
                 data = []

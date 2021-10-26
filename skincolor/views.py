@@ -6,8 +6,6 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, CreateView, UpdateView
 
-from sexo.forms import FormSexo
-from sexo.models import Sexos
 from skincolor.forms import FormSkincolor
 from skincolor.models import SkinColor
 
@@ -22,10 +20,8 @@ class ListSkinColor(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return super(ListSkinColor, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        print("Entro a POST")
         data = {}
         action = request.POST['action']
-        print(action)
         try:
             if action == 'list':
                 data = []
