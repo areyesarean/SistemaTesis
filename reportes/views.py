@@ -90,7 +90,6 @@ class ReportesResultadoAnualView(TemplateView):
                         else:
                             cons_cump_data.append(i.toJson())
                             cons_cump += 1
-                    print(cons_sobre_data)
 
                     donaciones = Donacion.objects.filter(fecha__year=year, bloodbank__municipio_id=municipio)
                     if len(donaciones):
@@ -198,15 +197,36 @@ class ReportesResultadoDiarioView(TemplateView):
                 data = []
                 id_area = request.POST.get('id_area', '')
                 fecha = request.POST.get('fecha', '')
-                print(fecha)
-                print(id_area)
                 if len(id_area) and len(fecha):
                     for i in Consultorio.objects.filter(areasalud_id=id_area):
                         data.append({
                             'name': i.numero,
                             'y': Donacion.objects.filter(consultorio_id=i.pk, fecha=fecha).count()
                         })
-                    print(data)
+
+            elif action == 'show_data':
+                data = []
+                don_consu = []
+                fecha = request.POST.get('fecha', '')
+                id_area = request.POST.get('id_area', '')
+                cant_don = Donacion.objects.filter(consultorio__areasalud=id_area, fecha=fecha).count()
+                donaciones = []
+                for i in Donacion.objects.filter(consultorio__areasalud=id_area, fecha=fecha):
+                    don_consu.append(i.toJson())
+
+                for consu in Consultorio.objects.filter(areasalud_id=id_area):
+                    donaciones.append({
+                        'consu': consu.numero,
+                        'cant_don': Donacion.objects.filter(consultorio_id=consu, consultorio__areasalud=id_area,
+                                                            fecha=fecha).count()
+                    })
+                # print(donaciones)
+                # sorted(donaciones, key=lambda x: x['cant_don'])
+                # print(donaciones)
+                data.append({
+                    'cant_don': cant_don,
+                    'don_consu': don_consu
+                })
             else:
                 data['error'] = 'No se especificó un action'
         except Exception as e:
