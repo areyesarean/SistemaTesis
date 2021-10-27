@@ -5,31 +5,60 @@
 {% endblock %}
 
 {% block card-body %}
-    <h5 class="mb-4">Seleccione un reporte de la lista!</h5>
-
-    <ul>
-        <li class="mb-3">
-            <a href="{% url 'reportes:ReportesResultadoDiarioView' %}">
-                Resumen del día
+    <dl>
+        <dt>
+            <a href="{% url 'reportes:ReportesResultadoDiarioView' %}" style="color: #dc3545">
+                Resumen del día por área de salud
             </a>
-        </li>
-        <li class="mb-3">
-            <a href="{% url 'reportes:ReportesResultadoMensualView' %}">
+        </dt>
+        <dd class="mb-3">Muestra información de las donaciones realizadas a lo largo del día de hoy o cualquier fecha
+            seleccionada en el área de salud seleccionada.
+        </dd>
+        <hr>
+        <dt>
+            <a href="{% url 'reportes:ReportesResultadoDiarioView' %}" style="color: #dc3545">
+                Resumen del día por municipio
+            </a>
+        </dt>
+        <dd class="mb-3">Muestra información de las donaciones realizadas a lo largo del día de hoy o cualquier fecha
+            seleccionada en el municipio seleccionado.
+        </dd>
+        <hr>
+        <dt>
+            <a href="{% url 'reportes:ReportesResultadoMensualView' %}" style="color: #dc3545">
                 Resultado del plan mensual de donaciones
             </a>
-        </li>
-        <li class="mb-3">
-            <a href="{% url 'reportes:ReportesResultadoAnual' %}">
+        </dt>
+        <dd class="mb-3">Muestra la información referente al cumplimiento del plan <strong>mensual</strong> de
+            donaciones en el municipio seleccionado.
+        </dd>
+        <hr>
+        <dt>
+            <a href="{% url 'reportes:ReportesResultadoAnual' %}" style="color: #dc3545">
                 Resultados del plan anual de donaciones
             </a>
-        </li>
-
-        <li class="mb-3">
-            <a href="{% url 'reportes:ReportesDonacionesConsultorio' %}">
-                Distribución de donaciones por consultorio médico
+        </dt>
+        <dd class="mb-3">Muestra la información referente al cumplimiento del plan <strong>anual</strong> de donaciones
+            en el municipio seleccionado.
+        </dd>
+        <hr>
+        <dt>
+            <a href="{% url 'reportes:ReportesDonacionesConsultorio' %}" style="color: #dc3545">
+                Distribución de donaciones por consultorio médico en el año.
             </a>
-        </li>
+        </dt>
+        <dd class="mb-3">Muestra un gráfico con la distribucion de las donaciones por consultorios médicos en un
+            minicipio seleccionado.
+        </dd>
+        <hr>
+        <dt>
+            <a href="{% url 'reportes:ReportesDonacionesConsultorio' %}" style="color: #dc3545">
+                Comportamiento de las donaciones a lo largo de un año.
+            </a>
+        </dt>
+        <dd class="mb-3">Muestra un gráfico de línea con la distribucion de las donaciones a lo largo de un año en el minicipio seleccionado.
+        </dd>
 
 
-    </ul>
+    </dl>
 {% endblock %}
