@@ -211,8 +211,8 @@ class ReportesResultadoDiarioView(TemplateView):
                 id_area = request.POST.get('id_area', '')
                 cant_don = Donacion.objects.filter(consultorio__areasalud=id_area, fecha=fecha).count()
                 donaciones = []
-                for i in Donacion.objects.filter(consultorio__areasalud=id_area, fecha=fecha):
-                    don_consu.append(i.toJson())
+                # for i in Donacion.objects.filter(consultorio__areasalud=id_area, fecha=fecha):
+                #     don_consu.append(i.toJson())
 
                 for consu in Consultorio.objects.filter(areasalud_id=id_area):
                     donaciones.append({
@@ -225,8 +225,20 @@ class ReportesResultadoDiarioView(TemplateView):
                 # print(donaciones)
                 data.append({
                     'cant_don': cant_don,
-                    'don_consu': don_consu
+                    'don_consu': donaciones
                 })
+            elif action == 'list_cant':
+                data = []
+                fecha = request.POST.get('fecha', '')
+                id_area = request.POST.get('id_area', '')
+
+                for consu in Consultorio.objects.filter(areasalud_id=id_area):
+                    data.append({
+                        'numero': consu.numero,
+                        'direccion': consu.direccion,
+                        'cant_don': Donacion.objects.filter(consultorio_id=consu, consultorio__areasalud=id_area,
+                                                            fecha=fecha).count()
+                    })
             else:
                 data['error'] = 'No se especificó un action'
         except Exception as e:

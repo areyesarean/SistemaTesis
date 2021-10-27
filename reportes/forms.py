@@ -41,7 +41,7 @@ class FormRPC(Form):
 
 
 class FormRPDiario(Form):
-    fecha = CharField(label='Fecha',
+    fecha = CharField(label='Seleccione la fecha',
                       widget=TextInput(attrs={
                           'class': 'form-control',
                           'autocomplete': 'off'
