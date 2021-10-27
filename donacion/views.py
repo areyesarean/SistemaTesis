@@ -29,8 +29,6 @@ class AddDonacion(LoginRequiredMixin, PermissionRequiredMixin, FormView):
                 donante = Donante.objects.get(ci__exact=request.POST['ci'])
                 data.append(donante.toJson())
             elif action == 'add':
-                print(request.POST)
-                print(self.get_form())
                 form = FormDonacion(request.POST)
                 form.save()
         except Exception as e:

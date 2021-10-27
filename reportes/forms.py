@@ -26,15 +26,36 @@ class FormRPC(Form):
         'value': datetime.now().year,
     }))
     provincia = ModelChoiceField(queryset=Provincias.objects.all(), label='Seleccione la Provincia',
-                                  widget=Select(attrs={
-                                      'class': 'form-control select2'
-                                  }))
-    municipios = CharField( label='Seleccione el Municipio',
-                                  widget=Select(attrs={
-                                      'class': 'form-control select2'
-                                  }))
+                                 widget=Select(attrs={
+                                     'class': 'form-control select2'
+                                 }))
+    municipios = CharField(label='Seleccione el Municipio',
+                           widget=Select(attrs={
+                               'class': 'form-control select2'
+                           }))
 
-    areasalud = CharField( label='Seleccione el Área de Salud',
-                                  widget=Select(attrs={
-                                      'class': 'form-control select2'
-                                  }))
+    areasalud = CharField(label='Seleccione el Área de Salud',
+                          widget=Select(attrs={
+                              'class': 'form-control select2'
+                          }))
+
+
+class FormRPDiario(Form):
+    fecha = CharField(label='Seleccione la fecha',
+                      widget=TextInput(attrs={
+                          'class': 'form-control',
+                          'autocomplete': 'off'
+                      }))
+    provincia = ModelChoiceField(queryset=Provincias.objects.all(), label='Seleccione la Provincia',
+                                 widget=Select(attrs={
+                                     'class': 'form-control select2'
+                                 }))
+    municipios = CharField(label='Seleccione el Municipio',
+                           widget=Select(attrs={
+                               'class': 'form-control select2'
+                           }))
+
+    areasalud = CharField(label='Seleccione el Área de Salud',
+                          widget=Select(attrs={
+                              'class': 'form-control select2'
+                          }))
