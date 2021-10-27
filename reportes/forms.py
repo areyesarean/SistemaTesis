@@ -18,7 +18,6 @@ class FormYears(Form):
                                       'class': 'form-control select2'
                                   }))
 
-
 class FormRPC(Form):
     years = IntegerField(label='Seleccione el año', widget=NumberInput(attrs={
         'class': 'form-control text-center',
@@ -39,7 +38,6 @@ class FormRPC(Form):
                               'class': 'form-control select2'
                           }))
 
-
 class FormRPDiario(Form):
     fecha = CharField(label='Seleccione la fecha',
                       widget=TextInput(attrs={
@@ -59,3 +57,15 @@ class FormRPDiario(Form):
                           widget=Select(attrs={
                               'class': 'form-control select2'
                           }))
+
+class FormReportMonth(Form):
+    years = IntegerField(label='Seleccione el año', widget=NumberInput(attrs={
+        'class': 'form-control text-center',
+        'id': 'touchpin',
+        'value': datetime.now().year,
+    }))
+
+    municipios = ModelChoiceField(queryset=Municipios.objects.all(), label='Seleccione el municipio',
+                                  widget=Select(attrs={
+                                      'class': 'form-control select2'
+                                  }))

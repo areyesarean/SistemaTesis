@@ -17,11 +17,10 @@
     <div class="col-lg-12">
         <div class="card card-danger card-outline text-center">
                 <h1 class="card-title" style="margin-left: 0px auto; padding: 10px">
-                    REPORTE ANUAL DE DONACIONES
+                    REPORTE MENSUAL DE DONACIONES
                 </h1>
         </div>
     </div>
-
     <div class="col-lg-3">
         <div class="card card-danger card-outline">
             <div class="card-header">
@@ -30,12 +29,34 @@
                 </h3>
             </div>
             <div class="card-body">
+
                 <form method="post" id="form_year">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="form-group ">
                                 <label for="exampleInputPassword1">{{ FormYears.years.label }}</label>
                                 {{ FormYears.years }}
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group ">
+                                <label for="exampleInputPassword1">Seleccione el mes</label>
+                                <select name="month" id="id_month" class="form-control select2" required>
+                                    <option value="">--------</option>
+                                    <option value="1">Enero</option>
+                                    <option value="2">Febrero</option>
+                                    <option value="3">Marzo</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Mayo</option>
+                                    <option value="6">Junio</option>
+                                    <option value="7">Julio</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+
+                                </select>
                             </div>
                         </div>
                         <div class="col-lg-12">
@@ -63,7 +84,7 @@
                     TOTAL DE DONACIONES EN EL AÑO
                 </h3>
             </div>
-            <div class="card-body" style="padding:77px 0px">
+            <div class="card-body" style="padding:118px 0px">
                 <div class="row">
                     <div class="col-lg-12 text-center">
                         <span id="total_donaciones" style="font-size: 60px">0</span>
@@ -82,7 +103,7 @@
                     PORCIENTO DE CUMPLIMIENTO DEL PLAN ANUAL
                 </h3>
             </div>
-            <div class="card-body" style="padding:58px 0px">
+            <div class="card-body" style="padding:99px 0px">
                 <div class="row">
                     <div class="col-lg-12 text-center">
                         <h1 style="font-size: 100px"><span id="porctge_cumplimiento">0</span>%</h1>
@@ -162,10 +183,11 @@
         <div class="card card-danger">
             <div class="card-header text-center">
                 <h3 class="card-title" id="card-title-incum">
-                    LISTADO DE CONSULTORIOS QUE INCUMPLIERON EL PLAN DEL AÑO ---- EN EL MUNICIPIO ---
+                    LISTADO DE CONSULTORIOS QUE INCUMPLIERON EL PLAN MENSUAL
                 </h3>
                 <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                    </button>
                 </div>
             </div>
             <!-- /.card-header -->
@@ -201,10 +223,11 @@
         <div class="card card-success">
             <div class="card-header text-center">
                 <h3 class="card-title" id="card-title-sobre">
-                    LISTADO DE CONSULTORIOS QUE SOBRECUMPLIERON EL PLAN DEL AÑO ---- EN EL MUNICIPIO ---
+                    LISTADO DE CONSULTORIOS QUE SOBRECUMPLIERON EL PLAN MENSUAL
                 </h3>
                 <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                    </button>
                 </div>
             </div>
             <!-- /.card-header -->
@@ -241,10 +264,11 @@
         <div class="card card-primary">
             <div class="card-header text-center">
                 <h3 class="card-title" id="card-title-cump">
-                    LISTADO DE CONSULTORIOS QUE CUMPLIERON EL PLAN DEL AÑO ---- EN EL MUNICIPIO ---
+                    LISTADO DE CONSULTORIOS QUE CUMPLIERON EL PLAN MENSUAL
                 </h3>
                 <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                    </button>
                 </div>
             </div>
             <!-- /.card-header -->
@@ -342,7 +366,6 @@
 
             //Llamda de funciones
             clearValores()
-            graph(serieempty, '----')
             //List_Incum()
 
             //Declaracion de funciones
@@ -391,9 +414,9 @@
             }
 
             function carga_name_tablas(year, mun) {
-                card_title_sobre.innerText = `LISTADO DE CONSULTORIOS QUE SOBRECUMPLIERON EL PLAN EN EL AÑO ${year} EN EL MUNICIPIO ${mun}`
-                card_title_cump.innerText = `LISTADO DE CONSULTORIOS QUE CUMPLIERON EL PLAN EN EL AÑO ${year} EN EL MUNICIPIO ${mun}`
-                card_title_incum.innerText = `LISTADO DE CONSULTORIOS QUE INCUMPLIERON EL PLAN EN EL AÑO ${year} EN EL MUNICIPIO ${mun}`
+                card_title_sobre.innerText = `LISTADO DE CONSULTORIOS QUE SOBRECUMPLIERON EL PLAN MENSUAL`
+                card_title_cump.innerText = `LISTADO DE CONSULTORIOS QUE CUMPLIERON EL PLAN MENSUAL`
+                card_title_incum.innerText = `LISTADO DE CONSULTORIOS QUE INCUMPLIERON EL PLAN MENSUAL`
             }
 
             function clear_name_tablas() {
@@ -422,19 +445,21 @@
                 e.preventDefault();
                 const year = $('#touchpin').val()
                 const municipios = $('#id_municipios').val()
+                const month = $('#id_month').val()
+                console.log(month)
                 $.ajax({
                     url: window.location.pathname,
                     type: 'POST',
                     data: {
                         action: 'data_number',
                         year,
+                        month,
                         municipios
                     },
                     dataType: 'json',
                 }).done(function (data) {
                     if (data.hasOwnProperty('error')) {
                         clearValores()
-                        graph(serieempty, '----')
                         clear_name_tablas()
                         $("#list-incum-table").dataTable().fnDestroy();
                         $("#list-sobre-table").dataTable().fnDestroy();
@@ -452,64 +477,11 @@
                     List_Sobre(data[3])
                     List_Cump(data[4])
                     carga_name_tablas(year, data[1][0].name)
-                    graph(data[1][0], year)
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     alert("Error")
                 });
             })
 
-            function graph(serie, year) {
-                Highcharts.chart('g-bars', {
-                    chart: {
-                        type: 'column',
-                    },
-                    title: {
-                        text: `Comportamiento mensual de las donaciones en el año ${year} `
-                    },
-                    subtitle: {
-                        text: `Municipio: ${serie.name}`
-                    },
-                    xAxis: {
-                        categories: [
-                            'Enero',
-                            'Febrero',
-                            'Marzo',
-                            'Abril',
-                            'Mayo',
-                            'Junio',
-                            'Julio',
-                            'Agosto',
-                            'Septiembre',
-                            'Octubre',
-                            'Noviembre',
-                            'Diciembre'
-                        ],
-                        crosshair: true
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: 'Cantidad de donaciones'
-
-                        }
-                    },
-                    tooltip: {
-                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                            '<td style="padding:0"><b>{point.y}</b></td></tr>',
-                        footerFormat: '</table>',
-                        shared: true,
-                        useHTML: true
-                    },
-                    plotOptions: {
-                        column: {
-                            pointPadding: 0.2,
-                            borderWidth: 0
-                        }
-                    },
-                    series: [serie]
-                });
-            }
 
             function List_Incum(data) {
                 let table_incum = $('#list-incum-table').DataTable({

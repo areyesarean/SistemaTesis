@@ -10,7 +10,7 @@ from configuration.models import Configuration
 from consultorio.models import Consultorio
 from donacion.models import Donacion
 from municipio.models import Municipios
-from reportes.forms import FormYears, FormRPC, FormRPDiario
+from reportes.forms import FormYears, FormRPC, FormRPDiario, FormReportMonth
 
 
 class ReportesMenuView(TemplateView):
@@ -168,10 +168,6 @@ class Reporte_Donaciones_de_Consultorios_Por_Area_Salud(TemplateView):
         return context
 
 
-class ReportesResultadoMensualView(TemplateView):
-    template_name = 'reportes/reporte_mensual.html'
-
-
 class ReportesResultadoDiarioView(TemplateView):
     template_name = 'reportes/reporte_diario.html'
 
@@ -249,4 +245,107 @@ class ReportesResultadoDiarioView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Resultado Diario por area de salud'
         context['FormRPC'] = FormRPDiario
+        return context
+
+
+class ReportesResultadoMensualView(TemplateView):
+    template_name = 'reportes/Reportes_Resultado_Mensual.html'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def graphic_comp_men_mun(self, mun, year):
+        try:
+            mont = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            muni = Municipios.objects.get(pk=mun)
+            data = []
+            serie = []
+            for i in mont:
+                serie.append(
+                    Donacion.objects.filter(fecha__year=year, fecha__month=i, bloodbank__municipio_id=muni.pk).count())
+
+            print(serie)
+
+            data.append({
+                'name': muni.municipio,
+                'data': serie
+            })
+            return data
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+
+            if action == 'data_number':
+
+                data = []
+                year = request.POST.get('year', '')
+                month = request.POST.get('month', '')
+                municipio = request.POST.get('municipios', '')
+                cant_don_con_mes = Configuration.objects.get(pk=1)
+
+                if len(year) and len(municipio):
+                    consultorios = Consultorio.objects.filter(areasalud__municipio_id=municipio)
+                    if not len(consultorios):
+                        raise ValueError(
+                            'Uyy, No existen consultorios asociados al municipio seleccionado en el año seleccionado en el mes seleccionado')
+
+                    cant_consul = consultorios.count()
+                    donaciones_previstas = (cant_consul * cant_don_con_mes.don_mensu)
+                    cons_sobre = 0
+                    cons_cump = 0
+                    cons_incum = 0
+
+                    cons_incum_data = []
+                    cons_cump_data = []
+                    cons_sobre_data = []
+
+                    for i in consultorios:
+                        cant = Donacion.objects.filter(consultorio__numero=i.numero, fecha__year=year, fecha__month=month).count()
+                        if cant > cant_don_con_mes.don_mensu:
+                            cons_sobre_data.append(i.toJson())
+                            cons_cump_data.append(i.toJson())
+                            cons_sobre += 1
+                            cons_cump += 1
+                        elif cant < cant_don_con_mes.don_mensu:
+                            cons_incum_data.append(i.toJson())
+                            cons_incum += 1
+                        else:
+                            cons_cump_data.append(i.toJson())
+                            cons_cump += 1
+
+                    donaciones = Donacion.objects.filter(fecha__year=year, fecha__month=month, bloodbank__municipio_id=municipio)
+                    if len(donaciones):
+                        data.append({
+                            'total_donaciones': donaciones.count(),
+                            'total_donaciones_previstas': donaciones_previstas,
+                            'porctge_cumplimiento': (donaciones.count() * 100) / donaciones_previstas,
+                            'cant_cons_cump': cons_cump,
+                            'prctge_cons_cump': (cons_cump * 100) / cant_consul,
+                            'cant_cons_incum': cons_incum,
+                            'prctge_cons_incum': (cons_incum * 100) / cant_consul,
+                            'cant_cons_sobre': cons_sobre,
+                            'prctge_cons_sobre': (cons_sobre * 100) / cant_consul,
+                        })
+                        data.append(self.graphic_comp_men_mun(municipio, year))
+                        data.append(cons_incum_data)
+                        data.append(cons_sobre_data)
+                        data.append(cons_cump_data)
+                    else:
+                        raise ValueError(
+                            "Uyy, No hay donaciones asociadas al municipio seleccionado en el año seleccionado en el mes seleccionado")
+            else:
+                data['error'] = 'No hay action'
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+        return JsonResponse(data, safe=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Resultado Anual'
+        context['FormYears'] = FormReportMonth
         return context
