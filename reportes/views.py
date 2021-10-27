@@ -305,7 +305,8 @@ class ReportesResultadoMensualView(TemplateView):
                     cons_sobre_data = []
 
                     for i in consultorios:
-                        cant = Donacion.objects.filter(consultorio__numero=i.numero, fecha__year=year, fecha__month=month).count()
+                        cant = Donacion.objects.filter(consultorio__numero=i.numero, fecha__year=year,
+                                                       fecha__month=month).count()
                         if cant > cant_don_con_mes.don_mensu:
                             cons_sobre_data.append(i.toJson())
                             cons_cump_data.append(i.toJson())
@@ -318,7 +319,8 @@ class ReportesResultadoMensualView(TemplateView):
                             cons_cump_data.append(i.toJson())
                             cons_cump += 1
 
-                    donaciones = Donacion.objects.filter(fecha__year=year, fecha__month=month, bloodbank__municipio_id=municipio)
+                    donaciones = Donacion.objects.filter(fecha__year=year, fecha__month=month,
+                                                         bloodbank__municipio_id=municipio)
                     if len(donaciones):
                         data.append({
                             'total_donaciones': donaciones.count(),
@@ -348,4 +350,86 @@ class ReportesResultadoMensualView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Resultado Anual'
         context['FormYears'] = FormReportMonth
+        return context
+
+
+class ReportesResultadoDiarioMunView(TemplateView):
+    template_name = 'reportes/reporte_diario_mun.html'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ReportesResultadoDiarioMunView, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        action = request.POST['action']
+        try:
+            if action == 'mun_in_prov':
+                id_prov = request.POST['id']
+                data = [{'id': '', 'text': '---------------'}]
+                for i in Municipios.objects.filter(provincia__municipios=id_prov):
+                    data.append({'id': i.pk, 'text': i.municipio})
+            elif action == 'areasalud_in_mun':
+                id_mun = request.POST['id']
+                data = [{'id': '', 'text': '---------------'}]
+                for i in AreaSalud.objects.filter(municipio_id=id_mun):
+                    data.append({'id': i.pk, 'text': i.nombre})
+            elif action == 'show_graphic':
+                data = []
+                id_mun = request.POST.get('id_mun', '')
+                fecha = request.POST.get('fecha', '')
+                if len(id_mun) and len(fecha):
+                    for i in Consultorio.objects.filter(areasalud__municipio_id=id_mun):
+                        data.append({
+                            'name': i.numero,
+                            'y': Donacion.objects.filter(consultorio_id=i.pk, fecha=fecha).count()
+                        })
+
+            elif action == 'show_data':
+                data = []
+                don_consu = []
+                fecha = request.POST.get('fecha', '')
+                id_mun = request.POST.get('id_mun', '')
+                cant_don = Donacion.objects.filter(consultorio__areasalud__municipio_id=id_mun, fecha=fecha).count()
+                donaciones = []
+                # for i in Donacion.objects.filter(consultorio__areasalud=id_area, fecha=fecha):
+                #     don_consu.append(i.toJson())
+
+                for consu in Consultorio.objects.filter(areasalud__municipio_id=id_mun):
+                    donaciones.append({
+                        'consu': consu.numero,
+                        'cant_don': Donacion.objects.filter(consultorio_id=consu,
+                                                            consultorio__areasalud__municipio_id=id_mun,
+                                                            fecha=fecha).count()
+                    })
+                # print(donaciones)
+                # sorted(donaciones, key=lambda x: x['cant_don'])
+                # print(donaciones)
+                data.append({
+                    'cant_don': cant_don,
+                    'don_consu': donaciones
+                })
+            elif action == 'list_cant':
+                data = []
+                fecha = request.POST.get('fecha', '')
+                id_mun = request.POST.get('id_mun', '')
+
+                for consu in Consultorio.objects.filter(areasalud__municipio_id=id_mun):
+                    data.append({
+                        'numero': consu.numero,
+                        'direccion': consu.direccion,
+                        'cant_don': Donacion.objects.filter(consultorio_id=consu,
+                                                            consultorio__areasalud__municipio_id=id_mun,
+                                                            fecha=fecha).count()
+                    })
+            else:
+                data['error'] = 'No se especificó un action'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Resultado Diario por municipio'
+        context['FormRPC'] = FormRPDiario
         return context

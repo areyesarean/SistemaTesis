@@ -1,0 +1,462 @@
+{% extends 'interfaz/index.html' %}
+{% load static %}
+
+{% block links %}
+    {#  TouchPin  #}
+    <link rel="stylesheet" href="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}">
+
+    <link rel="stylesheet" href="{% static 'core/Select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'core/Select2/select2-bootstrap4.min.css' %}">
+
+    <script src="{% static 'code/highcharts.js' %}"></script>
+    <script src="{% static 'code/modules/exporting.js' %}"></script>
+    <script src="{% static 'code/modules/offline-exporting.js' %}"></script>
+    <script src="{% static 'code/modules/export-data.js' %}"></script>
+    <script src="{% static 'code/modules/accessibility.js' %}"></script>
+    <script src="{% static 'code/themes/high-contrast-light.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+{% endblock %}
+
+{% block contenido %}
+    <div class="col-lg-12">
+        <div class="card card-danger card-outline text-center">
+                <h1 class="card-title" style="margin-left: 0px auto; padding: 10px">
+                    REPORTE DIARIO DE DONACIONES POR MUNICIPIO
+                </h1>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card card-danger card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-bullhorn"></i> SELECCIONE
+                </h3>
+            </div>
+            <form method="post" id="form" class="form-horizontal">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                        <label>{{ FormRPC.fecha.label }}</label>
+                        {{ FormRPC.fecha }}
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>{{ FormRPC.provincia.label }}</label>
+                        {{ FormRPC.provincia }}
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>{{ FormRPC.municipios.label }}</label>
+                        {{ FormRPC.municipios }}
+                    </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <input type="submit" value="Mostrar resumen" id="id_submit" class="col-lg-12 btn btn-danger">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card card-danger card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="icon fas fa-info"></i> DONACIONES TOTALES EL
+                    <span id="id_fechat">----/--/--</span>
+                </h3>
+
+            </div>
+            <div class="card-body">
+                <h1 id="id_don_totales" style="font-size: 100px" class="text-center">0</h1>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card card-danger card-outline">
+
+            <div class="card-body">
+                <div id="graphic"></div>
+            </div>
+            <div class="card-footer">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="card card-danger card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="icon fas fa-info"></i> DISTRIBUCION DE DONACIONES POR CONSULTORIOS
+                </h3>
+            </div>
+
+            <div class="card-body">
+                <table id="list_consu" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>Número del consultorio</th>
+                        <th>Dirección</th>
+                        <th>Cantidad de donaciones</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+
+    <script src="{% static  'core/Select2/select2.min.js' %}"></script>
+    <script src="{% static  'core/Select2/i18n/es.js' %}"></script>
+    <script src="{% static 'core/daterangePicker v3.14.1/daterangepicker.min.js' %}"></script>
+    <script src="{% static 'core/tempusDominus 5.1.2/moment.min.js' %}"></script>
+    <script src="{% static 'core/tempusDominus 5.1.2/moment-with-locales.js' %}"></script>
+
+    <script src="{% static 'donacion/add_ajax_donacion.js' %}"></script>
+    <script src="{% static 'errorMessage.js' %}"></script>
+
+    <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'core/Datatables/Buttons-1.6.5/js/dataTables.buttons.js' %}"></script>
+    <script src="{% static 'core/Datatables/JSZip-2.5.0/jszip.js' %}"></script>
+    <script src="{% static 'core/Datatables/pdfmake-0.1.36/pdfmake.js' %}"></script>
+    <script src="{% static 'core/Datatables/pdfmake-0.1.36/vfs_fonts.js' %}"></script>
+    <script src="{% static 'core/Datatables/Buttons-1.6.5/js/buttons.html5.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            graphic([], '-----')
+            $('select[name="municipios"]').attr('disabled', 'true')
+            $('select[name="areasalud"]').attr('disabled', 'true')
+            $('#id_submit').attr('disabled', 'true')
+
+            $('#id_fecha').daterangepicker({
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+                singleDatePicker: true,
+                showDropdowns: false,
+                minYear: 2000,
+                maxYear: parseInt(moment().format('YYYY'), 10)
+            });
+
+
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                language: 'es'
+            })
+
+            $('select[name="provincia"]').change(function () {
+                let id = this.value
+                if (this.value === '') {
+                    $('select[name="municipios"]').attr('disabled', 'true').html('')
+                    $('select[name="areasalud"]').attr('disabled', 'true').html('')
+                    $('#id_submit').attr('disabled', 'true')
+                } else {
+                    $('select[name="municipios"]').removeAttr('disabled').html('')
+                }
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'mun_in_prov',
+                        'id': id
+                    },
+                    dataType: 'json'
+                }).done(function (data) {
+                    console.log(data)
+                    if (!data.hasOwnProperty('error')) {
+                        $('select[name="municipios"]').html('').select2({
+                            theme: 'bootstrap4',
+                            language: 'es',
+                            data: data
+                        })
+                    } else {
+                        $.alert({
+                            icon: 'fa fa-times-circle',
+                            theme: 'modern',
+                            animation: 'zoom',
+                            type: 'red',
+                            title: 'Ha ocurrido un error!',
+                            content: data.error
+                        });
+                    }
+                })
+            })
+
+            $('select[name="municipios"]').change(function () {
+                let id = this.value
+                if (this.value === '') {
+                    $('#id_submit').attr('disabled', 'true')
+                } else {
+                    $('#id_submit').removeAttr('disabled')
+                }
+            })
+
+
+            function show_data(fecha, id_mun) {
+                console.log('show_data')
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'show_data',
+                        fecha,
+                        id_mun
+                    },
+                    dataType: 'json'
+                }).done(function (data) {
+                    if (!data.hasOwnProperty('error')) {
+                        console.log(data)
+                    } else {
+                        $.alert({
+                            icon: 'fa fa-times-circle',
+                            theme: 'modern',
+                            animation: 'zoom',
+                            type: 'red',
+                            title: 'Ha ocurrido un error!',
+                            content: data.error
+                        });
+                    }
+                    if (!data[0]['cant_don']) {
+                        graphic([], '-----')
+                        $.alert({
+                            icon: 'fa fa-times-circle',
+                            theme: 'modern',
+                            animation: 'zoom',
+                            type: 'red',
+                            title: 'Upss',
+                            content: 'No hay donaciones en esta área de salud en la fecha seleccionada'
+                        });
+
+                    }
+                    console.log('showData')
+                    console.log(data)
+                    console.log(data[0]['don_consu'])
+                    carga_valores(data, fecha)
+                })
+            }
+
+            function carga_valores(data, fecha) {
+                document.getElementById('id_don_totales').innerText = data[0]['cant_don']
+                document.getElementById('id_fechat').innerText = fecha
+            }
+
+            $('#form').submit(function (e) {
+                e.preventDefault();
+                const fecha = $('#id_fecha').val()
+                const id_mun = $('#id_municipios').val()
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        action: 'show_graphic',
+                        fecha,
+                        id_mun
+                    },
+                    dataType: 'json',
+                }).done(function (data) {
+                    if (data.hasOwnProperty('error')) {
+                        //clearValores()
+                        graphic([{'y': 0, 'name': '-----'}], fecha)
+
+                        errorMessage(data.error)
+                    }
+                    console.log(data)
+                    show_data(fecha, id_mun)
+                    graphic(data, id_mun)
+                    listado_cons(fecha, id_mun)
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert("Error")
+                });
+            })
+
+            function graphic(serie, fecha) {
+                Highcharts.chart('graphic', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: `DISTRIBUCIÓN DE LAS DONACIONES POR CONSULTORIOS MÉDICOS, ${fecha}`
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>Consultorio {point.name}</b>: {point.percentage:.1f} %',
+                                style: {
+                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Porcentage',
+                        colorByPoint: true,
+                        data: serie
+                    }]
+                });
+            }
+            var date_now = new moment().format('YYYY-MM-DD');
+            function listado_cons(fecha, id_mun) {
+                TableEst = $("#list_consu").DataTable({
+                    responsive: true,
+                    autoWidth: false,
+                    destroy: true,
+                    deferRender: true,
+                    ajax: {
+                        url: window.location.pathname,
+                        type: 'POST',
+                        data: {
+                            'action': 'list_cant',
+                            fecha,
+                            id_mun
+                        },
+                        dataSrc: "",
+                    },
+                    dom: "<'row'<'form-inline'<'offset-sm-10'>>>" +
+                        "<'row'<'col-lg-4'l><'col-lg-4 text-center mb-2'B><'col-lg-4'f>>" +
+                        "<'row'<'col-lg-12'tr>>" +
+                        "<'row'<'col-lg-5'i><'col-lg-7'p>>",
+                    buttons: [
+                        {
+                            text: '<i class="fa fa-spinner"></i>',
+                            titleAttr: 'Actualizar listado',
+                            className: 'btn btn-info',
+                            action: function () {
+                                this.ajax.reload()
+                            }
+                        },
+                        {
+                            extend: 'excelHtml5',
+                            text: '<i class="fa fa-file-excel"></i>',
+                            titleAttr: 'Exportar a exel',
+                            className: 'btn btn-success',
+                            exportOptions: {
+                                columns: [0, 1, 2]
+                            }
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: '<i class="fas fa-file-pdf"></i>',
+                            titleAttr: 'Exportar a Pdf',
+                            className: 'btn btn-danger',
+                            exportOptions: {
+                                columns: [0, 1, 2]
+                            },
+                            download: 'open',
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL',
+                            customize: function (doc) {
+                                doc.styles = {
+                                    header: {
+                                        fontSize: 18,
+                                        bold: true,
+                                        alignment: 'center'
+                                    },
+                                    subheader: {
+                                        fontSize: 13,
+                                        bold: true
+                                    },
+                                    quote: {
+                                        italics: true
+                                    },
+                                    small: {
+                                        fontSize: 8
+                                    },
+                                    tableHeader: {
+                                        bold: true,
+                                        fontSize: 11,
+                                        color: 'white',
+                                        fillColor: '#2d4154',
+                                        alignment: 'center'
+                                    }
+                                }
+                                doc.content[1].table.widths = ['20%', '60%','20%' ];
+                                doc.content[1].layout = {};
+                                doc['footer'] = (function (page, pages) {
+                                    return {
+                                        columns: [
+                                            {
+                                                alignment: 'left',
+                                                text: ['Fecha de creación: ', {text: date_now}]
+                                            },
+                                            {
+                                                alignment: 'right',
+                                                text: ['página ', {text: page.toString()}, ' de ', {text: pages.toString()}]
+                                            }
+                                        ],
+                                        margin: 20
+                                    }
+                                });
+                            }
+                        },
+                    ],
+                    columns: [
+                        {'data': 'numero'},
+                        {'data': 'direccion'},
+                        {'data': 'cant_don'},
+                    ],
+                    columnDefs: [
+                        {
+                            targets: [-1],
+                            class: 'text-center',
+                            render: function (data, type, row) {
+                                if (data == 0) {
+                                    return `<span class="badge badge-danger" style="color: white; padding: 10px">${data}</span>`
+                                }else {
+                                return `<span class="badge badge-success" style="color: white;padding: 10px">${data}</span>`
+                            }
+                            }
+                        },
+                        {
+                            targets: [0, 1],
+                            class: 'text-center',
+                        },
+                    ],
+                    language: {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sSearch": "<i class='fa fa-search'></i>",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        }
+                    },
+                    fnInitComplete: function () {
+
+                    }
+
+                })
+            }
+
+        });
+    </script>
+{% endblock %}
