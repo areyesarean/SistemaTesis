@@ -9,15 +9,27 @@
 
     <ul>
         <li class="mb-3">
-            <a href="{% url 'reportes:ReportesResultadoAnual' %}">
-                Resultados por año en el municipio seleccionado
+            <a href="{% url 'reportes:ReportesResultadoDiarioView' %}">
+                Resumen del día
             </a>
         </li>
         <li class="mb-3">
-            <a href="{% url 'reportes:ReportesDonacionesConsultorio' %}">
-                Distribución de donaciones por área de salud
+            <a href="{% url 'reportes:ReportesResultadoMensualView' %}">
+                Resultado del plan mensual de donaciones
             </a>
         </li>
+        <li class="mb-3">
+            <a href="{% url 'reportes:ReportesResultadoAnual' %}">
+                Resultados del plan anual de donaciones
+            </a>
+        </li>
+
+        <li class="mb-3">
+            <a href="{% url 'reportes:ReportesDonacionesConsultorio' %}">
+                Distribución de donaciones por consultorio médico
+            </a>
+        </li>
+
 
     </ul>
 {% endblock %}

@@ -1,0 +1,257 @@
+{% extends 'interfaz/index.html' %}
+{% load static %}
+
+{% block links %}
+    {#  TouchPin  #}
+    <link rel="stylesheet" href="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}">
+
+    <link rel="stylesheet" href="{% static 'core/Select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'core/Select2/select2-bootstrap4.min.css' %}">
+
+    <script src="{% static 'code/highcharts.js' %}"></script>
+    <script src="{% static 'code/modules/exporting.js' %}"></script>
+    <script src="{% static 'code/modules/offline-exporting.js' %}"></script>
+    <script src="{% static 'code/modules/export-data.js' %}"></script>
+    <script src="{% static 'code/modules/accessibility.js' %}"></script>
+    <script src="{% static 'code/themes/high-contrast-light.js' %}"></script>
+{% endblock %}
+
+{% block contenido %}
+    <div class="col-lg-4">
+        <div class="card card-danger card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Seleccione
+                </h3>
+            </div>
+            <form method="post" id="form">
+                <div class="card-body">
+                    <div class="form-group ">
+                        <label>{{ FormRPC.fecha.label }}</label>
+                        {{ FormRPC.fecha }}
+                    </div>
+                    <div class="form-group ">
+                        <label>{{ FormRPC.provincia.label }}</label>
+                        {{ FormRPC.provincia }}
+                    </div>
+                    <div class="form-group ">
+                        <label>{{ FormRPC.municipios.label }}</label>
+                        {{ FormRPC.municipios }}
+                    </div>
+                    <div class="form-group ">
+                        <label>{{ FormRPC.areasalud.label }}</label>
+                        {{ FormRPC.areasalud }}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <input type="submit" value="Mostrar" id="id_submit" class="col-lg-12 btn btn-danger">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card card-danger card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    Seleccione
+                </h3>
+            </div>
+                <div class="card-body">
+
+                </div>
+                <div class="card-footer">
+                </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card card-danger card-outline">
+
+            <div class="card-body">
+                <div id="graphic" ></div>
+            </div>
+            <div class="card-footer">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+
+    <script src="{% static  'core/Select2/select2.min.js' %}"></script>
+    <script src="{% static  'core/Select2/i18n/es.js' %}"></script>
+    <script src="{% static 'core/daterangePicker v3.14.1/daterangepicker.min.js' %}"></script>
+    <script src="{% static 'core/tempusDominus 5.1.2/moment.min.js' %}"></script>
+    <script src="{% static 'core/tempusDominus 5.1.2/moment-with-locales.js' %}"></script>
+
+    <script src="{% static 'donacion/add_ajax_donacion.js' %}"></script>
+    <script src="{% static 'errorMessage.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            graphic([], '-----')
+            $('select[name="municipios"]').attr('disabled', 'true')
+            $('select[name="areasalud"]').attr('disabled', 'true')
+            $('#id_submit').attr('disabled', 'true')
+
+            $('#id_fecha').daterangepicker({
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+                singleDatePicker: true,
+                showDropdowns: false,
+                minYear: 2000,
+                maxYear: parseInt(moment().format('YYYY'), 10)
+            });
+
+
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                language: 'es'
+            })
+
+            $('select[name="provincia"]').change(function () {
+                let id = this.value
+                if(this.value === ''){
+                    $('select[name="municipios"]').attr('disabled', 'true').html('')
+                    $('select[name="areasalud"]').attr('disabled', 'true').html('')
+                    $('#id_submit').attr('disabled', 'true')
+                }else{
+                    $('select[name="municipios"]').removeAttr('disabled').html('')
+                }
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'mun_in_prov',
+                        'id': id
+                    },
+                    dataType: 'json'
+                }).done(function (data) {
+                    console.log(data)
+                    if (!data.hasOwnProperty('error')) {
+                        $('select[name="municipios"]').html('').select2({
+                            theme: 'bootstrap4',
+                            language: 'es',
+                            data: data
+                        })
+                    } else {
+                        $.alert({
+                            icon: 'fa fa-times-circle',
+                            theme: 'modern',
+                            animation: 'zoom',
+                            type: 'red',
+                            title: 'Ha ocurrido un error!',
+                            content: data.error
+                        });
+                    }
+                })
+            })
+
+            $('select[name="municipios"]').change(function () {
+                let id = this.value
+                if(this.value === ''){
+                    $('select[name="areasalud"]').attr('disabled', 'true').html('')
+                    $('#id_submit').attr('disabled', 'true')
+                }else{
+                    $('select[name="areasalud"]').removeAttr('disabled').html('')
+                }
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'areasalud_in_mun',
+                        'id': id
+                    },
+                    dataType: 'json'
+                }).done(function (data) {
+                    if (!data.hasOwnProperty('error')) {
+                        $('select[name="areasalud"]').html('').select2({
+                            theme: 'bootstrap4',
+                            language: 'es',
+                            data: data
+                        })
+                    } else {
+                        $.alert({
+                            icon: 'fa fa-times-circle',
+                            theme: 'modern',
+                            animation: 'zoom',
+                            type: 'red',
+                            title: 'Ha ocurrido un error!',
+                            content: data.error
+                        });
+                    }
+                })
+            })
+
+            $('select[name="areasalud"]').change(function () {
+                if(this.value === ''){
+                    $('#id_submit').attr('disabled', 'true')
+                }else{
+                    $('#id_submit').removeAttr('disabled')
+                }
+            });
+
+            $('#form').submit(function (e) {
+                e.preventDefault();
+                const fecha = $('#id_fecha').val()
+                const area_salud = $('#id_areasalud').val()
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        action: 'show_graphic',
+                        fecha,
+                        id_area: area_salud
+                    },
+                    dataType: 'json',
+                }).done(function (data) {
+                    if (data.hasOwnProperty('error')) {
+                        //clearValores()
+                        graphic([{'y': 0, 'name': '-----'}], fecha)
+                        errorMessage(data.error)
+                    }
+                    console.log(data)
+                    graphic(data, fecha)
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert("Error")
+                });
+            })
+
+            function graphic(serie, fecha) {
+                Highcharts.chart('graphic', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: `Distribucion de donaciones por consultorios médicos, ${fecha}`
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>Consultorio #{point.name}</b>: {point.percentage:.1f} %',
+                                style: {
+                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Porcentage',
+                        colorByPoint: true,
+                        data: serie
+                    }]
+                });
+            }
+        });
+    </script>
+{% endblock %}
