@@ -79,12 +79,12 @@ class ReportesResultadoAnualView(TemplateView):
 
                     for i in consultorios:
                         cant = Donacion.objects.filter(consultorio__numero=i.numero, fecha__year=year).count()
-                        if cant > cant_don_con_mes.don_mensu:
+                        if cant > cant_don_con_mes.don_mensu * 12:
                             cons_sobre_data.append(i.toJson())
                             cons_cump_data.append(i.toJson())
                             cons_sobre += 1
                             cons_cump += 1
-                        elif cant < cant_don_con_mes.don_mensu:
+                        elif cant < cant_don_con_mes.don_mensu * 12:
                             cons_incum_data.append(i.toJson())
                             cons_incum += 1
                         else:
