@@ -77,7 +77,13 @@
             <div class="card-body">
                 <div id="graphic"></div>
             </div>
-            <div class="card-footer">
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card card-danger card-outline">
+
+            <div class="card-body">
+                <div id="graphic_bloodgroup"></div>
             </div>
         </div>
     </div>
@@ -130,6 +136,7 @@
     <script>
         $(document).ready(function () {
             graphic([], '-----')
+            graphic_bloodgroup([], '-----')
             $('select[name="municipios"]').attr('disabled', 'true')
             $('select[name="areasalud"]').attr('disabled', 'true')
             $('#id_submit').attr('disabled', 'true')
@@ -270,6 +277,7 @@
                     show_data(fecha, id_mun)
                     graphic(data, id_mun)
                     listado_cons(fecha, id_mun)
+                    graphic_blood()
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     alert("Error")
                 });
@@ -284,7 +292,7 @@
                         type: 'pie'
                     },
                     title: {
-                        text: `DISTRIBUCIÓN DE LAS DONACIONES POR CONSULTORIOS MÉDICOS, ${fecha}`
+                        text: `DISTRIBUCIÓN DE LAS DONACIONES POR CONSULTORIOS MÉDICOS,${fecha}`
                     },
                     tooltip: {
                         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -309,6 +317,62 @@
                     }]
                 });
             }
+
+            function graphic_blood() {
+                const fecha = $('#id_fecha').val()
+                const id_mun = $('#id_municipios').val()
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        action: 'show_graphic_blood_group',
+                        fecha,
+                        id_mun
+                    },
+                    dataType: 'json',
+                }).done(function (data) {
+                    if (data.hasOwnProperty('error')) {
+                        errorMessage(data.error)
+                    }
+                    console.log(data)
+                    graphic_bloodgroup(data, fecha)
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert("Error")
+                });
+            }
+
+            function graphic_bloodgroup(serie, fecha) {
+                Highcharts.chart('graphic_bloodgroup', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: `DISTRIBUCION DE LAS DONACIONES POR GRUPOS SANGUÍNEOS, ${fecha}`
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: false
+                            },
+                            showInLegend: true
+                        }
+                    },
+                    series: [{
+                        name: 'Brands',
+                        colorByPoint: true,
+                        data: serie
+                    }]
+                });
+            }
+
             var date_now = new moment().format('YYYY-MM-DD');
             function listado_cons(fecha, id_mun) {
                 TableEst = $("#list_consu").DataTable({
