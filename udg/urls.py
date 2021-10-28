@@ -15,15 +15,12 @@ Including another URLconf
 """
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.shortcuts import redirect
 from django.urls import path, include
 
-from redirect import redirectLogin
 from udg import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
-    path('', redirectLogin, name='Redirect'),
     path('login/', include('login.urls')),
     path('dashboard/', include('interfaz.urls')),
     path('estudiante/', include('core.urls')),
