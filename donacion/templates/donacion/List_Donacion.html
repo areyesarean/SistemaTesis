@@ -33,6 +33,7 @@
     <th>Banco de Sangre</th>
     <th>Carnet de identidad</th>
     <th>Nombre del Donante</th>
+    <th>Grupo Sanguíneo</th>
     <th>Consultorio</th>
     <th>Área de Salud</th>
     <th>Municipio</th>
@@ -46,6 +47,7 @@
     <th>Banco de Sangre</th>
     <th>Carnet de identidad</th>
     <th>Nombre del Donante</th>
+    <th>Grupo Sanguíneo</th>
     <th>Consultorio</th>
     <th>Área de Salud</th>
     <th>Municipio</th>
@@ -187,7 +189,7 @@
                         titleAttr: 'Exportar a exel',
                         className: 'btn btn-success',
                         exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6, 7, 8]
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9]
                         }
                     },
                     {
@@ -196,7 +198,7 @@
                         titleAttr: 'Exportar a Pdf',
                         className: 'btn btn-danger',
                         exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6, 7, 8]
+                            columns: [1, 2, 3, 4, 5, 6, 7, 8, 9]
                         },
                         download: 'open',
                         orientation: 'landscape',
@@ -226,7 +228,7 @@
                                     alignment: 'center'
                                 }
                             }
-                            doc.content[1].table.widths = ['10%', '10%', '20%', '10%', '10%', '10%', '10%', '20%'];
+                            doc.content[1].table.widths = ['10%', '10%', '20%', '10%', '10%', '10%', '10%', '10%', '10%'];
                             doc.content[1].layout = {};
                             doc['footer'] = (function (page, pages) {
                                 return {
@@ -251,6 +253,7 @@
                     {'data': 'bloodbank'},
                     {'data': 'donante'},
                     {'data': 'nombre'},
+                    {'data': 'bloodgroup'},
                     {'data': 'consultorio'},
                     {'data': 'area_salud'},
                     {'data': 'municipio'},
