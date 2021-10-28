@@ -69,3 +69,18 @@ class FormReportMonth(Form):
                                   widget=Select(attrs={
                                       'class': 'form-control select2'
                                   }))
+
+class FormRPAnualMun(Form):
+    year = IntegerField(label='Seleccione el año', widget=NumberInput(attrs={
+        'class': 'form-control text-center',
+        'id': 'touchpin',
+        'value': datetime.now().year,
+    }))
+    provincia = ModelChoiceField(queryset=Provincias.objects.all(), label='Seleccione la Provincia',
+                                 widget=Select(attrs={
+                                     'class': 'form-control select2'
+                                 }))
+    municipios = CharField(label='Seleccione el Municipio',
+                           widget=Select(attrs={
+                               'class': 'form-control select2'
+                           }))

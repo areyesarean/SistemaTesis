@@ -2,7 +2,7 @@ from django.urls import path
 
 from reportes.views import ReportesMenuView, ReportesResultadoAnualView, \
     Reporte_Donaciones_de_Consultorios_Por_Area_Salud, ReportesResultadoDiarioView, ReportesResultadoMensualView, \
-    ReportesResultadoDiarioMunView
+    ReportesResultadoDiarioMunView, ReporteComportamientoAnualDonaciones
 
 app_name = 'reportes'
 
@@ -12,6 +12,7 @@ urlpatterns = [
     path('day/', ReportesResultadoDiarioView.as_view(), name='ReportesResultadoDiarioView'),
     path('daymun/', ReportesResultadoDiarioMunView.as_view(), name='ReportesResultadoDiarioMunView'),
     path('month/', ReportesResultadoMensualView.as_view(), name='ReportesResultadoMensualView'),
+    path('yearmun/', ReporteComportamientoAnualDonaciones.as_view(), name='ReporteComportamientoAnualDonaciones'),
     path('consu/', Reporte_Donaciones_de_Consultorios_Por_Area_Salud.as_view(), name='ReportesDonacionesConsultorio'),
 
 ]

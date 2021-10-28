@@ -1,0 +1,284 @@
+{% extends 'interfaz/index.html' %}
+{% load static %}
+
+{% block links %}
+    {#  TouchPin  #}
+    <link rel="stylesheet" href="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}">
+
+    <link rel="stylesheet" href="{% static 'core/Select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'core/Select2/select2-bootstrap4.min.css' %}">
+
+    <script src="{% static 'code/highcharts.js' %}"></script>
+    <script src="{% static 'code/modules/exporting.js' %}"></script>
+    <script src="{% static 'code/modules/offline-exporting.js' %}"></script>
+    <script src="{% static 'code/modules/export-data.js' %}"></script>
+    <script src="{% static 'code/modules/accessibility.js' %}"></script>
+    <script src="{% static 'code/themes/high-contrast-light.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+{% endblock %}
+
+{% block contenido %}
+    <div class="col-lg-12">
+        <div class="card card-danger card-outline text-center">
+            <h1 class="card-title" style="margin-left: 0px auto; padding: 10px">
+                COMPORTAMIENTO DE LAS DONACIONES POR AREAS DE SALUD EN EL AÑO SELECCIONADO EN UN MUNICIPIO SELECCIONADO
+            </h1>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card card-danger card-outline">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-bullhorn"></i> SELECCIONE
+                </h3>
+            </div>
+            <form method="post" id="form" class="form-horizontal">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group col-lg-4">
+                            <label>{{ FormRPC.year.label }}</label>
+                            {{ FormRPC.year }}
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>{{ FormRPC.provincia.label }}</label>
+                            {{ FormRPC.provincia }}
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>{{ FormRPC.municipios.label }}</label>
+                            {{ FormRPC.municipios }}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <input type="submit" value="Mostrar gráfico" id="id_submit" class="col-lg-12 btn btn-danger">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="card card-danger card-outline">
+
+            <div class="card-body">
+                <div id="graphic"></div>
+            </div>
+            <div class="card-footer">
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'core/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+
+    <script src="{% static  'core/Select2/select2.min.js' %}"></script>
+    <script src="{% static  'core/Select2/i18n/es.js' %}"></script>
+    <script src="{% static 'core/daterangePicker v3.14.1/daterangepicker.min.js' %}"></script>
+    <script src="{% static 'core/tempusDominus 5.1.2/moment.min.js' %}"></script>
+    <script src="{% static 'core/tempusDominus 5.1.2/moment-with-locales.js' %}"></script>
+
+    <script src="{% static 'donacion/add_ajax_donacion.js' %}"></script>
+    <script src="{% static 'errorMessage.js' %}"></script>
+
+    <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'core/Datatables/Buttons-1.6.5/js/dataTables.buttons.js' %}"></script>
+    <script src="{% static 'core/Datatables/JSZip-2.5.0/jszip.js' %}"></script>
+    <script src="{% static 'core/Datatables/pdfmake-0.1.36/pdfmake.js' %}"></script>
+    <script src="{% static 'core/Datatables/pdfmake-0.1.36/vfs_fonts.js' %}"></script>
+    <script src="{% static 'core/Datatables/Buttons-1.6.5/js/buttons.html5.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            graphic([], '-----', 'No ha seleccionado un municipio')
+            $('select[name="municipios"]').attr('disabled', 'true')
+            $('select[name="areasalud"]').attr('disabled', 'true')
+            $('#id_submit').attr('disabled', 'true')
+
+            $('#touchpin').TouchSpin({
+                min: 2000,
+                max: 2300,
+                step: 1,
+                decimals: 0,
+                boostat: 5,
+                maxboostedstep: 10,
+                {#postfix: '%',#}
+            })
+
+            $('#id_fecha').daterangepicker({
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+                singleDatePicker: true,
+                showDropdowns: false,
+                minYear: 2000,
+                maxYear: parseInt(moment().format('YYYY'), 10)
+            });
+
+
+            $('.select2').select2({
+                theme: 'bootstrap4',
+                language: 'es'
+            })
+
+            $('select[name="provincia"]').change(function () {
+                let id = this.value
+                if (this.value === '') {
+                    $('select[name="municipios"]').attr('disabled', 'true').html('')
+                    $('select[name="areasalud"]').attr('disabled', 'true').html('')
+                    $('#id_submit').attr('disabled', 'true')
+                } else {
+                    $('select[name="municipios"]').removeAttr('disabled').html('')
+                }
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'mun_in_prov',
+                        'id': id
+                    },
+                    dataType: 'json'
+                }).done(function (data) {
+                    console.log(data)
+                    if (!data.hasOwnProperty('error')) {
+                        $('select[name="municipios"]').html('').select2({
+                            theme: 'bootstrap4',
+                            language: 'es',
+                            data: data
+                        })
+                    } else {
+                        $.alert({
+                            icon: 'fa fa-times-circle',
+                            theme: 'modern',
+                            animation: 'zoom',
+                            type: 'red',
+                            title: 'Ha ocurrido un error!',
+                            content: data.error
+                        });
+                    }
+                })
+            })
+
+            $('select[name="municipios"]').change(function () {
+                let id = this.value
+                if (this.value === '') {
+                    $('#id_submit').attr('disabled', 'true')
+                } else {
+                    $('#id_submit').removeAttr('disabled')
+                }
+            })
+
+
+          /*  function show_data(fecha, id_mun) {
+                console.log('show_data')
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'show_data',
+                        fecha,
+                        id_mun
+                    },
+                    dataType: 'json'
+                }).done(function (data) {
+                    if (!data.hasOwnProperty('error')) {
+                        console.log(data)
+                    } else {
+                        $.alert({
+                            icon: 'fa fa-times-circle',
+                            theme: 'modern',
+                            animation: 'zoom',
+                            type: 'red',
+                            title: 'Ha ocurrido un error!',
+                            content: data.error
+                        });
+                    }
+                    if (!data[0]['cant_don']) {
+                        graphic([], '-----')
+                        $.alert({
+                            icon: 'fa fa-times-circle',
+                            theme: 'modern',
+                            animation: 'zoom',
+                            type: 'red',
+                            title: 'Upss',
+                            content: 'No hay donaciones en esta área de salud en la fecha seleccionada'
+                        });
+
+                    }
+                    console.log('showData')
+                    console.log(data)
+                    console.log(data[0]['don_consu'])
+                    carga_valores(data, fecha)
+                })
+            }*/
+
+            function carga_valores(data, fecha) {
+                document.getElementById('id_don_totales').innerText = data[0]['cant_don']
+                document.getElementById('id_fechat').innerText = fecha
+            }
+
+            $('#form').submit(function (e) {
+                e.preventDefault();
+                const year = $('#touchpin').val()
+                const id_mun = $('#id_municipios').val()
+                $.ajax({
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        action: 'show_graphic',
+                        year,
+                        id_mun
+                    },
+                    dataType: 'json',
+                }).done(function (data) {
+                    if (data.hasOwnProperty('error')) {
+                        //clearValores()
+                        graphic([], year, 'No ha seleccionado un municipio')
+                        errorMessage(data.error)
+                    }
+                    console.log(data)
+                   // show_data(year, id_mun)
+                    graphic(data[0]['graphic'], year, data[0]['mun_name'])
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert("Error")
+                });
+            })
+
+            function graphic(serie, year, mun) {
+                Highcharts.chart('graphic', {
+                    chart: {
+                        type: 'line'
+                    },
+                    title: {
+                        text: `COMPORTAMIENTO DE LAS DONACIONES EN ${year}`
+                    },
+                    subtitle: {
+                        text: `Municipio: ${mun}`
+                    },
+                    xAxis: {
+                        categories: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Augosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Cantidad de donaciones'
+                        }
+                    },
+                    plotOptions: {
+                        line: {
+                            dataLabels: {
+                                enabled: true
+                            },
+                            enableMouseTracking: false
+                        }
+                    },
+                    series: serie
+                });
+            }
+
+        });
+    </script>
+{% endblock %}

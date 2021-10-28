@@ -1,5 +1,4 @@
 # Create your views here.
-
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -10,7 +9,7 @@ from configuration.models import Configuration
 from consultorio.models import Consultorio
 from donacion.models import Donacion
 from municipio.models import Municipios
-from reportes.forms import FormYears, FormRPC, FormRPDiario, FormReportMonth
+from reportes.forms import FormYears, FormRPC, FormRPDiario, FormReportMonth, FormRPAnualMun
 
 
 class ReportesMenuView(TemplateView):
@@ -432,4 +431,72 @@ class ReportesResultadoDiarioMunView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Resultado Diario por municipio'
         context['FormRPC'] = FormRPDiario
+        return context
+
+
+class ReporteComportamientoAnualDonaciones(TemplateView):
+    template_name = 'reportes/reporte_anual_don_municipio.html'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ReporteComportamientoAnualDonaciones, self).dispatch(request, *args, **kwargs)
+
+    def graphic_comp_men_mun(self, mun, year):
+        try:
+            mont = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            data = []
+            cant_don_year = []
+            for area in AreaSalud.objects.filter(municipio_id=mun):
+                for mes in mont:
+                    cant_don_year.append(
+                        Donacion.objects.filter(fecha__year=year, fecha__month=mes, consultorio__areasalud=area.pk).count())
+                data.append({
+                    'name': area.nombre,
+                    'data': cant_don_year
+                })
+                cant_don_year = []
+
+            print('GRAFICO LINIA')
+            print(data)
+            return data
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        action = request.POST['action']
+        try:
+            if action == 'mun_in_prov':
+                id_prov = request.POST['id']
+                data = [{'id': '', 'text': '---------------'}]
+                for i in Municipios.objects.filter(provincia__municipios=id_prov):
+                    data.append({'id': i.pk, 'text': i.municipio})
+            elif action == 'areasalud_in_mun':
+                id_mun = request.POST['id']
+                data = [{'id': '', 'text': '---------------'}]
+                for i in AreaSalud.objects.filter(municipio_id=id_mun):
+                    data.append({'id': i.pk, 'text': i.nombre})
+            elif action == 'show_graphic':
+                data = []
+                id_mun = request.POST.get('id_mun', '')
+                year = request.POST.get('year', '')
+                mun_name = Municipios.objects.get(pk=id_mun).toJson()
+
+                if len(id_mun) and len(year):
+                    data.append({
+                        'mun_name': mun_name['municipio'],
+                        'graphic': self.graphic_comp_men_mun(id_mun, year)
+                    })
+            else:
+                data['error'] = 'No se especificó un action'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Comportamiento anual de donaciones'
+        context['FormRPC'] = FormRPAnualMun
         return context
