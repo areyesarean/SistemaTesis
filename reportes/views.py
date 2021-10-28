@@ -5,13 +5,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from areasalud.models import AreaSalud
+from bloodgroup.models import BloodGroup
 from configuration.models import Configuration
 from consultorio.models import Consultorio
 from donacion.models import Donacion
 from municipio.models import Municipios
 from reportes.forms import FormYears, FormRPC, FormRPDiario, FormReportMonth, FormRPAnualMun
 
-#Reporte menu
+
+# Reporte menu
 class ReportesMenuView(TemplateView):
     template_name = 'reportes/Reportes_Menu.html'
 
@@ -20,7 +22,8 @@ class ReportesMenuView(TemplateView):
         context['title'] = 'Reportes'
         return context
 
-#Reporte anual
+
+# Reporte anual
 class ReportesResultadoAnualView(TemplateView):
     template_name = 'reportes/Reportes_Resultado_Anual.html'
 
@@ -122,7 +125,8 @@ class ReportesResultadoAnualView(TemplateView):
         context['FormYears'] = FormYears
         return context
 
-#reporte donaciones de consultorios por area de salud
+
+# reporte donaciones de consultorios por area de salud
 class Reporte_Donaciones_de_Consultorios_Por_Area_Salud(TemplateView):
     template_name = 'reportes/Reporte_Comp_Consult.html'
 
@@ -166,7 +170,8 @@ class Reporte_Donaciones_de_Consultorios_Por_Area_Salud(TemplateView):
         context['FormRPC'] = FormRPC
         return context
 
-#reporte diario por area de salud
+
+# reporte diario por area de salud
 class ReportesResultadoDiarioView(TemplateView):
     template_name = 'reportes/reporte_diario.html'
 
@@ -206,8 +211,6 @@ class ReportesResultadoDiarioView(TemplateView):
                 id_area = request.POST.get('id_area', '')
                 cant_don = Donacion.objects.filter(consultorio__areasalud=id_area, fecha=fecha).count()
                 donaciones = []
-                # for i in Donacion.objects.filter(consultorio__areasalud=id_area, fecha=fecha):
-                #     don_consu.append(i.toJson())
 
                 for consu in Consultorio.objects.filter(areasalud_id=id_area):
                     donaciones.append({
@@ -215,9 +218,6 @@ class ReportesResultadoDiarioView(TemplateView):
                         'cant_don': Donacion.objects.filter(consultorio_id=consu, consultorio__areasalud=id_area,
                                                             fecha=fecha).count()
                     })
-                # print(donaciones)
-                # sorted(donaciones, key=lambda x: x['cant_don'])
-                # print(donaciones)
                 data.append({
                     'cant_don': cant_don,
                     'don_consu': donaciones
@@ -234,6 +234,19 @@ class ReportesResultadoDiarioView(TemplateView):
                         'cant_don': Donacion.objects.filter(consultorio_id=consu, consultorio__areasalud=id_area,
                                                             fecha=fecha).count()
                     })
+            elif action == 'show_graphic_blood_group':
+                data = []
+                id_area = request.POST.get('id_area', '')
+                fecha = request.POST.get('fecha', '')
+                if len(id_area) and len(fecha):
+                    for blood_group in BloodGroup.objects.all():
+                        data.append({
+                            'name': blood_group.bloodgroup,
+                            'y': Donacion.objects.filter(consultorio__areasalud=id_area, fecha=fecha,
+                                                            donante__bloodgroup=blood_group).count()
+                        })
+
+                    print(data)
             else:
                 data['error'] = 'No se especificó un action'
         except Exception as e:
@@ -246,7 +259,8 @@ class ReportesResultadoDiarioView(TemplateView):
         context['FormRPC'] = FormRPDiario
         return context
 
-#Reporte mesnual
+
+# Reporte mesnual
 class ReportesResultadoMensualView(TemplateView):
     template_name = 'reportes/Reportes_Resultado_Mensual.html'
 
@@ -351,7 +365,8 @@ class ReportesResultadoMensualView(TemplateView):
         context['FormYears'] = FormReportMonth
         return context
 
-#Reprote diario por municipio
+
+# Reprote diario por municipio
 class ReportesResultadoDiarioMunView(TemplateView):
     template_name = 'reportes/reporte_diario_mun.html'
 
@@ -383,7 +398,6 @@ class ReportesResultadoDiarioMunView(TemplateView):
                             'name': i.numero,
                             'y': Donacion.objects.filter(consultorio_id=i.pk, fecha=fecha).count()
                         })
-
             elif action == 'show_data':
                 data = []
                 don_consu = []
@@ -391,8 +405,6 @@ class ReportesResultadoDiarioMunView(TemplateView):
                 id_mun = request.POST.get('id_mun', '')
                 cant_don = Donacion.objects.filter(consultorio__areasalud__municipio_id=id_mun, fecha=fecha).count()
                 donaciones = []
-                # for i in Donacion.objects.filter(consultorio__areasalud=id_area, fecha=fecha):
-                #     don_consu.append(i.toJson())
 
                 for consu in Consultorio.objects.filter(areasalud__municipio_id=id_mun):
                     donaciones.append({
@@ -401,9 +413,6 @@ class ReportesResultadoDiarioMunView(TemplateView):
                                                             consultorio__areasalud__municipio_id=id_mun,
                                                             fecha=fecha).count()
                     })
-                # print(donaciones)
-                # sorted(donaciones, key=lambda x: x['cant_don'])
-                # print(donaciones)
                 data.append({
                     'cant_don': cant_don,
                     'don_consu': donaciones
@@ -421,6 +430,20 @@ class ReportesResultadoDiarioMunView(TemplateView):
                                                             consultorio__areasalud__municipio_id=id_mun,
                                                             fecha=fecha).count()
                     })
+            elif action == 'show_graphic_blood_group':
+                data = []
+                id_mun = request.POST.get('id_mun', '')
+                print(id_mun)
+                fecha = request.POST.get('fecha', '')
+                if len(id_mun) and len(fecha):
+                    for blood_group in BloodGroup.objects.all():
+                        data.append({
+                            'name': blood_group.bloodgroup,
+                            'y': Donacion.objects.filter(consultorio__areasalud__municipio_id=id_mun, fecha=fecha,
+                                                            donante__bloodgroup=blood_group).count()
+                        })
+
+                    print(data)
             else:
                 data['error'] = 'No se especificó un action'
         except Exception as e:
@@ -434,7 +457,7 @@ class ReportesResultadoDiarioMunView(TemplateView):
         return context
 
 
-#Es el reprote anual con el grafioc de linia
+# Es el reprote anual con el grafioc de linia
 class ReporteComportamientoAnualDonaciones(TemplateView):
     template_name = 'reportes/reporte_anual_don_municipio.html'
 
@@ -450,7 +473,8 @@ class ReporteComportamientoAnualDonaciones(TemplateView):
             for area in AreaSalud.objects.filter(municipio_id=mun):
                 for mes in mont:
                     cant_don_year.append(
-                        Donacion.objects.filter(fecha__year=year, fecha__month=mes, consultorio__areasalud=area.pk).count())
+                        Donacion.objects.filter(fecha__year=year, fecha__month=mes,
+                                                consultorio__areasalud=area.pk).count())
                 data.append({
                     'name': area.nombre,
                     'data': cant_don_year
@@ -462,7 +486,6 @@ class ReporteComportamientoAnualDonaciones(TemplateView):
             return data
         except Exception as e:
             return JsonResponse({'error': str(e)})
-
 
     def post(self, request, *args, **kwargs):
         data = {}
@@ -494,7 +517,6 @@ class ReporteComportamientoAnualDonaciones(TemplateView):
         except Exception as e:
             data['error'] = str(e)
         return JsonResponse(data, safe=False)
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
