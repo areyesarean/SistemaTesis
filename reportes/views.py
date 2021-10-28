@@ -11,7 +11,7 @@ from donacion.models import Donacion
 from municipio.models import Municipios
 from reportes.forms import FormYears, FormRPC, FormRPDiario, FormReportMonth, FormRPAnualMun
 
-
+#Reporte menu
 class ReportesMenuView(TemplateView):
     template_name = 'reportes/Reportes_Menu.html'
 
@@ -20,7 +20,7 @@ class ReportesMenuView(TemplateView):
         context['title'] = 'Reportes'
         return context
 
-
+#Reporte anual
 class ReportesResultadoAnualView(TemplateView):
     template_name = 'reportes/Reportes_Resultado_Anual.html'
 
@@ -122,7 +122,7 @@ class ReportesResultadoAnualView(TemplateView):
         context['FormYears'] = FormYears
         return context
 
-
+#reporte donaciones de consultorios por area de salud
 class Reporte_Donaciones_de_Consultorios_Por_Area_Salud(TemplateView):
     template_name = 'reportes/Reporte_Comp_Consult.html'
 
@@ -166,7 +166,7 @@ class Reporte_Donaciones_de_Consultorios_Por_Area_Salud(TemplateView):
         context['FormRPC'] = FormRPC
         return context
 
-
+#reporte diario por area de salud
 class ReportesResultadoDiarioView(TemplateView):
     template_name = 'reportes/reporte_diario.html'
 
@@ -246,7 +246,7 @@ class ReportesResultadoDiarioView(TemplateView):
         context['FormRPC'] = FormRPDiario
         return context
 
-
+#Reporte mesnual
 class ReportesResultadoMensualView(TemplateView):
     template_name = 'reportes/Reportes_Resultado_Mensual.html'
 
@@ -351,7 +351,7 @@ class ReportesResultadoMensualView(TemplateView):
         context['FormYears'] = FormReportMonth
         return context
 
-
+#Reprote diario por municipio
 class ReportesResultadoDiarioMunView(TemplateView):
     template_name = 'reportes/reporte_diario_mun.html'
 
@@ -434,6 +434,7 @@ class ReportesResultadoDiarioMunView(TemplateView):
         return context
 
 
+#Es el reprote anual con el grafioc de linia
 class ReporteComportamientoAnualDonaciones(TemplateView):
     template_name = 'reportes/reporte_anual_don_municipio.html'
 
