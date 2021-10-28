@@ -77,6 +77,10 @@
     <script>
         $(document).ready(function () {
             graphic([], '-----')
+
+            $('select[name="municipios"]').attr('disabled', 'true')
+            $('select[name="areasalud"]').attr('disabled', 'true')
+            $('#id_submit').attr('disabled', 'true')
             $('#touchpin').TouchSpin({
                 min: 2000,
                 max: 2300,
@@ -96,6 +100,13 @@
 
             $('select[name="provincia"]').change(function () {
                 let id = this.value
+                if (this.value === '') {
+                    $('select[name="municipios"]').attr('disabled', 'true').html('')
+                    $('select[name="areasalud"]').attr('disabled', 'true').html('')
+                    $('#id_submit').attr('disabled', 'true')
+                } else {
+                    $('select[name="municipios"]').removeAttr('disabled').html('')
+                }
                 $.ajax({
                     url: window.location.pathname,
                     type: 'POST',
@@ -127,6 +138,13 @@
 
             $('select[name="municipios"]').change(function () {
                 let id = this.value
+
+                if (this.value === '') {
+                    $('select[name="areasalud"]').attr('disabled', 'true').html('')
+                    $('#id_submit').attr('disabled', 'true')
+                } else {
+                    $('select[name="areasalud"]').removeAttr('disabled').html('')
+                }
                 $.ajax({
                     url: window.location.pathname,
                     type: 'POST',
@@ -154,6 +172,13 @@
                     }
                 })
             })
+             $('select[name="areasalud"]').change(function () {
+                if (this.value === '') {
+                    $('#id_submit').attr('disabled', 'true')
+                } else {
+                    $('#id_submit').removeAttr('disabled')
+                }
+            });
 
             $('#form').submit(function (e) {
                 e.preventDefault();
