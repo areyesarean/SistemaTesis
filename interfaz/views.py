@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 
 from areasalud.models import AreaSalud
 from bloodbank.models import BloodBank
+from configuration.models import Configuration
 from consultorio.models import Consultorio
 from core.models import Estudiante, Municipio
 from donacion.models import Donacion
@@ -13,6 +14,11 @@ from sexo.models import Sexos
 
 class MenuPpal(LoginRequiredMixin, TemplateView):
     template_name = 'interfaz/graficos.html'
+    def create_config(self):
+        if not Configuration.objects.count() == 1:
+            print('Configuration create successful')
+            Configuration(pk=1, don_mensu=3).save()
+            return 1
 
     def graphic_sexo(self):
         data = []
@@ -60,4 +66,5 @@ class MenuPpal(LoginRequiredMixin, TemplateView):
         context['data_municipios'] = self.graphic_catMunicipio()
         context['cant_estudiantes'] = self.cant_estudiantes()
         context['cant_donaciones'] = self.cant_donaciones()
+        context['config'] = self.create_config()
         return context
