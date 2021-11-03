@@ -37,7 +37,7 @@ Instalación
         pip install -r udg/requirements.txt
         ```
 4. Crear en postgres un rol de nombre postgres y password Admin123*
-5. Crear la base de datos con nombre bloodbank y propietario el usuario previamente creado
+5. Crear la base de datos con nombre udg y propietario el usuario previamente creado
 
 8. Generar la estructura de la base de datos ejecutando: 
     ```sh 
