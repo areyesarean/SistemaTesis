@@ -35,6 +35,6 @@ urlpatterns = [
     path('donacion/', include('donacion.urls')),
     path('reportes/', include('reportes.urls')),
     path('config/', include('configuration.urls')),
-    # path('estudiante/', include('core.urls')),
+    path('estudiante/', include('core.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
