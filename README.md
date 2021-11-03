@@ -1,8 +1,5 @@
 # Sistema de gestión de donaciones de sangre
 
-Copyright (2020) Universidad de Granma
-------------------------------------------------------------------------------------
-
 Requisitos
 --------------
 * PostgresSQL 10+
@@ -22,21 +19,18 @@ Instalación
         ```
 
 2. Crear un entorno virtual de Python 3.8+ en la carpeta del proyecto, al mismo nivel de las carpetas udg
-    * si no se ha instalado python3-venv, instalalarlo ejecutando 
-        ```sh 
-        sudo apt-get install python3-venv
-        ```
+
     * crear el entorno ejecutando 
         ```sh
-        python3 -m venv venv
+        python -m venv venv
         ```
       Esto crea una carpeta venv con todos los archivos necesarios. Para más información visite [**Python Docs**](https://docs.python.org/3/tutorial/venv.html)
     * Activar el entorno virtual ejecutando 
         ```sh
-        cd venv/bin/Script/activate
+        cd venv/bin/script/activate
         ```
     
-3. Despues de creado el entorno virtual y activado, es necesario satisfacer previamente algunas dependencias de la libreria django_auth_ldap usada en el proyecto.
+3. Despues de creado el entorno virtual y activado, es necesario satisfacer previamente algunas dependencias de la librerías usadas en el proyecto.
 
     * Instalar las dependencias con el comando:
         ```sh 
